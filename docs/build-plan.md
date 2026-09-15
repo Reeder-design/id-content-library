@@ -101,23 +101,31 @@ This file is the implementation tracker for v1.
 
 ## Phase 8 — GitHub Pages + release QA
 
-- [ ] Configure Pages deployment
-- [ ] Add automated validation in GitHub Actions
-- [ ] Test interactive HTML/JavaScript reference item
-- [ ] Test Storyline source + published-preview reference item
-- [ ] Test prompt/text/framework reference item
-- [ ] Test mobile/responsive behavior
-- [ ] Test Library Manager end to end
-- [ ] Confirm public-safe boundary
-- [ ] Document routine maintenance workflow
+- [x] Add GitHub Pages deployment workflow
+- [x] Build an explicit public-only deployment artifact that excludes Library Manager
+- [x] Add automated Phase 8 validation to GitHub Actions
+- [x] Test interactive HTML/JavaScript reference fixture
+- [x] Test Storyline source packaging + published-preview reference fixture
+- [x] Test prompt/text/framework reference fixture
+- [x] Add responsive/mobile release contracts
+- [x] Test Library Manager end to end manually
+- [x] Confirm public-safe deployment boundary
+- [x] Document routine maintenance workflow
+- [ ] Merge Phase 8 release PR to `main`
+- [ ] Enable repository Pages source as GitHub Actions if needed
+- [ ] Verify successful live Pages deployment
+- [ ] Spot-check live homepage/Guide/search/filter behavior
+- [ ] Spot-check live mobile/phone layout
 - [ ] Declare v1 complete
 
 ## V1 acceptance test
 
-The same system must successfully support all three reference content types through:
+The system must successfully support all three reference content types through:
 
 **upload → minimal metadata → preview → validate → publish → browse**
 
 1. Interactive HTML/JavaScript component
 2. Storyline source + published interactive preview
 3. Prompt/text/framework resource
+
+Phase 8 CI uses temporary internal QA fixtures for these three content families so release validation does not require fake test items to remain in the public Lab.
