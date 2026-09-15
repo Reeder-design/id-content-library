@@ -90,6 +90,37 @@ def action_link(label: str, href: str, *, download: bool = False, primary: bool 
     return f"<a{attrs}>{html.escape(label)}</a>"
 
 
+def render_public_guide() -> str:
+    return '''<div class="public-guide-scrim" data-public-guide-scrim hidden></div>
+  <aside class="public-guide-drawer" data-public-guide aria-hidden="true" aria-label="Learning Content Lab guide">
+    <div class="public-guide-drawer-header">
+      <div><p class="eyebrow">Visitor guide</p><h2>How to use the Lab</h2></div>
+      <button class="public-guide-close" type="button" data-public-guide-close aria-label="Close guide">×</button>
+    </div>
+    <p class="public-guide-intro">The Learning Content Lab is a public library of reusable instructional-design work: templates, interactions, prompts, job aids, code, frameworks, experiments, and other building blocks.</p>
+    <section class="public-guide-section">
+      <h3>Finding something useful</h3>
+      <ul class="public-guide-list">
+        <li><span>1</span><div><strong>Search naturally.</strong> Try a topic, tool, format, skill, or interaction type.</div></li>
+        <li><span>2</span><div><strong>Narrow it down.</strong> Filter by content type, tool, or tag when the library gets crowded.</div></li>
+        <li><span>3</span><div><strong>Open an item.</strong> Each item page can include a live preview, usage notes, reusable source files, and downloads.</div></li>
+      </ul>
+    </section>
+    <section class="public-guide-section">
+      <h3>What the status means</h3>
+      <div class="public-guide-legend">
+        <div><strong>Stable</strong><span>Ready to reuse, adapt, or share.</span></div>
+        <div><strong>Experimental</strong><span>Useful work that is still being tested or refined.</span></div>
+        <div><strong>Archived</strong><span>Kept for reference, but not actively maintained or recommended.</span></div>
+      </div>
+    </section>
+    <section class="public-guide-section">
+      <h3>Lab vs. portfolio</h3>
+      <p>The portfolio is the curated highlight reel. This Lab is the broader workbench: reusable pieces, experiments, templates, and practical building blocks that may never need a full case study.</p>
+    </section>
+  </aside>'''
+
+
 def render_preview(item: dict, item_dir: Path, assets: dict) -> tuple[str, str | None]:
     preview_type = clean(item.get("preview_type"))
     interactive_entry = assets["interactive_entry"]
@@ -200,14 +231,17 @@ def render_item_page(item: dict, item_dir: Path) -> str:
     if portfolio and portfolio != "library-only":
         portfolio_line = f'<div><dt>Portfolio</dt><dd>{html.escape(humanize(portfolio))}</dd></div>'
 
+    guide_markup = render_public_guide()
+
     return f'''<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="{html.escape(clean(item.get('summary')), quote=True)}">
-  <meta name="theme-color" content="#f8f8f6">
+  <meta name="theme-color" content="#fbfaff">
   <title>{html.escape(clean(item.get('title')))} | Learning Content Lab</title>
+  <link rel="icon" type="image/svg+xml" href="../../assets/site/favicon.svg">
   <link rel="stylesheet" href="../../css/styles.css">
   <link rel="stylesheet" href="../../css/item-pages.css">
 </head>
@@ -215,10 +249,15 @@ def render_item_page(item: dict, item_dir: Path) -> str:
   <!-- {GENERATED_MARKER} -->
   <header class="site-header">
     <div class="page-shell header-inner">
-      <a class="brand" href="../../" aria-label="Learning Content Lab home"><span class="brand-mark" aria-hidden="true">L</span><span>Learning Content Lab</span></a>
-      <a class="header-back" href="../../">← Back to library</a>
+      <a class="brand" href="../../" aria-label="Learning Content Lab home"><span class="brand-mark" aria-hidden="true">✩</span><span>Learning Content Lab</span></a>
+      <div class="public-header-actions">
+        <button class="public-guide-button" type="button" data-public-guide-open><span aria-hidden="true">?</span><span class="guide-label">Guide</span></button>
+        <a class="header-back" href="../../">← Back to library</a>
+      </div>
     </div>
   </header>
+
+  {guide_markup}
 
   <main>
     <section class="item-hero">
@@ -266,6 +305,7 @@ def render_item_page(item: dict, item_dir: Path) -> str:
   </main>
 
   <footer class="site-footer"><div class="page-shell footer-inner"><p>Learning Content Lab</p><p>Reusable work, experiments, and building blocks.</p></div></footer>
+  <script src="../../js/public-guide.js"></script>
 </body>
 </html>
 '''

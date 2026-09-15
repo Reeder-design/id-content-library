@@ -140,6 +140,18 @@ function createCard(item) {
   const card = makeElement("article", "library-card");
   if (normalize(item.library_status) === "archived") card.classList.add("is-archived");
 
+  if (text(item.thumbnail)) {
+    const imageLink = makeElement("a", "card-thumbnail-link");
+    imageLink.href = `items/${item.slug}/`;
+    imageLink.setAttribute("aria-label", `View ${text(item.title)}`);
+    const image = makeElement("img", "card-thumbnail");
+    image.src = `items/${item.slug}/${text(item.thumbnail)}`;
+    image.alt = `Preview image for ${text(item.title)}`;
+    image.loading = "lazy";
+    imageLink.append(image);
+    card.append(imageLink);
+  }
+
   const top = makeElement("div", "card-topline");
   top.append(makeElement("span", "card-type", displayContentType(item)));
   const status = makeElement("span", "status-badge", humanize(item.library_status));

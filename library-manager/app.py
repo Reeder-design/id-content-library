@@ -15,6 +15,9 @@ from pathlib import Path, PurePosixPath
 from flask import Flask, abort, flash, jsonify, redirect, render_template, request, send_from_directory, session, url_for
 
 from smart_prefill import infer_from_files
+from thumbnailer import AUTO_NAMES, generate_thumbnail
+from workspace import publish as publish_workspace
+from workspace import run_validation, summarize_changes, validation_ok
 
 ROOT = Path(__file__).resolve().parents[1]
 ITEMS_DIR = ROOT / "items"
@@ -22,6 +25,7 @@ OPTIONS_PATH = ROOT / "library-data" / "options.json"
 BUILD_SCRIPT = ROOT / "scripts" / "build-library.py"
 SLUG_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 UPLOAD_AREAS = ("preview", "source", "assets")
+THUMBNAIL_SUFFIXES = {".png", ".jpg", ".jpeg", ".webp", ".gif", ".svg"}
 
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(32)
@@ -104,6 +108,8 @@ def load_items() -> list[dict]:
         slug = clean(item.get("slug"))
         item["_folder"] = str(ITEMS_DIR / slug)
         item["_preview_url"] = url_for("repo_file", filepath=f"items/{slug}/index.html")
+        thumb = clean(item.get("thumbnail"))
+        item["_thumbnail_url"] = url_for("repo_file", filepath=f"items/{slug}/{thumb}") if thumb else ""
         items.append(item)
     return sorted(items, key=lambda item: clean(item.get("title")).lower())
 
@@ -238,6 +244,27 @@ def apply_uploads(directory: Path) -> int:
     return saved
 
 
+def apply_custom_thumbnail(directory: Path, item: dict) -> bool:
+    upload = request.files.get("thumbnail_file")
+    if not upload or not clean(upload.filename):
+        return False
+    suffix = Path(clean(upload.filename)).suffix.lower()
+    if suffix not in THUMBNAIL_SUFFIXES:
+        raise ValueError("Custom preview image must be PNG, JPG, JPEG, WEBP, GIF, or SVG.")
+    assets = directory / "assets"
+    assets.mkdir(parents=True, exist_ok=True)
+    for path in assets.glob("custom-thumbnail.*"):
+        path.unlink()
+    for name in AUTO_NAMES:
+        path = assets / name
+        if path.exists():
+            path.unlink()
+    target = assets / f"custom-thumbnail{suffix}"
+    upload.save(target)
+    item["thumbnail"] = f"assets/{target.name}"
+    return True
+
+
 def write_metadata(directory: Path, item: dict) -> None:
     directory.mkdir(parents=True, exist_ok=True)
     for area in UPLOAD_AREAS:
@@ -256,6 +283,18 @@ def rebuild_library() -> None:
     if result.returncode != 0:
         detail = (result.stderr or result.stdout or "Unknown build failure").strip()
         raise RuntimeError(detail)
+
+
+def finish_item_files(directory: Path, item: dict) -> dict:
+    custom = apply_custom_thumbnail(directory, item)
+    write_metadata(directory, item)
+    rebuild_library()
+    if custom:
+        return {"kind": "custom", "message": "Using your custom preview image."}
+    result = generate_thumbnail(directory, item, request.host_url.rstrip("/"))
+    item["thumbnail"] = result["path"]
+    write_metadata(directory, item)
+    return result
 
 
 def mutate_existing(slug: str, mutation) -> None:
@@ -297,6 +336,16 @@ def render_item_form(mode: str, item, options: dict, *, status: int = 200):
     )
 
 
+@app.context_processor
+def manager_context():
+    try:
+        summary = summarize_changes(ROOT)
+        count = summary.get("item_count", 0)
+    except Exception:
+        count = 0
+    return {"workspace_change_count": count}
+
+
 @app.get("/")
 def home():
     return redirect(url_for("library"))
@@ -305,6 +354,40 @@ def home():
 @app.get("/library")
 def library():
     return render_template("library.html", items=load_items())
+
+
+@app.get("/workspace")
+def workspace_page():
+    return render_template("workspace.html", summary=summarize_changes(ROOT), checks=None, publish_result=None)
+
+
+@app.post("/workspace/validate")
+def validate_workspace():
+    require_csrf()
+    checks = run_validation(ROOT)
+    return render_template(
+        "workspace.html",
+        summary=summarize_changes(ROOT),
+        checks=checks,
+        validation_passed=validation_ok(checks),
+        publish_result=None,
+    )
+
+
+@app.post("/workspace/publish")
+def publish_changes():
+    require_csrf()
+    if request.form.get("reviewed") != "1" or request.form.get("public_safe") != "1":
+        result = {"ok": False, "message": "Confirm both review checks before publishing."}
+        return render_template("workspace.html", summary=summarize_changes(ROOT), checks=None, publish_result=result), 400
+    result = publish_workspace(ROOT)
+    return render_template(
+        "workspace.html",
+        summary=summarize_changes(ROOT),
+        checks=result.get("checks"),
+        validation_passed=result.get("ok", False),
+        publish_result=result,
+    ), (200 if result.get("ok") else 400)
 
 
 @app.post("/api/prefill")
@@ -332,8 +415,8 @@ def add_item():
             raise ValueError("That slug already exists. Choose a different slug.")
         directory.mkdir(parents=True)
         try:
-            write_metadata(directory, item)
             apply_uploads(directory)
+            thumbnail_result = finish_item_files(directory, item)
             rebuild_library()
         except Exception:
             shutil.rmtree(directory, ignore_errors=True)
@@ -343,7 +426,7 @@ def add_item():
         flash(str(exc), "error")
         return render_item_form("add", request.form, options, status=400)
 
-    flash(f"Added {item['title']} to the local library.", "success")
+    flash(f"Added {item['title']} locally. {thumbnail_result['message']} Review it before publishing.", "success")
     return redirect(url_for("library"))
 
 
@@ -355,19 +438,50 @@ def edit_item(slug: str):
         return render_item_form("edit", existing, options)
 
     require_csrf()
+    thumbnail_result: dict = {"message": "Preview image kept."}
     try:
         updated = form_metadata(existing=existing)
+        updated["updated"] = date.today().isoformat()
 
         def mutation(directory: Path) -> None:
-            write_metadata(directory, updated)
+            nonlocal thumbnail_result
             apply_uploads(directory)
+            thumbnail_result = finish_item_files(directory, updated)
 
         mutate_existing(slug, mutation)
     except (ValueError, RuntimeError) as exc:
         flash(str(exc), "error")
         return render_item_form("edit", request.form, options, status=400)
 
-    flash(f"Saved changes to {updated['title']}.", "success")
+    flash(f"Saved changes to {updated['title']} locally. {thumbnail_result['message']}", "success")
+    return redirect(url_for("library"))
+
+
+@app.post("/items/<slug>/thumbnail/regenerate")
+def regenerate_thumbnail(slug: str):
+    require_csrf()
+    item = load_item(slug)
+    current = clean(item.get("thumbnail"))
+    if current and Path(current).name not in AUTO_NAMES:
+        flash("This item uses a custom preview image. Edit the item to replace it.", "error")
+        return redirect(url_for("library"))
+
+    result: dict = {}
+
+    def mutation(directory: Path) -> None:
+        nonlocal result
+        rebuild_library()
+        result = generate_thumbnail(directory, item, request.host_url.rstrip("/"))
+        item["thumbnail"] = result["path"]
+        item["updated"] = date.today().isoformat()
+        write_metadata(directory, item)
+
+    try:
+        mutate_existing(slug, mutation)
+    except RuntimeError as exc:
+        flash(f"Could not refresh the preview image: {exc}", "error")
+    else:
+        flash(result.get("message", "Preview image refreshed."), "success")
     return redirect(url_for("library"))
 
 
@@ -430,7 +544,7 @@ def delete_item(slug: str):
             flash(f"Delete failed and was rolled back: {exc}", "error")
             return redirect(url_for("library"))
 
-    flash(f"Deleted {item['title']}. Git history can still recover prior committed versions.", "success")
+    flash(f"Deleted {item['title']} locally. Review the removal before publishing.", "success")
     return redirect(url_for("library"))
 
 

@@ -1,0 +1,81 @@
+<% extends "base.html" %>
+<% block title %>Review & Publish | Library Manager<% endblock %>
+<% block content %>
+<section class="page-heading publish-heading">
+  <div>
+    <p class="eyebrow">Final local checkpoint</p>
+    <h1>Review &amp; Publish</h1>
+    <p>Everything below is still local until you explicitly publish. Preview, validate, and review the batch first.</p>
+  </div>
+  <a class="button secondary" href="[[ url_for('repo_file', filepath='index.html') ]]" target="_blank" rel="noopener">Preview Full Library</a>
+</section>
+
+<% if publish_result %>
+<div class="publish-result <% if publish_result.ok %>success<% else %>error<% endif %>">
+  <strong><% if publish_result.ok %>Published ✦<% else %>Not published<% endif %></strong>
+  <p>[[ publish_result.message ]]</p>
+  <% if publish_result.get('sha') %><small>GitHub commit: [[ publish_result.sha ]]</small><% endif %>
+  <% if publish_result.get('detail') %><small>[[ publish_result.detail ]]</small><% endif %>
+</div>
+<% endif %>
+
+<div class="publish-layout">
+  <section class="publish-panel">
+    <div class="panel-heading">
+      <div><p class="eyebrow">1 · What changed?</p><h2>Your local batch</h2></div>
+      <span class="change-count">[[ summary.item_count ]] item change<% if summary.item_count != 1 %>s<% endif %></span>
+    </div>
+
+    <% if summary.has_changes %>
+    <div class="change-groups">
+      <% if summary.added %><div class="change-group"><strong>New items</strong><div class="change-chips"><% for slug in summary.added %><span>+ [[ slug ]]</span><% endfor %></div></div><% endif %>
+      <% if summary.updated %><div class="change-group"><strong>Updated items</strong><div class="change-chips"><% for slug in summary.updated %><span>↻ [[ slug ]]</span><% endfor %></div></div><% endif %>
+      <% if summary.removed %><div class="change-group"><strong>Removed items</strong><div class="change-chips"><% for slug in summary.removed %><span>− [[ slug ]]</span><% endfor %></div></div><% endif %>
+      <% if summary.generated %><div class="change-group"><strong>Library index</strong><p class="quiet-note">The generated library data changed to match the items above.</p></div><% endif %>
+      <% if summary.other %>
+      <div class="change-group warning-group"><strong>Changes outside Library Manager</strong><p class="quiet-note">These are intentionally blocked from one-click publishing so they cannot be committed by accident.</p><div class="change-chips"><% for path in summary.other %><span>[[ path ]]</span><% endfor %></div></div>
+      <% endif %>
+    </div>
+    <% else %>
+    <div class="workspace-empty"><span aria-hidden="true">✧</span><div><strong>Nothing waiting to publish.</strong><p>Make local Library Manager changes first, then come back here.</p></div></div>
+    <% endif %>
+
+    <% if summary.count and summary.count != summary.item_count %><p class="quiet-note backend-change-note">[[ summary.count ]] underlying file update<% if summary.count != 1 %>s<% endif %> are handled automatically behind the scenes.</p><% endif %>
+    <div class="branch-note"><strong>Local branch:</strong> [[ summary.branch or 'unknown' ]] <% if summary.branch != 'main' %><span>Publishing stays locked until you are on main.</span><% endif %></div>
+  </section>
+
+  <section class="publish-panel">
+    <div class="panel-heading"><div><p class="eyebrow">2 · Safety check</p><h2>Validate</h2></div></div>
+    <p>The Manager checks metadata, file paths, slugs, thumbnails, generated pages, and preview support before anything can publish.</p>
+
+    <% if checks %>
+    <div class="validation-list">
+      <% for check in checks %>
+      <div class="validation-row <% if check.ok %>pass<% else %>fail<% endif %>">
+        <span aria-hidden="true"><% if check.ok %>✓<% else %>!<% endif %></span>
+        <div><strong>[[ check.label ]]</strong><small>[[ check.detail ]]</small></div>
+      </div>
+      <% endfor %>
+    </div>
+    <% endif %>
+
+    <form method="post" action="[[ url_for('validate_workspace') ]]">
+      <input type="hidden" name="csrf_token" value="[[ csrf_token() ]]">
+      <button class="button secondary" type="submit">Run Validation</button>
+    </form>
+  </section>
+</div>
+
+<section class="publish-panel final-publish-panel">
+  <div class="panel-heading"><div><p class="eyebrow">3 · Deliberate publish</p><h2>Send this batch to GitHub</h2></div></div>
+  <p>Publish commits only Library Manager content. If GitHub has newer work, you have unrelated local edits, validation fails, or you are not on <code>main</code>, the Manager stops instead of guessing.</p>
+
+  <form class="publish-form" method="post" action="[[ url_for('publish_changes') ]]">
+    <input type="hidden" name="csrf_token" value="[[ csrf_token() ]]">
+    <label class="check-row"><input type="checkbox" name="reviewed" value="1"> <span>I previewed/reviewed this batch and the change summary looks right.</span></label>
+    <label class="check-row"><input type="checkbox" name="public_safe" value="1"> <span>I confirm this material is public-safe and ready to leave my computer.</span></label>
+    <button class="button publish-button" type="submit" <% if not summary.has_changes or summary.other or summary.branch != 'main' %>disabled<% endif %>>Publish to GitHub</button>
+    <% if summary.other %><small>Publishing is disabled until unrelated local changes are handled separately.</small><% elif summary.branch != 'main' %><small>Publishing is disabled on feature branches.</small><% elif not summary.has_changes %><small>There is nothing waiting to publish.</small><% endif %>
+  </form>
+</section>
+<% endblock %>

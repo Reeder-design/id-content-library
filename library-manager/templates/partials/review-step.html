@@ -1,8 +1,22 @@
   <section class="form-step" data-step="3">
     <div class="section-heading with-help">
-      <div><p class="eyebrow">Step 3</p><h2>Quick check</h2><p>If this reads the way you expect, save it. Phase 7 will add the actual generated preview, validation summary, and Publish button.</p></div>
-      <details class="help-popover"><summary aria-label="Help with review">?</summary><div class="help-card"><strong>No trick questions here.</strong><p>This is just a last glance at the information that will be written into the local library.</p></div></details>
+      <div><p class="eyebrow">Step 3</p><h2>Quick check</h2><p>This is a pre-save preview of how the item will read in the library. After saving, you can open the real generated item page before publishing anything.</p></div>
+      <details class="help-popover"><summary aria-label="Help with review">?</summary><div class="help-card"><strong>Still local.</strong><p>Saving here updates only your local copy. GitHub publishing is a separate Review &amp; Publish step.</p></div></details>
     </div>
+
+    <div class="draft-preview-shell">
+      <p class="eyebrow">Pre-save preview</p>
+      <article class="draft-library-card" data-draft-preview>
+        <div class="draft-preview-art" aria-hidden="true"><span>✦</span></div>
+        <div class="card-topline"><span class="eyebrow" data-draft="content_type">Resource</span><span class="status-pill" data-draft="library_status">stable</span></div>
+        <h3 data-draft="title">Untitled item</h3>
+        <p data-draft="summary">Your description will appear here.</p>
+        <div class="draft-meta"><strong data-draft="format">Format</strong><span data-draft="tools">Tools</span></div>
+        <div class="draft-tags" data-draft="tags"></div>
+      </article>
+      <p class="quiet-note">The automatic screenshot/card image is created after you save the item locally, because the Manager needs a real generated page to capture.</p>
+    </div>
+
     <div class="review-card">
       <dl>
         <div><dt>Title</dt><dd data-review="title">—</dd></div>
@@ -14,6 +28,5 @@
       </dl>
     </div>
     <p class="public-safe-note"><strong>One last thing:</strong> this repository is public. Save only material that is already safe to share outside your company or client work.</p>
-    <div class="step-actions"><button type="button" class="button secondary" data-prev-step>Back</button><button type="submit" class="button"><% if mode == 'edit' %>Save Changes<% else %>Add to Library<% endif %></button></div>
+    <div class="step-actions"><button type="button" class="button secondary" data-prev-step>Back</button><button type="submit" class="button"><% if mode == 'edit' %>Save Locally<% else %>Add Locally<% endif %></button></div>
   </section>
-</form>

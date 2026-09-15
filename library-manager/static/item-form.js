@@ -13,14 +13,53 @@
   let autoWriting = false;
   let requestId = 0;
 
+  const valueOf = (name) => {
+    const field = form.elements.namedItem(name);
+    return field && 'value' in field ? String(field.value || '').trim() : '';
+  };
+
+  const split = (value) => String(value || '').split(',').map((x) => x.trim()).filter(Boolean);
+
+  const updateReview = () => {
+    qa('[data-review]').forEach((el) => {
+      const value = valueOf(el.dataset.review);
+      el.textContent = value || '—';
+    });
+  };
+
+  const updateDraftPreview = () => {
+    qa('[data-draft]').forEach((el) => {
+      const name = el.dataset.draft;
+      const value = valueOf(name);
+      if (name === 'tags') {
+        el.replaceChildren(...split(value).map((tag) => {
+          const chip = document.createElement('span');
+          chip.className = 'choice-chip selected';
+          chip.textContent = tag;
+          return chip;
+        }));
+        return;
+      }
+      const fallbacks = {
+        title: 'Untitled item',
+        summary: 'Your description will appear here.',
+        content_type: 'Resource',
+        library_status: 'stable',
+        format: 'Format',
+        tools: 'Tools',
+      };
+      el.textContent = value || fallbacks[name] || '—';
+    });
+  };
+
   const showStep = (next) => {
     step = Math.max(1, Math.min(3, next));
     qa('[data-step]').forEach((el) => el.classList.toggle('active', Number(el.dataset.step) === step));
     document.querySelectorAll('[data-step-label]').forEach((el) => el.classList.toggle('active', Number(el.dataset.stepLabel) === step));
-    if (step === 3) qa('[data-review]').forEach((el) => {
-      const field = form.elements.namedItem(el.dataset.review);
-      el.textContent = field && field.value ? field.value : '—';
-    });
+    if (step === 3) {
+      updateReview();
+      updateDraftPreview();
+    }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -49,7 +88,6 @@
     field.addEventListener('change', markHuman);
   });
 
-  const split = (value) => String(value || '').split(',').map((x) => x.trim()).filter(Boolean);
   const syncChips = () => qa('[data-chip-target]').forEach((group) => {
     const field = form.elements.namedItem(group.dataset.chipTarget);
     if (!field) return;
