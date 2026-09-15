@@ -2,12 +2,14 @@
 
 A reusable public library for instructional-design templates, interactions, prompts, code, resources, experiments, and other learning-content assets.
 
-The repository has two parts:
+The repository has two deliberately separate surfaces:
 
-- **Learning Content Lab** — the static public library that will be hosted with GitHub Pages.
-- **Library Manager** — a lightweight local-only utility for adding, editing, previewing, validating, and publishing library items.
+- **Learning Content Lab** — the public-facing static site that visitors browse. This is the part that will be hosted with GitHub Pages.
+- **Library Manager** — the private maintenance utility used locally on the owner's computer for adding, editing, previewing, validating, batching, and publishing library items. It is not a public website and is not intended to be deployed.
 
-This is intentionally separate from the official portfolio. The portfolio contains selected spotlight projects; this library can contain the broader body of reusable work.
+The public Lab and local Manager share the same visual identity so maintaining the library and browsing it feel like parts of one system, but they serve different audiences and remain technically separate.
+
+This project is also intentionally separate from the official portfolio. The portfolio contains selected spotlight projects; the Lab can contain the broader body of reusable work.
 
 ## Core rule
 
@@ -29,11 +31,13 @@ id-content-library/
 └── docs/
 ```
 
-Each future library item will own a folder under `items/<slug>/` containing its metadata and, when relevant, `preview/`, `source/`, and `assets/` content.
+Each library item owns a folder under `items/<slug>/` containing its metadata and, when relevant, `preview/`, `source/`, and `assets/` content. Library Manager hides those repository mechanics during normal use.
 
 ## Design principles
 
-- Keep the public site static and simple.
+- Keep the public site static, approachable, and easy to browse.
+- Keep Library Manager local-only and maintenance-focused.
+- Use one shared visual identity across both surfaces without turning the public Lab into an admin interface.
 - Make adding content low-friction.
 - Infer technical metadata locally whenever practical.
 - Require human input only for context the system cannot reliably determine.
