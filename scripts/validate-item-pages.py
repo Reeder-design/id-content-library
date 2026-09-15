@@ -21,13 +21,13 @@ def load_builder():
     return module
 
 
-def base_item(preview_type: str, slug: str) -> dict:
+def base_item(preview_type: str, slug: str, format_name: str = "Fixture") -> dict:
     return {
         "title": f"Fixture {preview_type.title()}",
         "slug": slug,
         "summary": "Generated preview fixture.",
         "content_type": "Design Patterns",
-        "format": "Fixture",
+        "format": format_name,
         "tools": ["HTML"],
         "tags": ["fixture"],
         "library_status": "stable",
@@ -53,26 +53,26 @@ def main() -> int:
 
     with tempfile.TemporaryDirectory() as temp:
         root = Path(temp)
-
         scenarios = [
-            ("interactive", "interactive-fixture", "preview/index.html", "<html><body>interactive</body></html>", ["Interactive preview", "Launch preview"]),
-            ("document", "document-fixture", "preview/guide.pdf", "%PDF fixture", ["Document preview", "Open preview"]),
-            ("image", "image-fixture", "preview/example.png", "image placeholder", ["media-preview", "Open preview"]),
-            ("video", "video-fixture", "preview/demo.mp4", "video placeholder", ["video-preview", "Open preview"]),
-            ("code", "code-fixture", "preview/example.js", "<script>alert('x')</script>", ["text-preview", "&lt;script&gt;"]),
-            ("text", "text-fixture", "preview/prompt.md", "# Prompt\nUse this safely.", ["text-preview", "# Prompt"]),
-            ("download", "download-fixture", "source/template.story", "source placeholder", ["Download source", "reusable download"]),
-            ("none", "none-fixture", None, None, ["informational", "Permanent URL"]),
+            ("interactive", "interactive-fixture", "Fixture", "preview/index.html", "<html><body>interactive</body></html>", ["Interactive preview", "preview/index.html", "Launch preview"]),
+            ("interactive", "storyline-fixture", "Storyline", "preview/story.html", "<html><body>storyline</body></html>", ["Interactive preview", "preview/story.html", "Launch preview", "Storyline"]),
+            ("document", "document-fixture", "PDF", "preview/guide.pdf", "%PDF fixture", ["Document preview", "Open preview"]),
+            ("image", "image-fixture", "Image", "preview/example.png", "image placeholder", ["media-preview", "Open preview"]),
+            ("video", "video-fixture", "Video", "preview/demo.mp4", "video placeholder", ["video-preview", "Open preview"]),
+            ("code", "code-fixture", "HTML/CSS/JavaScript", "preview/example.js", "<script>alert('x')</script>", ["text-preview", "&lt;script&gt;"]),
+            ("text", "text-fixture", "Text/Markdown", "preview/prompt.md", "# Prompt\nUse this safely.", ["text-preview", "# Prompt"]),
+            ("download", "download-fixture", "Storyline", "source/template.story", "source placeholder", ["Download source", "reusable download"]),
+            ("none", "none-fixture", "Fixture", None, None, ["informational", "Permanent URL"]),
         ]
 
-        for preview_type, slug, relative_path, content, expected in scenarios:
+        for preview_type, slug, format_name, relative_path, content, expected in scenarios:
             item_dir = root / slug
             item_dir.mkdir(parents=True, exist_ok=True)
-            item = base_item(preview_type, slug)
+            item = base_item(preview_type, slug, format_name)
             if relative_path:
                 write(item_dir / relative_path, content or "fixture")
             page = builder.render_item_page(item, item_dir)
-            assert_contains(page, builder.GENERATED_MARKER, f"/items/{slug}/", *expected)
+            assert_contains(page, builder.GENERATED_MARKER, "../../css/item-pages.css", f"/items/{slug}/", *expected)
 
         fallback_dir = root / "fallback-fixture"
         fallback_dir.mkdir(parents=True, exist_ok=True)
@@ -90,7 +90,7 @@ def main() -> int:
         source_page = builder.render_item_page(source_item, source_dir)
         assert_contains(source_page, "Source files", "Source downloads", "one.txt", "two.txt")
 
-    print("PASS: Permanent item page rendering supports interactive, document, image, video, code, text, download, none, and fallback modes")
+    print("PASS: Item pages support web/Storyline interactive launches, documents, images, video, code, text, downloads, none, and graceful fallback")
     return 0
 
 
