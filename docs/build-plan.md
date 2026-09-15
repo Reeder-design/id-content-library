@@ -23,13 +23,13 @@ This file is the implementation tracker for v1.
 
 ## Phase 3 — Static Learning Content Lab
 
-- [ ] Build public homepage/layout
-- [ ] Generate item cards from library data
-- [ ] Add search
-- [ ] Add content-type filtering
-- [ ] Add tool/tag filtering
-- [ ] Add status display
-- [ ] Make site responsive
+- [x] Build public homepage/layout
+- [x] Generate item cards from library data
+- [x] Add search
+- [x] Add content-type filtering
+- [x] Add tool/tag filtering
+- [x] Add status display
+- [x] Make site responsive
 
 ## Phase 4 — Item pages + previews
 

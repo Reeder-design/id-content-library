@@ -29,3 +29,9 @@ jobs:
 
       - name: Validate library data model
         run: python scripts/validate-library.py
+
+      - name: Validate public library UI
+        run: python scripts/validate-public-ui.py
+
+      - name: Check public JavaScript syntax
+        run: node --check js/library.js
