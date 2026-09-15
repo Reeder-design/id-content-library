@@ -2,6 +2,10 @@
 
 A reusable public library for instructional-design templates, interactions, prompts, code, resources, experiments, and other learning-content assets.
 
+**V1 released:** 2026-09-15
+
+**Public Learning Content Lab:** `https://reeder-design.github.io/id-content-library/`
+
 The repository has two deliberately separate surfaces:
 
 - **Learning Content Lab** — the public-facing static site that visitors browse. This is the only surface deployed through GitHub Pages.
@@ -48,7 +52,7 @@ The deployment does **not** upload the repository root. `scripts/build-public-si
 
 Library Manager, scripts, docs, templates, workflows, and local/repository internals are deliberately excluded from the public artifact.
 
-Expected project-site URL after Pages is enabled:
+Live project-site URL:
 
 `https://reeder-design.github.io/id-content-library/`
 
