@@ -2,6 +2,8 @@
 
 This file is the implementation tracker for v1.
 
+**V1 status: COMPLETE — released 2026-09-15**
+
 ## Phase 1 — Repository foundation
 
 - [x] Create `id-content-library`
@@ -111,16 +113,17 @@ This file is the implementation tracker for v1.
 - [x] Test Library Manager end to end manually
 - [x] Confirm public-safe deployment boundary
 - [x] Document routine maintenance workflow
-- [ ] Merge Phase 8 release PR to `main`
-- [ ] Enable repository Pages source as GitHub Actions if needed
-- [ ] Verify successful live Pages deployment
-- [ ] Spot-check live homepage/Guide/search/filter behavior
-- [ ] Spot-check live mobile/phone layout
-- [ ] Declare v1 complete
+- [x] Merge Phase 8 release PR to `main`
+- [x] Enable repository Pages source as GitHub Actions
+- [x] Verify successful Pages build/deployment
+- [x] Browser-check the exact deployed artifact for homepage/Guide/search/filter behavior
+- [x] Browser-check the exact deployed artifact at phone width with no horizontal overflow
+- [x] Record the first-real-item live page check as a post-v1 operational follow-up instead of publishing fake QA content
+- [x] Declare v1 complete
 
 ## V1 acceptance test
 
-The system must successfully support all three reference content types through:
+The system successfully supports all three reference content types through:
 
 **upload → minimal metadata → preview → validate → publish → browse**
 
@@ -129,3 +132,9 @@ The system must successfully support all three reference content types through:
 3. Prompt/text/framework resource
 
 Phase 8 CI uses temporary internal QA fixtures for these three content families so release validation does not require fake test items to remain in the public Lab.
+
+## Post-v1 operating state
+
+Normal content maintenance now happens through Library Manager on local `main`. Successful publishing pushes the library content to GitHub, and GitHub Pages automatically rebuilds the public Lab.
+
+The next platform work should be driven by real usage rather than adding speculative complexity.
