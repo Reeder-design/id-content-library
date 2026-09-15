@@ -4,8 +4,8 @@ A reusable public library for instructional-design templates, interactions, prom
 
 The repository has two deliberately separate surfaces:
 
-- **Learning Content Lab** — the public-facing static site that visitors browse. This is the part that will be hosted with GitHub Pages.
-- **Library Manager** — the private maintenance utility used locally on the owner's computer for adding, editing, previewing, validating, batching, and publishing library items. It is not a public website and is not intended to be deployed.
+- **Learning Content Lab** — the public-facing static site that visitors browse. This is the only surface deployed through GitHub Pages.
+- **Library Manager** — the private maintenance utility used locally on the owner's computer for adding, editing, previewing, validating, batching, and publishing library items. It is not a public website and is not deployed.
 
 The public Lab and local Manager share the same visual identity so maintaining the library and browsing it feel like parts of one system, but they serve different audiences and remain technically separate.
 
@@ -33,6 +33,25 @@ id-content-library/
 
 Each library item owns a folder under `items/<slug>/` containing its metadata and, when relevant, `preview/`, `source/`, and `assets/` content. Library Manager hides those repository mechanics during normal use.
 
+## Public deployment
+
+GitHub Pages is deployed from `.github/workflows/deploy-pages.yml` after changes reach `main`.
+
+The deployment does **not** upload the repository root. `scripts/build-public-site.py` creates an allow-listed static artifact containing only:
+
+- `index.html`
+- `css/`
+- `js/`
+- `assets/site/`
+- `items/`
+- `library-data/`
+
+Library Manager, scripts, docs, templates, workflows, and local/repository internals are deliberately excluded from the public artifact.
+
+Expected project-site URL after Pages is enabled:
+
+`https://reeder-design.github.io/id-content-library/`
+
 ## Design principles
 
 - Keep the public site static, approachable, and easy to browse.
@@ -45,6 +64,10 @@ Each library item owns a folder under `items/<slug>/` containing its metadata an
 - Use Git history instead of inventing a separate versioning system.
 - Add complexity only after real usage proves it is needed.
 
-## Build status
+## Maintenance
+
+See [`docs/maintenance.md`](docs/maintenance.md) for the routine content workflow.
+
+See [`docs/release-qa.md`](docs/release-qa.md) for v1 release acceptance and deployment gates.
 
 See [`docs/build-plan.md`](docs/build-plan.md) for the phased implementation tracker.

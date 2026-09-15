@@ -17,7 +17,7 @@ jobs:
 
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -47,8 +47,8 @@ jobs:
           node --check js/library.js
           node --check js/public-guide.js
 
-      - name: Check Library Manager Python syntax
-        run: python -m py_compile library-manager/app.py library-manager/smart_prefill.py library-manager/workspace.py library-manager/thumbnailer.py
+      - name: Check Python syntax
+        run: python -m py_compile library-manager/app.py library-manager/smart_prefill.py library-manager/workspace.py library-manager/thumbnailer.py scripts/build-public-site.py scripts/validate-phase8-release.py
 
       - name: Check Library Manager JavaScript syntax
         run: |
@@ -63,3 +63,6 @@ jobs:
 
       - name: Validate Phase 7 preview and publishing
         run: python scripts/validate-phase7-manager.py
+
+      - name: Validate Phase 8 release and v1 acceptance fixtures
+        run: python scripts/validate-phase8-release.py
