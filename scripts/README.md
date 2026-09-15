@@ -21,6 +21,7 @@ python scripts/build-library.py --check
 - `validate-foundation.py` checks the repository foundation and public-safe boundary.
 - `validate-library.py` checks metadata and controlled-value conventions.
 - `validate-public-ui.py` checks the searchable/filterable homepage contract.
-- `validate-item-pages.py` exercises the Phase 4 preview matrix, including web/Storyline interactive launches, PDF/documents, images, video, text/code, source downloads, and graceful fallback behavior.
+- `validate-item-pages.py` exercises the preview matrix, including web/Storyline interactive launches, PDF/documents, images, video, text/code, source downloads, and graceful fallback behavior.
+- `validate-phase4-ui.py` checks permanent card links, item-page styling, and generator contracts.
 
 GitHub Actions runs these checks on pull requests and pushes to `main`.
