@@ -35,13 +35,14 @@
     </div>
 
     <details class="advanced-file-options">
-      <summary>Advanced file options <small>Usually you can ignore this</small></summary>
+      <summary>Advanced file options <small>Only for unusual file-handling cases</small></summary>
       <div class="advanced-file-body">
-        <label class="check-row"><input type="checkbox" data-source-only> Treat this project as download/source only instead of trying to use it as a browser preview.</label>
+        <p class="quiet-note"><strong>This is not related to the “Other” resource category.</strong> These settings only change how the Manager handles the project files behind the scenes. Most of the time, leave them alone.</p>
+        <label class="check-row"><input type="checkbox" data-source-only> <span><strong>Download/source only.</strong> Use this when the project should be offered as a file to download instead of displayed or launched in the browser. Examples: a .story source file with no published output, an editable PowerPoint template, or another file that does not need an in-browser preview.</span></label>
         <% if mode == 'edit' %>
-        <label class="check-row"><input type="checkbox" data-replace-project> Replace the current project files instead of adding to them.</label>
+        <label class="check-row"><input type="checkbox" data-replace-project> <span><strong>Replace the current project files.</strong> Use this when you are uploading a newer version and want the new file/folder to replace the project files already stored for this item instead of being added alongside them.</span></label>
         <% endif %>
-        <p class="quiet-note">These controls change how the Manager stores the project behind the scenes. You never need to manage the repository folders yourself.</p>
+        <p class="quiet-note">If you are simply adding a normal project and want the Manager to preview it when possible, you do not need anything in this section.</p>
       </div>
     </details>
 
