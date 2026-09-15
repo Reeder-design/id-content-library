@@ -44,3 +44,9 @@ jobs:
 
       - name: Check public JavaScript syntax
         run: node --check js/library.js
+
+      - name: Check Library Manager Python syntax
+        run: python -m py_compile library-manager/app.py
+
+      - name: Check Library Manager JavaScript syntax
+        run: node --check library-manager/static/manager.js
