@@ -78,16 +78,16 @@ This file is the implementation tracker for v1.
 
 ## Phase 7 — Preview + validation + publishing
 
-- [ ] Preview new item before adding
-- [ ] Preview full library locally
-- [ ] Generate automatic screenshots/thumbnails for supported interactive, document, and image content
-- [ ] Normalize/crop generated card imagery to consistent display sizes
-- [ ] Allow a generated thumbnail to be replaced manually when desired
-- [ ] Validate metadata, paths, slugs, files, and generated pages
-- [ ] Show human-readable change summary
-- [ ] Batch multiple changes
-- [ ] Add deliberate Publish to GitHub action
-- [ ] Automate routine Git commit/sync/push work
+- [x] Preview new item before adding
+- [x] Preview full library locally
+- [x] Generate automatic screenshots/thumbnails for supported interactive, document, and image content
+- [x] Normalize/crop generated card imagery to consistent display sizes
+- [x] Allow a generated thumbnail to be replaced manually when desired
+- [x] Validate metadata, paths, slugs, files, thumbnails, and generated pages
+- [x] Show human-readable change summary
+- [x] Batch multiple local item changes before publishing
+- [x] Add deliberate Publish to GitHub action
+- [x] Automate routine Git fetch/check/commit/push work with safe sync guards
 
 ## Phase 8 — GitHub Pages + release QA
 
