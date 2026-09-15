@@ -46,6 +46,7 @@ def check_html() -> None:
         "How to use the Lab",
         "What the status means",
         "Lab vs. portfolio",
+        "assets/site/favicon.svg",
     ):
         if token not in html:
             fail(f"Public visitor-guide contract is missing: {token}")
@@ -99,7 +100,7 @@ def check_css_contract() -> None:
         fail("Public library CSS is missing required responsive components: " + ", ".join(missing))
 
     theme = (ROOT / "css" / "public-lab-theme.css").read_text(encoding="utf-8")
-    for token in ("--violet:", "--lavender:", "--mint:", ".public-guide-drawer", ".public-guide-button", ".library-card"):
+    for token in ("--violet:", "--lavender:", "--mint:", ".public-guide-drawer", ".public-guide-button", "min-width: 104px", ".library-card"):
         if token not in theme:
             fail(f"Public Lab theme is missing: {token}")
 
