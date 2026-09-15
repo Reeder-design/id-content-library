@@ -9,13 +9,32 @@
 <body>
   <header class="manager-header">
     <div class="shell header-row">
-      <a class="brand" href="[[ url_for('library') ]]"><span class="brand-mark">L</span><span>Library Manager</span></a>
+      <a class="brand" href="[[ url_for('library') ]]"><span class="brand-mark" aria-hidden="true">✩</span><span>Library Manager</span></a>
       <nav>
         <a href="[[ url_for('library') ]]">Library</a>
+        <button type="button" class="guide-button" data-guide-open><span aria-hidden="true">?</span> Guide</button>
         <a class="button" href="[[ url_for('add_item') ]]">Add Item</a>
       </nav>
     </div>
   </header>
+
+  <div class="guide-scrim" data-guide-scrim hidden></div>
+  <aside class="guide-drawer" data-guide-drawer aria-hidden="true" aria-label="Library Manager guide">
+    <div class="guide-drawer-header">
+      <div><p class="eyebrow">Tiny user guide</p><h2>Library Manager, in plain English</h2></div>
+      <button type="button" class="guide-close" data-guide-close aria-label="Close guide">×</button>
+    </div>
+    <p class="guide-intro">You should not need to remember Git, folders, file paths, or how the site is built. Just tell the Manager what the thing is.</p>
+    <ol class="guide-steps">
+      <li><span>1</span><div><strong>Add your project.</strong><p>Choose one file or one complete folder. The Manager handles the library copies behind the scenes.</p></div></li>
+      <li><span>2</span><div><strong>Check the suggestions.</strong><p>Title, format, tools, and preview behavior are guessed from the files. Change anything that looks wrong.</p></div></li>
+      <li><span>3</span><div><strong>Add the human stuff.</strong><p>Pick what kind of resource it is, write a short description, and add useful tags.</p></div></li>
+      <li><span>4</span><div><strong>Review before saving.</strong><p>Nothing is published to GitHub from this screen yet. Publishing controls arrive in Phase 7.</p></div></li>
+    </ol>
+    <div class="guide-tip"><strong>Rule of thumb:</strong> if a field feels technical, leave the smart suggestion alone unless you know you want something different.</div>
+    <div class="guide-tip soft"><strong>Public-safe reminder:</strong> anything added here belongs in the public Learning Content Lab. Keep confidential or unsanitized work out of this repository.</div>
+  </aside>
+
   <main class="shell manager-main">
     <% with messages = get_flashed_messages(with_categories=true) %>
       <% for category, message in messages %>

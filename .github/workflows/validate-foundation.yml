@@ -53,3 +53,6 @@ jobs:
 
       - name: Validate Phase 6 smart upload behavior
         run: python scripts/validate-phase6-manager.py
+
+      - name: Validate Phase 6.5 Manager UX
+        run: python scripts/validate-phase65-manager.py
