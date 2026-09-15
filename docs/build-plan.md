@@ -89,6 +89,16 @@ This file is the implementation tracker for v1.
 - [x] Add deliberate Publish to GitHub action
 - [x] Automate routine Git fetch/check/commit/push work with safe sync guards
 
+## Phase 7.5 — Public Lab experience refresh
+
+- [x] Keep Library Manager local-only and the Learning Content Lab public-facing
+- [x] Align the public Lab with the Manager's mint/lavender/violet visual identity
+- [x] Preserve a visitor-facing design instead of exposing admin/maintenance controls
+- [x] Add a public Guide button and plain-language visitor guide
+- [x] Explain browsing, item pages, and library statuses in the public guide
+- [x] Apply the refreshed visual system to generated item pages
+- [x] Add regression checks for the public guide and shared visual theme
+
 ## Phase 8 — GitHub Pages + release QA
 
 - [ ] Configure Pages deployment
