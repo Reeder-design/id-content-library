@@ -3,17 +3,107 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Reusable instructional-design templates, interactions, prompts, code, resources, and experiments.">
+  <meta name="description" content="Browse reusable instructional-design templates, interactions, prompts, code, resources, and experiments.">
+  <meta name="theme-color" content="#f8f8f6">
   <title>Learning Content Lab</title>
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-  <main class="shell">
-    <p class="eyebrow">Foundation</p>
-    <h1>Learning Content Lab</h1>
-    <p class="lede">Reusable instructional-design templates, interactions, prompts, code, resources, and experiments.</p>
-    <p>The library foundation is ready. Search, filters, item cards, previews, and the Library Manager will be added in later phases.</p>
+  <header class="site-header">
+    <div class="page-shell header-inner">
+      <a class="brand" href="./" aria-label="Learning Content Lab home">
+        <span class="brand-mark" aria-hidden="true">L</span>
+        <span>Learning Content Lab</span>
+      </a>
+      <span class="header-note">Reusable ID workbench</span>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="page-shell hero-grid">
+        <div>
+          <p class="eyebrow">Learning design library</p>
+          <h1>Useful things, built to be reused.</h1>
+          <p class="lede">A growing library of instructional-design templates, interactions, prompts, code, resources, and experiments.</p>
+        </div>
+        <aside class="hero-note" aria-label="About this library">
+          <p class="hero-note-label">How this differs from my portfolio</p>
+          <p>This is the workshop, not the museum. The portfolio highlights selected projects; this lab keeps the broader collection of reusable work.</p>
+        </aside>
+      </div>
+    </section>
+
+    <section class="library-section" aria-labelledby="library-heading">
+      <div class="page-shell">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Browse the library</p>
+            <h2 id="library-heading">Find something useful</h2>
+          </div>
+          <p id="results-count" class="results-count" aria-live="polite">Loading library…</p>
+        </div>
+
+        <div class="controls" aria-label="Library filters">
+          <div class="search-field">
+            <label for="library-search">Search</label>
+            <div class="search-input-wrap">
+              <span class="search-icon" aria-hidden="true">⌕</span>
+              <input id="library-search" type="search" placeholder="Search titles, tools, tags, formats…" autocomplete="off">
+            </div>
+          </div>
+
+          <div class="filter-group filter-group-wide">
+            <span class="filter-label">Content type</span>
+            <div id="content-type-filters" class="filter-pills" role="group" aria-label="Filter by content type">
+              <button class="filter-pill is-active" type="button" data-value="all" aria-pressed="true">All</button>
+            </div>
+          </div>
+
+          <div class="filter-row">
+            <div class="select-field">
+              <label for="tool-filter">Tool</label>
+              <select id="tool-filter">
+                <option value="all">All tools</option>
+              </select>
+            </div>
+            <div class="select-field">
+              <label for="tag-filter">Tag</label>
+              <select id="tag-filter">
+                <option value="all">All tags</option>
+              </select>
+            </div>
+            <button id="clear-filters" class="clear-button" type="button">Clear filters</button>
+          </div>
+        </div>
+
+        <div id="load-error" class="notice notice-error" hidden role="alert">
+          <strong>The library could not be loaded.</strong>
+          <span>Try refreshing the page. If the problem continues, the library data may need validation.</span>
+        </div>
+
+        <div id="library-grid" class="library-grid" aria-live="polite"></div>
+
+        <div id="empty-state" class="empty-state" hidden>
+          <span class="empty-mark" aria-hidden="true">✦</span>
+          <h3 id="empty-title">The shelves are ready.</h3>
+          <p id="empty-copy">Library items will appear here as they are added.</p>
+        </div>
+
+        <noscript>
+          <div class="notice">JavaScript is required to browse and filter this library.</div>
+        </noscript>
+      </div>
+    </section>
   </main>
+
+  <footer class="site-footer">
+    <div class="page-shell footer-inner">
+      <p>Learning Content Lab</p>
+      <p>Reusable work, experiments, and building blocks.</p>
+    </div>
+  </footer>
+
   <script src="js/library.js"></script>
 </body>
 </html>
