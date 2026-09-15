@@ -1,0 +1,14 @@
+{
+  "title": "Facilitator Toolkit Example",
+  "slug": "facilitator-toolkit-example",
+  "summary": "Fixture proving that custom content categories can use the Other pathway.",
+  "content_type": "Other",
+  "format": "Text/Markdown",
+  "tools": ["Other"],
+  "tags": ["fixture", "other"],
+  "library_status": "experimental",
+  "preview_type": "text",
+  "created": "2026-09-15",
+  "portfolio_status": "library-only",
+  "other_label": "Facilitator Toolkit"
+}

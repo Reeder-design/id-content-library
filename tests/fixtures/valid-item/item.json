@@ -1,0 +1,14 @@
+{
+  "title": "Branching Sales Conversation Template",
+  "slug": "branching-sales-conversation-template",
+  "summary": "Reusable choose-your-path framework for practicing sales discovery conversations.",
+  "content_type": "Interactive Learning",
+  "format": "Storyline",
+  "tools": ["Articulate Storyline"],
+  "tags": ["branching", "sales enablement", "scenario", "practice"],
+  "library_status": "stable",
+  "preview_type": "interactive",
+  "created": "2026-09-15",
+  "portfolio_status": "library-only",
+  "usage_notes": "Fixture only; this is not a published library item."
+}

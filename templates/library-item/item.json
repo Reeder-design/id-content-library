@@ -1,0 +1,14 @@
+{
+  "title": "Example Item Title",
+  "slug": "example-item-title",
+  "summary": "One-sentence description of what this reusable item is and what it helps someone do.",
+  "content_type": "Templates & Frameworks",
+  "format": "HTML/CSS/JavaScript",
+  "tools": ["HTML", "CSS", "JavaScript"],
+  "tags": ["template", "reusable"],
+  "library_status": "stable",
+  "preview_type": "interactive",
+  "created": "2026-09-15",
+  "portfolio_status": "library-only",
+  "usage_notes": "Optional setup, reuse, or customization notes go here."
+}
