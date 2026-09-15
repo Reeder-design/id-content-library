@@ -61,7 +61,6 @@ def discover_item_assets(item_dir: Path) -> dict:
     preview_files = list_files(preview_dir)
     source_files = list_files(source_dir)
     entry = preview_dir / "index.html"
-
     return {
         "preview_files": preview_files,
         "source_files": source_files,
@@ -89,17 +88,14 @@ def render_preview(item: dict, item_dir: Path, assets: dict) -> tuple[str, str |
     preview_files = assets["preview_files"]
 
     if preview_type == "interactive" and interactive_entry:
-        return (
-            '<div class="preview-frame"><iframe src="preview/" title="Interactive preview" loading="lazy"></iframe></div>',
-            "preview/",
-        )
+        return ('<div class="preview-frame"><iframe src="preview/" title="Interactive preview" loading="lazy"></iframe></div>', "preview/")
 
     if preview_type == "document" and assets["document"]:
         path = assets["document"]
         href = web_path(path, item_dir)
         if path.suffix.lower() == ".pdf":
             return (f'<div class="preview-frame preview-document"><iframe src="{html.escape(href, quote=True)}" title="Document preview" loading="lazy"></iframe></div>', href)
-        return (f'<div class="preview-placeholder"><p>This document format is best opened directly.</p></div>', href)
+        return ('<div class="preview-placeholder"><p>This document format is best opened directly.</p></div>', href)
 
     if preview_type == "image" and assets["image"]:
         href = web_path(assets["image"], item_dir)
@@ -119,24 +115,14 @@ def render_preview(item: dict, item_dir: Path, assets: dict) -> tuple[str, str |
             truncated = len(content) > 40000
             content = content[:40000]
             note = '<p class="preview-note">Preview truncated after 40,000 characters.</p>' if truncated else ""
-            return (
-                f'<div class="text-preview"><div class="preview-file-label">{html.escape(path.name)}</div><pre><code>{html.escape(content)}</code></pre>{note}</div>',
-                web_path(path, item_dir),
-            )
+            return (f'<div class="text-preview"><div class="preview-file-label">{html.escape(path.name)}</div><pre><code>{html.escape(content)}</code></pre>{note}</div>', web_path(path, item_dir))
 
     if preview_type == "other" and interactive_entry:
-        return (
-            '<div class="preview-frame"><iframe src="preview/" title="Item preview" loading="lazy"></iframe></div>',
-            "preview/",
-        )
+        return ('<div class="preview-frame"><iframe src="preview/" title="Item preview" loading="lazy"></iframe></div>', "preview/")
 
     if preview_files:
         path = preview_files[0]
-        href = web_path(path, item_dir)
-        return (
-            '<div class="preview-placeholder"><p>A browser preview is not available for this format, but the preview file can still be opened directly.</p></div>',
-            href,
-        )
+        return ('<div class="preview-placeholder"><p>A browser preview is not available for this format, but the preview file can still be opened directly.</p></div>', web_path(path, item_dir))
 
     message = "This item does not include a browser preview."
     if preview_type == "download":
@@ -179,8 +165,8 @@ def render_item_page(item: dict, item_dir: Path) -> str:
         actions.append(action_link("Download source", web_path(source_files[0], item_dir), download=True))
     elif len(source_files) > 1:
         actions.append('<a class="button-link" href="#source-downloads">Source files</a>')
-
     action_markup = f'<div class="item-actions">{"".join(actions)}</div>' if actions else ""
+
     usage_notes = clean(item.get("usage_notes"))
     usage_markup = ""
     if usage_notes:
@@ -212,6 +198,7 @@ def render_item_page(item: dict, item_dir: Path) -> str:
   <meta name="theme-color" content="#f8f8f6">
   <title>{html.escape(clean(item.get('title')))} | Learning Content Lab</title>
   <link rel="stylesheet" href="../../css/styles.css">
+  <link rel="stylesheet" href="../../css/item-pages.css">
 </head>
 <body class="item-page">
   <!-- {GENERATED_MARKER} -->
