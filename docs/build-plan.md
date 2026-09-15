@@ -9,17 +9,17 @@ This file is the implementation tracker for v1.
 - [x] Add architecture README
 - [x] Add `.gitignore`
 - [x] Add build tracker
-- [ ] Clone repository locally
-- [ ] Configure repo-local Git author with GitHub noreply identity
-- [ ] Confirm clean local `main` after the foundation PR is merged
+- [x] Clone repository locally
+- [x] Configure repo-local Git author with GitHub noreply identity
+- [x] Confirm clean local `main` after the foundation PR is merged
 
 ## Phase 2 — Data model + item template
 
-- [ ] Implement minimum `item.json` schema
-- [ ] Define controlled values and `Other` behavior
-- [ ] Create reusable item-folder template
-- [ ] Define preview/source/assets conventions
-- [ ] Add test item data
+- [x] Implement minimum `item.json` schema
+- [x] Define controlled values and `Other` behavior
+- [x] Create reusable item-folder template
+- [x] Define preview/source/assets conventions
+- [x] Add test item data
 
 ## Phase 3 — Static Learning Content Lab
 

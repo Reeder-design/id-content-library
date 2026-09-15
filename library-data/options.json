@@ -1,0 +1,49 @@
+{
+  "content_types": [
+    "Interactive Learning",
+    "Templates & Frameworks",
+    "Assessment & Practice",
+    "Sales Enablement",
+    "Job Aids & Resources",
+    "Multimedia",
+    "Prompt Library",
+    "Code & Automation",
+    "Design Patterns",
+    "Other"
+  ],
+  "library_statuses": ["experimental", "stable", "archived", "other"],
+  "preview_types": ["interactive", "document", "image", "video", "code", "text", "download", "none", "other"],
+  "portfolio_statuses": ["library-only", "portfolio-candidate", "featured-in-portfolio", "other"],
+  "format_suggestions": [
+    "Storyline",
+    "Rise",
+    "HTML/CSS/JavaScript",
+    "PDF",
+    "PowerPoint",
+    "Video",
+    "Image",
+    "Python",
+    "Text/Markdown",
+    "Other"
+  ],
+  "tool_suggestions": [
+    "Articulate Storyline",
+    "Articulate Rise",
+    "HTML",
+    "CSS",
+    "JavaScript",
+    "Python",
+    "Microsoft PowerPoint",
+    "Adobe Illustrator",
+    "Adobe Photoshop",
+    "Adobe After Effects",
+    "Adobe Premiere Pro",
+    "Camtasia",
+    "Canva",
+    "Other"
+  ],
+  "defaults": {
+    "library_status": "stable",
+    "portfolio_status": "library-only"
+  }
+}
