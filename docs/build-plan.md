@@ -33,14 +33,14 @@ This file is the implementation tracker for v1.
 
 ## Phase 4 — Item pages + previews
 
-- [ ] Generate permanent item pages
-- [ ] Support HTML/JavaScript previews
-- [ ] Support Storyline published output
-- [ ] Support PDF/document previews
-- [ ] Support images and video
-- [ ] Support text, prompts, and code
-- [ ] Support download-only/unknown assets
-- [ ] Add graceful preview fallback
+- [x] Generate permanent item pages
+- [x] Support HTML/JavaScript previews
+- [x] Support Storyline published output
+- [x] Support PDF/document previews
+- [x] Support images and video
+- [x] Support text, prompts, and code
+- [x] Support download-only/unknown assets
+- [x] Add graceful preview fallback
 
 ## Phase 5 — Library Manager
 
