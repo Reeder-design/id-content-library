@@ -72,6 +72,12 @@ small { display: block; margin-top: .35rem; color: var(--muted); font-weight: 50
 .form-step.active { display: block; }
 .section-heading { margin-bottom: 1.25rem; }
 .section-heading h2 { margin: .25rem 0 .4rem; color: var(--taupe); font-size: 2rem; }
+.smart-prefill-banner { display: grid; gap: .15rem; margin-bottom: 1rem; padding: .85rem 1rem; border: 1px solid rgba(80,132,132,.28); border-radius: 12px; background: rgba(80,132,132,.07); }
+.smart-prefill-banner strong { color: var(--taupe); }
+.smart-prefill-banner span { color: var(--muted); font-size: .9rem; }
+.smart-prefill-banner[data-state="working"] { border-color: rgba(151,219,79,.5); background: rgba(151,219,79,.09); }
+.smart-prefill-banner[data-state="done"] { border-color: rgba(121,201,158,.55); background: rgba(121,201,158,.12); }
+.smart-prefill-banner[data-state="error"] { border-color: rgba(163,58,58,.38); background: #fff4f4; }
 .upload-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 1rem; }
 .upload-card { padding: 1rem; box-shadow: none; background: var(--paper); }
 .upload-card h3 { margin: 0 0 .35rem; color: var(--taupe); }
@@ -82,6 +88,16 @@ small { display: block; margin-top: .35rem; color: var(--muted); font-weight: 50
 .check-row input { width: auto; margin-top: .2rem; }
 .form-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 1rem; }
 .span-2 { grid-column: span 2; }
+.field-group { min-width: 0; }
+.choice-chips { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: .65rem; }
+.choice-chip { min-height: 34px; padding: .42rem .65rem; border: 1px solid var(--line); border-radius: 999px; color: var(--charcoal); background: var(--paper); font-size: .82rem; font-weight: 700; }
+.choice-chip:hover { border-color: var(--pine-blue); }
+.choice-chip.selected { color: white; border-color: var(--pine-blue); background: var(--pine-blue); }
+.advanced-details { margin-top: 1.2rem; border: 1px solid var(--line); border-radius: 14px; background: var(--paper); }
+.advanced-details summary { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .9rem 1rem; color: var(--taupe); cursor: pointer; font-weight: 820; }
+.advanced-details summary small { margin: 0; text-align: right; }
+.advanced-details[open] summary { border-bottom: 1px solid var(--line); }
+.advanced-grid { padding: 1rem; }
 .step-actions { display: flex; justify-content: flex-end; gap: .65rem; margin-top: 1.5rem; }
 .review-card { padding: 1rem; box-shadow: none; background: var(--paper); }
 .review-card dl { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); margin: 0; }
@@ -103,5 +119,7 @@ code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
   .span-2 { grid-column: auto; }
   .stepper { grid-template-columns: 1fr; }
   .card-actions, .step-actions { align-items: stretch; flex-direction: column; }
+  .advanced-details summary { align-items: flex-start; flex-direction: column; }
+  .advanced-details summary small { text-align: left; }
   .button { width: 100%; }
 }
