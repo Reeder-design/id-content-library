@@ -74,15 +74,21 @@ summary:focus-visible {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: .4rem;
-  min-height: 40px;
-  padding: .56rem .78rem;
+  gap: .48rem;
+  min-height: 42px;
+  padding: .65rem 1rem;
   border: 1px solid rgba(117,97,216,.28);
   border-radius: 12px;
   color: var(--violet-deep);
   background: rgba(255,255,255,.76);
   font-weight: 800;
+  line-height: 1.1;
   text-decoration: none;
+  white-space: nowrap;
+}
+.public-guide-button {
+  min-width: 104px;
+  flex: 0 0 auto;
 }
 .public-guide-button:hover,
 .header-back:hover {
@@ -92,8 +98,9 @@ summary:focus-visible {
 .public-guide-button span {
   display: grid;
   place-items: center;
-  width: 20px;
-  height: 20px;
+  flex: 0 0 auto;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
   background: var(--lavender-soft);
   font-size: .78rem;
@@ -364,7 +371,11 @@ select:focus { border-color: var(--violet); }
 @media (max-width: 680px) {
   .public-header-actions { margin-left: auto; }
   .header-note { display: none; }
-  .public-guide-button { padding-inline: .7rem; }
+  .public-guide-button {
+    width: 42px;
+    min-width: 42px;
+    padding: 0;
+  }
   .public-guide-button .guide-label { display: none; }
   .public-guide-drawer { width: 100%; }
   .hero::after,
