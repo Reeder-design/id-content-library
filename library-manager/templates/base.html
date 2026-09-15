@@ -12,6 +12,8 @@
       <a class="brand" href="[[ url_for('library') ]]"><span class="brand-mark" aria-hidden="true">✩</span><span>Library Manager</span></a>
       <nav>
         <a href="[[ url_for('library') ]]">Library</a>
+        <a href="[[ url_for('repo_file', filepath='index.html') ]]" target="_blank" rel="noopener">Preview Library</a>
+        <a class="publish-nav" href="[[ url_for('workspace_page') ]]">Review &amp; Publish<% if workspace_change_count %><span>[[ workspace_change_count ]]</span><% endif %></a>
         <button type="button" class="guide-button" data-guide-open><span aria-hidden="true">?</span> Guide</button>
         <a class="button" href="[[ url_for('add_item') ]]">Add Item</a>
       </nav>
@@ -28,11 +30,11 @@
     <ol class="guide-steps">
       <li><span>1</span><div><strong>Add your project.</strong><p>Choose one file or one complete folder. The Manager handles the library copies behind the scenes.</p></div></li>
       <li><span>2</span><div><strong>Check the suggestions.</strong><p>Title, format, tools, and preview behavior are guessed from the files. Change anything that looks wrong.</p></div></li>
-      <li><span>3</span><div><strong>Add the human stuff.</strong><p>Pick what kind of resource it is, write a short description, and add useful tags.</p></div></li>
-      <li><span>4</span><div><strong>Review before saving.</strong><p>Nothing is published to GitHub from this screen yet. Publishing controls arrive in Phase 7.</p></div></li>
+      <li><span>3</span><div><strong>Save locally and preview.</strong><p>Your changes stay on your computer. Preview the item or the whole library and keep editing until it feels right.</p></div></li>
+      <li><span>4</span><div><strong>Review &amp; Publish.</strong><p>The Manager validates the library, summarizes the batch of local changes, and only sends them to GitHub when you explicitly publish.</p></div></li>
     </ol>
     <div class="guide-tip"><strong>Rule of thumb:</strong> if a field feels technical, leave the smart suggestion alone unless you know you want something different.</div>
-    <div class="guide-tip soft"><strong>Public-safe reminder:</strong> anything added here belongs in the public Learning Content Lab. Keep confidential or unsanitized work out of this repository.</div>
+    <div class="guide-tip soft"><strong>Public-safe reminder:</strong> anything you publish belongs in the public Learning Content Lab. Keep confidential or unsanitized work out of this repository.</div>
   </aside>
 
   <main class="shell manager-main">
