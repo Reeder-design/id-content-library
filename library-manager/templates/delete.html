@@ -1,0 +1,16 @@
+<% extends "base.html" %>
+<% block title %>Delete Item | Library Manager<% endblock %>
+<% block content %>
+<section class="danger-panel">
+  <p class="eyebrow">Danger zone</p>
+  <h1>Delete [[ item.title ]]?</h1>
+  <p>Archive is the safer normal action. Delete removes the entire local item folder; committed history can still recover older versions.</p>
+  <div class="delete-phrase"><span>Type exactly:</span><code>[[ required_phrase ]]</code></div>
+  <form method="post">
+    <input type="hidden" name="csrf_token" value="[[ csrf_token() ]]">
+    <label>Confirmation phrase<input required name="confirm_phrase" autocomplete="off"></label>
+    <label class="check-row"><input required type="checkbox" name="understand" value="1"> I understand this removes the entire item folder from my working copy.</label>
+    <div class="step-actions"><a class="button secondary" href="[[ url_for('library') ]]">Cancel</a><button class="button danger" type="submit">Permanently Delete</button></div>
+  </form>
+</section>
+<% endblock %>

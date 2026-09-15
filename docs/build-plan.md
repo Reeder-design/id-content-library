@@ -44,13 +44,13 @@ This file is the implementation tracker for v1.
 
 ## Phase 5 — Library Manager
 
-- [ ] Build local-only app
-- [ ] Add Library browser
-- [ ] Add Item wizard
-- [ ] Edit existing items
-- [ ] Archive items
-- [ ] Upload files/folders
-- [ ] Add deliberate delete protection
+- [x] Build local-only app
+- [x] Add Library browser
+- [x] Add Item wizard
+- [x] Edit existing items
+- [x] Archive items
+- [x] Upload files/folders
+- [x] Add deliberate delete protection
 
 ## Phase 6 — Smart upload + prefill
 
