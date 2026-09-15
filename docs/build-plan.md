@@ -1,0 +1,97 @@
+# Learning Content Lab + Library Manager — Build Plan
+
+This file is the implementation tracker for v1.
+
+## Phase 1 — Repository foundation
+
+- [x] Create `id-content-library`
+- [x] Create agreed repository skeleton
+- [x] Add architecture README
+- [x] Add `.gitignore`
+- [x] Add build tracker
+- [ ] Clone repository locally
+- [ ] Configure repo-local Git author with GitHub noreply identity
+- [ ] Confirm clean local `main` after the foundation PR is merged
+
+## Phase 2 — Data model + item template
+
+- [ ] Implement minimum `item.json` schema
+- [ ] Define controlled values and `Other` behavior
+- [ ] Create reusable item-folder template
+- [ ] Define preview/source/assets conventions
+- [ ] Add test item data
+
+## Phase 3 — Static Learning Content Lab
+
+- [ ] Build public homepage/layout
+- [ ] Generate item cards from library data
+- [ ] Add search
+- [ ] Add content-type filtering
+- [ ] Add tool/tag filtering
+- [ ] Add status display
+- [ ] Make site responsive
+
+## Phase 4 — Item pages + previews
+
+- [ ] Generate permanent item pages
+- [ ] Support HTML/JavaScript previews
+- [ ] Support Storyline published output
+- [ ] Support PDF/document previews
+- [ ] Support images and video
+- [ ] Support text, prompts, and code
+- [ ] Support download-only/unknown assets
+- [ ] Add graceful preview fallback
+
+## Phase 5 — Library Manager
+
+- [ ] Build local-only app
+- [ ] Add Library browser
+- [ ] Add Item wizard
+- [ ] Edit existing items
+- [ ] Archive items
+- [ ] Upload files/folders
+- [ ] Add deliberate delete protection
+
+## Phase 6 — Smart upload + prefill
+
+- [ ] Detect common file types
+- [ ] Detect Storyline source/output
+- [ ] Infer format/tool/preview type
+- [ ] Generate title/slug suggestions from filenames
+- [ ] Prefill dates/default statuses
+- [ ] Add dropdowns and tag/tool chips
+- [ ] Remember commonly used tags/tools
+- [ ] Move uncommon fields under Advanced Details
+
+## Phase 7 — Preview + validation + publishing
+
+- [ ] Preview new item before adding
+- [ ] Preview full library locally
+- [ ] Validate metadata, paths, slugs, files, and generated pages
+- [ ] Show human-readable change summary
+- [ ] Batch multiple changes
+- [ ] Add deliberate Publish to GitHub action
+- [ ] Automate routine Git commit/sync/push work
+
+## Phase 8 — GitHub Pages + release QA
+
+- [ ] Configure Pages deployment
+- [ ] Add automated validation in GitHub Actions
+- [ ] Test interactive HTML/JavaScript reference item
+- [ ] Test Storyline source + published-preview reference item
+- [ ] Test prompt/text/framework reference item
+- [ ] Test mobile/responsive behavior
+- [ ] Test Library Manager end to end
+- [ ] Confirm public-safe boundary
+- [ ] Document routine maintenance workflow
+- [ ] Declare v1 complete
+
+## V1 acceptance test
+
+The same system must successfully support all three reference content types through:
+
+**upload → minimal metadata → preview → validate → publish → browse**
+
+1. Interactive HTML/JavaScript component
+2. Storyline source + published interactive preview
+3. Prompt/text/framework resource
