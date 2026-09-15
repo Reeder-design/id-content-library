@@ -340,7 +340,7 @@ def render_item_form(mode: str, item, options: dict, *, status: int = 200):
 def manager_context():
     try:
         summary = summarize_changes(ROOT)
-        count = summary["count"]
+        count = summary.get("item_count", 0)
     except Exception:
         count = 0
     return {"workspace_change_count": count}
