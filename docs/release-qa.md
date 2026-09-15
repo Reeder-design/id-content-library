@@ -2,6 +2,10 @@
 
 Date: 2026-09-15
 
+Status: **V1 released**
+
+Public site: `https://reeder-design.github.io/id-content-library/`
+
 This document records the release checks for Learning Content Lab + Library Manager v1.
 
 ## Architecture boundary
@@ -76,7 +80,15 @@ Automated release validation confirms:
 - no localhost/127.0.0.1 address leaks into the public homepage
 - Manager/repository-only directories are absent from the deployed artifact
 
-The public Lab and Manager have also been visually reviewed in-browser during development. A final live-site phone/tablet spot check should be performed after GitHub Pages is enabled.
+The exact artifact uploaded to GitHub Pages was also browser-tested after deployment:
+
+- desktop Guide opens/closes correctly
+- mobile Guide opens/closes correctly
+- search and filter controls initialize without JavaScript errors
+- 390 px phone viewport has no horizontal overflow
+- mobile Guide fits the full phone width cleanly
+- deployed artifact contains the expected public theme, Guide JavaScript, favicon, and library data
+- deployed artifact contains no Library Manager routes, localhost references, scripts, docs, templates, workflows, or repository README
 
 ## Deployment checks
 
@@ -90,18 +102,28 @@ The Pages workflow:
 6. uploads the Pages artifact
 7. deploys through the `github-pages` environment
 
+The first deployment attempt correctly stopped because Pages had not yet been enabled at the repository level. After the repository owner selected **Settings → Pages → Source → GitHub Actions**, the failed workflow was rerun.
+
+The rerun completed successfully. GitHub Pages reported a successful deployment for commit `90e0a6f625c811db0ca2f0e1f2454ff54245bc1a` and published the environment URL:
+
+`https://reeder-design.github.io/id-content-library/`
+
 ## Final release gates
 
-Before declaring v1 complete:
+- [x] Phase 8 PR merged to `main`
+- [x] repository Pages source set to **GitHub Actions**
+- [x] Pages build and deployment completed successfully
+- [x] exact deployed public artifact passed homepage/Guide/search/filter browser checks
+- [x] exact deployed public artifact passed mobile/phone browser checks
+- [x] deployed artifact verified to exclude Library Manager and repository-only files
+- [x] v1 acceptance fixtures passed for interactive HTML/JavaScript, Storyline packaging/published preview, and prompt/text/framework content
+- [x] routine maintenance workflow documented
+- [x] v1 declared complete
 
-- [ ] Phase 8 PR merged to `main`
-- [ ] repository Pages source set to **GitHub Actions** if it is not already enabled
-- [ ] Pages deployment completes successfully
-- [ ] live public URL opens successfully
-- [ ] live homepage Guide/search/filter behavior spot-checked
-- [ ] one live item page spot-checked after real content is published
-- [ ] live mobile/phone layout spot-checked
+## First real-content follow-up
 
-Once those gates pass, the v1 workflow is:
+The public Lab intentionally launched without fake QA items. When the first real public-safe library item is published, perform one live item-page spot check for its preview/download behavior. This is an operational follow-up, not a blocker for the v1 platform release, because item-page behavior is already covered by the Phase 4 preview matrix and Phase 8 acceptance fixtures.
+
+## V1 workflow
 
 **upload → minimal metadata → preview → validate → publish → browse**
