@@ -23,16 +23,16 @@ def expect(condition: bool, message: str) -> None:
         raise SystemExit(f"FAIL: {message}")
 
 
-for marker in ("/workspace", "validate_workspace", "publish_changes", "regenerate_thumbnail", "finish_item_files", "thumbnail_file"):
+for marker in ("/workspace", "validate_workspace", "publish_changes", "regenerate_thumbnail", "finish_item_files", "thumbnail_file", 'summary.get("item_count", 0)'):
     expect(marker in app_source, f"Missing Phase 7 app marker: {marker}")
 
-for marker in ("summarize_changes", "run_validation", "git(root, \"fetch\", \"origin\")", "git(root, \"commit\"", "git(root, \"push\", \"origin\", \"main\")", "summary[\"other\"]"):
+for marker in ("summarize_changes", "item_count", "run_validation", "git(root, \"fetch\", \"origin\")", "git(root, \"commit\"", "git(root, \"push\", \"origin\", \"main\")", "summary[\"other\"]"):
     expect(marker in workspace_source, f"Missing workspace safety marker: {marker}")
 
 for marker in ("1200, 675", "ImageOps.fit", "sync_playwright", "auto-thumbnail.svg", "custom"):
     expect(marker in thumbnail_source, f"Missing thumbnail marker: {marker}")
 
-for marker in ("Review &amp; Publish", "Preview Full Library", "Publish to GitHub", "I confirm this material is public-safe", "data-draft-preview", "Custom card image"):
+for marker in ("Review &amp; Publish", "Preview Full Library", "Publish to GitHub", "I confirm this material is public-safe", "data-draft-preview", "Custom card image", "assets/site/favicon.svg", "summary.item_count"):
     expect(marker in templates, f"Missing Phase 7 UI marker: {marker}")
 
 for marker in ("updateDraftPreview", "data-draft", "Add Locally", "Save Locally"):
@@ -44,9 +44,11 @@ for marker in ("publish-layout", "validation-row", "draft-library-card", "manage
 expect("item.thumbnail" in public_js and "card-thumbnail" in public_js, "Public library must render item thumbnails")
 expect("card-thumbnail-link" in public_css, "Public thumbnail sizing styles are missing")
 expect("css/card-thumbnails.css" in index_html, "Public thumbnail stylesheet is not loaded")
+expect("assets/site/favicon.svg" in index_html, "Public Lab favicon is not loaded")
+expect((ROOT / "assets" / "site" / "favicon.svg").is_file(), "Shared favicon asset is missing")
 expect("Pillow" in requirements and "playwright" in requirements, "Thumbnail dependencies are missing")
 expect("</form>" not in (ROOT / "library-manager" / "templates" / "partials" / "review-step.html").read_text(encoding="utf-8"), "Review partial should not close the parent form")
 
 print("PASS: Phase 7 local preview and automatic thumbnail contracts")
-print("PASS: Phase 7 validation, batching, and deliberate publishing controls")
-print("PASS: Phase 7 public card thumbnails and custom image replacement contracts")
+print("PASS: Phase 7 item-first batching and deliberate publishing controls")
+print("PASS: Phase 7 public card thumbnails, favicon, and custom image replacement contracts")
