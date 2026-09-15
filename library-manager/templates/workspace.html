@@ -23,7 +23,7 @@
   <section class="publish-panel">
     <div class="panel-heading">
       <div><p class="eyebrow">1 · What changed?</p><h2>Your local batch</h2></div>
-      <span class="change-count">[[ summary.count ]] file change<% if summary.count != 1 %>s<% endif %></span>
+      <span class="change-count">[[ summary.item_count ]] item change<% if summary.item_count != 1 %>s<% endif %></span>
     </div>
 
     <% if summary.has_changes %>
@@ -40,6 +40,7 @@
     <div class="workspace-empty"><span aria-hidden="true">✧</span><div><strong>Nothing waiting to publish.</strong><p>Make local Library Manager changes first, then come back here.</p></div></div>
     <% endif %>
 
+    <% if summary.count and summary.count != summary.item_count %><p class="quiet-note backend-change-note">[[ summary.count ]] underlying file update<% if summary.count != 1 %>s<% endif %> are handled automatically behind the scenes.</p><% endif %>
     <div class="branch-note"><strong>Local branch:</strong> [[ summary.branch or 'unknown' ]] <% if summary.branch != 'main' %><span>Publishing stays locked until you are on main.</span><% endif %></div>
   </section>
 
