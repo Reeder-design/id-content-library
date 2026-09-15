@@ -51,15 +51,17 @@ expect(python_item["format"] == "Python", "Python detection")
 expect(python_item["tools"] == ["Python"] and python_item["preview_type"] == "code", "Python tool and preview inference")
 
 app_source = (ROOT / "library-manager" / "app.py").read_text(encoding="utf-8")
-template = (ROOT / "library-manager" / "templates" / "item-form.html").read_text(encoding="utf-8")
-javascript = (ROOT / "library-manager" / "static" / "manager.js").read_text(encoding="utf-8")
+template_dir = ROOT / "library-manager" / "templates"
+templates = "\n".join(path.read_text(encoding="utf-8") for path in template_dir.rglob("*.html"))
+static_dir = ROOT / "library-manager" / "static"
+javascript = "\n".join(path.read_text(encoding="utf-8") for path in static_dir.glob("*.js"))
 options = json.loads((ROOT / "library-data" / "options.json").read_text(encoding="utf-8"))
 
 for marker in ("/api/prefill", "new_item_defaults", "suggestion_catalog", "127.0.0.1"):
     expect(marker in app_source, f"Missing app marker: {marker}")
 for marker in ("data-smart-field", "data-chip-target", "Advanced Details", "data-advanced-details"):
-    expect(marker in template, f"Missing form marker: {marker}")
-for marker in ("runSmartPrefill", "dataset.autoFilled", "syncAllChips", "/api/prefill"):
+    expect(marker in templates, f"Missing form marker: {marker}")
+for marker in ("runSmartPrefill", "dataset.autoFilled", "syncChips", "/api/prefill"):
     expect(marker in javascript, f"Missing JavaScript marker: {marker}")
 
 expect(options["defaults"]["library_status"] == "stable", "Stable library default")

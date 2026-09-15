@@ -1,0 +1,19 @@
+  <section class="form-step" data-step="3">
+    <div class="section-heading with-help">
+      <div><p class="eyebrow">Step 3</p><h2>Quick check</h2><p>If this reads the way you expect, save it. Phase 7 will add the actual generated preview, validation summary, and Publish button.</p></div>
+      <details class="help-popover"><summary aria-label="Help with review">?</summary><div class="help-card"><strong>No trick questions here.</strong><p>This is just a last glance at the information that will be written into the local library.</p></div></details>
+    </div>
+    <div class="review-card">
+      <dl>
+        <div><dt>Title</dt><dd data-review="title">—</dd></div>
+        <div><dt>Resource type</dt><dd data-review="content_type">—</dd></div>
+        <div><dt>Format</dt><dd data-review="format">—</dd></div>
+        <div><dt>Made with</dt><dd data-review="tools">—</dd></div>
+        <div><dt>Tags</dt><dd data-review="tags">—</dd></div>
+        <div><dt>How ready</dt><dd data-review="library_status">—</dd></div>
+      </dl>
+    </div>
+    <p class="public-safe-note"><strong>One last thing:</strong> this repository is public. Save only material that is already safe to share outside your company or client work.</p>
+    <div class="step-actions"><button type="button" class="button secondary" data-prev-step>Back</button><button type="submit" class="button"><% if mode == 'edit' %>Save Changes<% else %>Add to Library<% endif %></button></div>
+  </section>
+</form>

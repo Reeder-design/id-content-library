@@ -1,0 +1,19 @@
+  <section class="form-step" data-step="2">
+    <div class="section-heading with-help">
+      <div><p class="eyebrow">Step 2</p><h2>Tell us what it is</h2><p>The Manager handles technical metadata. You add the meaning.</p></div>
+      <details class="help-popover">
+        <summary aria-label="Help with item details">?</summary>
+        <div class="help-card">
+          <strong>Keep it simple.</strong>
+          <p>Think about what another instructional designer would need to understand, find, and reuse this item later.</p>
+          <p>If the detected format or preview behavior looks fine, there is no reason to open Advanced Details.</p>
+        </div>
+      </details>
+    </div>
+
+    <% include "partials/details-main.html" %>
+    <% include "partials/advanced-details.html" %>
+    <datalist id="format-suggestions"><% for value in options.format_suggestions %><option value="[[ value ]]"></option><% endfor %></datalist>
+    <div class="step-actions"><button type="button" class="button secondary" data-prev-step>Back</button><button type="button" class="button" data-next-step>Review it</button></div>
+  </section>
+

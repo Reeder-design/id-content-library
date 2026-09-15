@@ -63,10 +63,26 @@ This file is the implementation tracker for v1.
 - [x] Remember commonly used tags/tools
 - [x] Move uncommon fields under Advanced Details
 
+## Phase 6.5 — Manager UX refinement
+
+- [x] Replace preview/source/assets upload cards with one Add Your Project flow
+- [x] Keep repository folder mechanics hidden during normal use
+- [x] Add source-only and replace-project advanced controls
+- [x] Simplify normal metadata to human-language questions
+- [x] Keep technical metadata under Advanced Details
+- [x] Show Other label only when an Other option is actually selected
+- [x] Add a plain-language user guide drawer
+- [x] Add contextual help bubbles and option descriptions
+- [x] Refresh the Manager with a light green/purple futuristic-whimsical visual system
+- [x] Preserve smart prefill and human-overrides-win behavior
+
 ## Phase 7 — Preview + validation + publishing
 
 - [ ] Preview new item before adding
 - [ ] Preview full library locally
+- [ ] Generate automatic screenshots/thumbnails for supported interactive, document, and image content
+- [ ] Normalize/crop generated card imagery to consistent display sizes
+- [ ] Allow a generated thumbnail to be replaced manually when desired
 - [ ] Validate metadata, paths, slugs, files, and generated pages
 - [ ] Show human-readable change summary
 - [ ] Batch multiple changes

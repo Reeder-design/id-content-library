@@ -1,0 +1,53 @@
+    <details class="advanced-details" data-advanced-details>
+      <summary><span>Advanced Details</span><small>Only open this when a smart guess is wrong or you need an uncommon setting</small></summary>
+      <div class="form-grid advanced-grid">
+        <div class="field-block">
+          <div class="field-label-row"><label for="item-slug">Web address name</label><details class="field-help"><summary aria-label="Help with web address name">?</summary><div>This becomes the stable item URL. The Manager creates it from the title. Usually leave it alone.</div></details></div>
+          <input id="item-slug" required name="slug" value="[[ item.get('slug','') ]]" pattern="[a-z0-9]+(?:-[a-z0-9]+)*" data-smart-field="slug" <% if mode == 'edit' %>readonly<% endif %>>
+        </div>
+
+        <div class="field-block">
+          <div class="field-label-row"><label for="item-format">Detected format</label><details class="field-help"><summary aria-label="Help with format">?</summary><div>The file technology or delivery format, such as Storyline, PDF, PowerPoint, or HTML/CSS/JavaScript.</div></details></div>
+          <input id="item-format" required name="format" list="format-suggestions" value="[[ item.get('format','') ]]" data-smart-field="format">
+        </div>
+
+        <div class="field-block">
+          <div class="field-label-row"><label for="preview-type">How should it preview?</label><details class="field-help"><summary aria-label="Help with preview behavior">?</summary><div>This tells the public item page whether to launch an interaction, show a document/image/video, display text/code, or offer a download.</div></details></div>
+          <select id="preview-type" required name="preview_type" data-smart-field="preview_type">
+            <option value="">Choose…</option>
+            <% for value in options.preview_types %><option value="[[ value ]]" <% if item.get('preview_type') == value %>selected<% endif %>>[[ value ]]</option><% endfor %>
+          </select>
+        </div>
+
+        <div class="field-block">
+          <div class="field-label-row">
+            <label for="library-status">How ready is it?</label>
+            <details class="field-help wide-help"><summary aria-label="Help with readiness">?</summary><div><ul class="option-help-list compact"><li><b>stable</b> — ready to reuse and share.</li><li><b>experimental</b> — useful, but still being tested or refined.</li><li><b>archived</b> — kept for history but not something you actively recommend.</li><li><b>other</b> — use only when those three genuinely do not fit.</li></ul></div></details>
+          </div>
+          <select id="library-status" required name="library_status">
+            <option value="">Choose…</option>
+            <% for value in options.library_statuses %><option value="[[ value ]]" <% if item.get('library_status') == value %>selected<% endif %>>[[ value ]]</option><% endfor %>
+          </select>
+        </div>
+
+        <div class="field-block span-2">
+          <div class="field-label-row"><label for="portfolio-status">Portfolio relationship</label><details class="field-help"><summary aria-label="Help with portfolio relationship">?</summary><div>Library-only is normal. Candidate means you may later promote it into the official portfolio. Nothing is promoted automatically.</div></details></div>
+          <select id="portfolio-status" name="portfolio_status">
+            <option value="">Not set</option>
+            <% for value in options.portfolio_statuses %><option value="[[ value ]]" <% if item.get('portfolio_status') == value %>selected<% endif %>>[[ value ]]</option><% endfor %>
+          </select>
+        </div>
+
+        <% set uses_other = item.get('content_type') == 'Other' or item.get('library_status') == 'other' or item.get('preview_type') == 'other' or item.get('portfolio_status') == 'other' %>
+        <div class="field-block span-2" data-other-label-wrap <% if not uses_other %>hidden<% endif %>>
+          <label for="other-label">What does “Other” mean here?</label>
+          <input id="other-label" name="other_label" value="[[ item.get('other_label','') ]]" <% if not uses_other %>disabled<% endif %>>
+        </div>
+
+        <div class="field-block span-2">
+          <div class="field-label-row"><label for="usage-notes">Anything someone should know before reusing it?</label><details class="field-help"><summary aria-label="Help with usage notes">?</summary><div>Optional. Add setup notes, dependencies, adaptation tips, or anything that would save future-you confusion.</div></details></div>
+          <textarea id="usage-notes" name="usage_notes" rows="4">[[ item.get('usage_notes','') ]]</textarea>
+        </div>
+      </div>
+    </details>
+

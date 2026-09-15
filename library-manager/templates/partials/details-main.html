@@ -1,0 +1,70 @@
+    <div class="human-form-grid">
+      <div class="field-block span-2">
+        <div class="field-label-row">
+          <label for="item-title">Title</label>
+          <details class="field-help"><summary aria-label="Help with title">?</summary><div>Use the name you would expect to see on a library card. We suggest one from the file or folder name.</div></details>
+        </div>
+        <input id="item-title" required name="title" value="[[ item.get('title','') ]]" data-smart-field="title" placeholder="Branching Sales Scenario">
+      </div>
+
+      <div class="field-block span-2">
+        <div class="field-label-row">
+          <label for="content-type">What kind of resource is this?</label>
+          <details class="field-help wide-help">
+            <summary aria-label="Help choosing a resource type">?</summary>
+            <div>
+              <strong>Pick the best fit:</strong>
+              <ul class="option-help-list">
+                <li><b>Interactive Learning</b> — clickable or branching learning experiences.</li>
+                <li><b>Templates & Frameworks</b> — reusable structures, planning tools, or starter files.</li>
+                <li><b>Assessment & Practice</b> — quizzes, practice activities, rubrics, or skill checks.</li>
+                <li><b>Sales Enablement</b> — reusable resources built specifically to support selling.</li>
+                <li><b>Job Aids & Resources</b> — quick-reference tools people use while doing the work.</li>
+                <li><b>Multimedia</b> — video, motion, audio, graphics, or other media-first work.</li>
+                <li><b>Prompt Library</b> — reusable AI prompts or prompt frameworks.</li>
+                <li><b>Code & Automation</b> — scripts, automations, utilities, or code-first resources.</li>
+                <li><b>Design Patterns</b> — reusable UI, interaction, or learning-design patterns.</li>
+                <li><b>Other</b> — anything that genuinely does not fit the choices above.</li>
+              </ul>
+            </div>
+          </details>
+        </div>
+        <select id="content-type" required name="content_type">
+          <option value="">Choose the closest match…</option>
+          <% for value in options.content_types %><option value="[[ value ]]" <% if item.get('content_type') == value %>selected<% endif %>>[[ value ]]</option><% endfor %>
+        </select>
+      </div>
+
+      <div class="field-block span-2">
+        <div class="field-label-row">
+          <label for="item-summary">Short description</label>
+          <details class="field-help"><summary aria-label="Help with description">?</summary><div>One or two plain-English sentences: what is this, and what does it help someone do?</div></details>
+        </div>
+        <textarea id="item-summary" required name="summary" rows="3" placeholder="A reusable branching scenario template for practicing sales discovery conversations.">[[ item.get('summary','') ]]</textarea>
+      </div>
+
+      <div class="field-block span-2">
+        <div class="field-label-row">
+          <label for="item-tools">What did you use to make it?</label>
+          <details class="field-help"><summary aria-label="Help with tools">?</summary><div>List the tools someone would care about when reusing or adapting the item. Tap a chip or type your own.</div></details>
+        </div>
+        <input id="item-tools" required name="tools" value="<% if item.get('tools') is string %>[[ item.get('tools') ]]<% else %>[[ item.get('tools',[])|join(', ') ]]<% endif %>" placeholder="Articulate Storyline, JavaScript" data-smart-field="tools">
+        <div class="choice-chips" data-chip-target="tools">
+          <% for value in suggestions.tools %><button type="button" class="choice-chip" data-chip-value="[[ value ]]">[[ value ]]</button><% endfor %>
+        </div>
+      </div>
+
+      <div class="field-block span-2">
+        <div class="field-label-row">
+          <label for="item-tags">How would you search for it later?</label>
+          <details class="field-help"><summary aria-label="Help with tags">?</summary><div>Use a few natural keywords: topic, interaction type, audience, skill, or use case. Previously used tags show up as chips.</div></details>
+        </div>
+        <input id="item-tags" required name="tags" value="<% if item.get('tags') is string %>[[ item.get('tags') ]]<% else %>[[ item.get('tags',[])|join(', ') ]]<% endif %>" placeholder="branching, scenario, sales enablement">
+        <% if suggestions.tags %>
+        <div class="choice-chips" data-chip-target="tags">
+          <% for value in suggestions.tags %><button type="button" class="choice-chip" data-chip-value="[[ value ]]">[[ value ]]</button><% endfor %>
+        </div>
+        <% endif %>
+      </div>
+    </div>
+

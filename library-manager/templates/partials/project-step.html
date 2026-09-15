@@ -1,0 +1,51 @@
+  <section class="form-step active" data-step="1">
+    <div class="section-heading with-help">
+      <div><p class="eyebrow">Step 1</p><h2>Add your project</h2><p>Choose the file or complete folder that <em>is</em> the resource. You do not need to sort anything into preview, source, or asset folders.</p></div>
+      <details class="help-popover">
+        <summary aria-label="Help with project files">?</summary>
+        <div class="help-card">
+          <strong>What should I choose?</strong>
+          <p>Pick the thing you would hand to someone else: an HTML project folder, a published Storyline folder, a .story file, PDF, PowerPoint, image, video, prompt file, Python file, and so on.</p>
+          <p>The Manager uses that same project for reusable files and browser preview behavior when it can.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="project-upload-card">
+      <div class="project-upload-spark" aria-hidden="true">✦</div>
+      <h3><% if mode == 'edit' %>Add or replace the project<% else %>Drop in one project<% endif %></h3>
+      <p>One file or one folder is enough. We’ll do the boring organizing.</p>
+      <div class="project-upload-actions">
+        <label class="upload-button">
+          <span>Choose a file</span>
+          <input class="visually-hidden" type="file" name="project_files" data-upload-group="project_files">
+        </label>
+        <span class="upload-or">or</span>
+        <label class="upload-button secondary-upload">
+          <span>Choose a folder</span>
+          <input class="visually-hidden" type="file" name="project_files" data-upload-group="project_files" data-folder-input multiple webkitdirectory directory>
+        </label>
+      </div>
+      <div class="file-selection project-selection" data-file-selection="project_files">Nothing selected yet.</div>
+    </div>
+
+    <div class="smart-prefill-banner" data-smart-prefill-status data-state="ready">
+      <span class="smart-icon" aria-hidden="true">✧</span>
+      <div><strong>Smart suggestions are ready.</strong><span>Choose your project and we’ll suggest the obvious details without overwriting your later edits.</span></div>
+    </div>
+
+    <details class="advanced-file-options">
+      <summary>Advanced file options <small>Only for unusual file-handling cases</small></summary>
+      <div class="advanced-file-body">
+        <p class="quiet-note"><strong>This is not related to the “Other” resource category.</strong> These settings only change how the Manager handles the project files behind the scenes. Most of the time, leave them alone.</p>
+        <label class="check-row"><input type="checkbox" data-source-only> <span><strong>Download/source only.</strong> Use this when the project should be offered as a file to download instead of displayed or launched in the browser. Examples: a .story source file with no published output, an editable PowerPoint template, or another file that does not need an in-browser preview.</span></label>
+        <% if mode == 'edit' %>
+        <label class="check-row"><input type="checkbox" data-replace-project> <span><strong>Replace the current project files.</strong> Use this when you are uploading a newer version and want the new file/folder to replace the project files already stored for this item instead of being added alongside them.</span></label>
+        <% endif %>
+        <p class="quiet-note">If you are simply adding a normal project and want the Manager to preview it when possible, you do not need anything in this section.</p>
+      </div>
+    </details>
+
+    <div class="step-actions"><button type="button" class="button" data-next-step>Looks good — next</button></div>
+  </section>
+
