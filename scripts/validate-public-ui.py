@@ -38,11 +38,23 @@ def check_html() -> None:
     if "<noscript>" not in lower:
         fail("Public homepage must include a noscript fallback")
 
+    for token in (
+        "css/public-lab-theme.css",
+        "js/public-guide.js",
+        "data-public-guide-open",
+        "data-public-guide",
+        "How to use the Lab",
+        "What the status means",
+        "Lab vs. portfolio",
+    ):
+        if token not in html:
+            fail(f"Public visitor-guide contract is missing: {token}")
+
     duplicate_ids = sorted({value for value in re.findall(r'id="([^"]+)"', html) if html.count(f'id="{value}"') > 1})
     if duplicate_ids:
         fail("Public homepage contains duplicate IDs: " + ", ".join(duplicate_ids))
 
-    print("PASS: Public library HTML structure is valid")
+    print("PASS: Public library HTML structure and visitor guide are valid")
 
 
 def check_javascript_contract() -> None:
@@ -64,7 +76,12 @@ def check_javascript_contract() -> None:
     if "innerHTML" in js:
         fail("Public library rendering must not inject item metadata with innerHTML")
 
-    print("PASS: Public library JavaScript contract is intact")
+    guide_js = (ROOT / "js" / "public-guide.js").read_text(encoding="utf-8")
+    for token in ("data-public-guide-open", "openGuide", "closeGuide", "Escape"):
+        if token not in guide_js:
+            fail(f"Public guide JavaScript contract is incomplete: {token}")
+
+    print("PASS: Public library and visitor-guide JavaScript contracts are intact")
 
 
 def check_css_contract() -> None:
@@ -81,7 +98,16 @@ def check_css_contract() -> None:
     if missing:
         fail("Public library CSS is missing required responsive components: " + ", ".join(missing))
 
-    print("PASS: Public library responsive CSS contract is intact")
+    theme = (ROOT / "css" / "public-lab-theme.css").read_text(encoding="utf-8")
+    for token in ("--violet:", "--lavender:", "--mint:", ".public-guide-drawer", ".public-guide-button", ".library-card"):
+        if token not in theme:
+            fail(f"Public Lab theme is missing: {token}")
+
+    item_css = (ROOT / "css" / "item-pages.css").read_text(encoding="utf-8")
+    if '@import url("public-lab-theme.css")' not in item_css:
+        fail("Generated item pages must inherit the public Lab theme")
+
+    print("PASS: Public library responsive CSS and shared visual theme contracts are intact")
 
 
 def main() -> int:
