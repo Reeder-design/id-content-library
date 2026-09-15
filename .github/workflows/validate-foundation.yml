@@ -49,7 +49,9 @@ jobs:
         run: python -m py_compile library-manager/app.py library-manager/smart_prefill.py
 
       - name: Check Library Manager JavaScript syntax
-        run: node --check library-manager/static/manager.js
+        run: |
+          node --check library-manager/static/manager.js
+          node --check library-manager/static/item-form.js
 
       - name: Validate Phase 6 smart upload behavior
         run: python scripts/validate-phase6-manager.py
