@@ -169,9 +169,10 @@ def publish(root: Path) -> dict:
 
     push = git(root, "push", "origin", "main")
     if push.returncode != 0:
+        git(root, "reset", "--soft", "HEAD~1")
         return {
             "ok": False,
-            "message": "The local publish commit was created, but GitHub rejected the push. Your work is still safe locally.",
+            "message": "GitHub rejected the push, so the publish commit was rolled back and your changes remain visibly unpublished locally.",
             "detail": (push.stderr or push.stdout).strip(),
         }
 
