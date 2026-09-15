@@ -55,16 +55,24 @@ def first_with_suffix(files: list[Path], suffixes: set[str]) -> Path | None:
     return next((path for path in files if path.suffix.lower() in suffixes), None)
 
 
+def find_interactive_entry(preview_dir: Path, preview_files: list[Path]) -> Path | None:
+    for name in ("index.html", "story.html", "index.htm"):
+        candidate = preview_dir / name
+        if candidate.is_file():
+            return candidate
+    top_level_html = [path for path in preview_files if path.parent == preview_dir and path.suffix.lower() in {".html", ".htm"}]
+    return top_level_html[0] if top_level_html else None
+
+
 def discover_item_assets(item_dir: Path) -> dict:
     preview_dir = item_dir / "preview"
     source_dir = item_dir / "source"
     preview_files = list_files(preview_dir)
     source_files = list_files(source_dir)
-    entry = preview_dir / "index.html"
     return {
         "preview_files": preview_files,
         "source_files": source_files,
-        "interactive_entry": entry if entry.is_file() else None,
+        "interactive_entry": find_interactive_entry(preview_dir, preview_files),
         "document": first_with_suffix(preview_files, DOCUMENT_SUFFIXES),
         "image": first_with_suffix(preview_files, IMAGE_SUFFIXES),
         "video": first_with_suffix(preview_files, VIDEO_SUFFIXES),
@@ -88,7 +96,8 @@ def render_preview(item: dict, item_dir: Path, assets: dict) -> tuple[str, str |
     preview_files = assets["preview_files"]
 
     if preview_type == "interactive" and interactive_entry:
-        return ('<div class="preview-frame"><iframe src="preview/" title="Interactive preview" loading="lazy"></iframe></div>', "preview/")
+        href = web_path(interactive_entry, item_dir)
+        return (f'<div class="preview-frame"><iframe src="{html.escape(href, quote=True)}" title="Interactive preview" loading="lazy"></iframe></div>', href)
 
     if preview_type == "document" and assets["document"]:
         path = assets["document"]
@@ -118,7 +127,8 @@ def render_preview(item: dict, item_dir: Path, assets: dict) -> tuple[str, str |
             return (f'<div class="text-preview"><div class="preview-file-label">{html.escape(path.name)}</div><pre><code>{html.escape(content)}</code></pre>{note}</div>', web_path(path, item_dir))
 
     if preview_type == "other" and interactive_entry:
-        return ('<div class="preview-frame"><iframe src="preview/" title="Item preview" loading="lazy"></iframe></div>', "preview/")
+        href = web_path(interactive_entry, item_dir)
+        return (f'<div class="preview-frame"><iframe src="{html.escape(href, quote=True)}" title="Item preview" loading="lazy"></iframe></div>', href)
 
     if preview_files:
         path = preview_files[0]
@@ -159,7 +169,8 @@ def render_item_page(item: dict, item_dir: Path) -> str:
 
     actions = []
     if preview_href:
-        label = "Launch preview" if assets["interactive_entry"] and preview_href == "preview/" else "Open preview"
+        interactive_href = web_path(assets["interactive_entry"], item_dir) if assets["interactive_entry"] else None
+        label = "Launch preview" if interactive_href and preview_href == interactive_href else "Open preview"
         actions.append(action_link(label, preview_href, primary=True))
     if len(source_files) == 1:
         actions.append(action_link("Download source", web_path(source_files[0], item_dir), download=True))
