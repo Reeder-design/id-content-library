@@ -1,0 +1,27 @@
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+
+# Local secrets and environment
+.env
+.env.*
+!.env.example
+
+# Local Library Manager runtime/private state
+.library-manager/
+library-manager/.runtime/
+
+# Editors
+.vscode/
+.idea/
+
+# Temporary files
+*.tmp
+*.temp
+*~
