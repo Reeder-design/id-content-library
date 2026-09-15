@@ -1,0 +1,27 @@
+<% extends "base.html" %>
+<% block title %>Library | Library Manager<% endblock %>
+<% block content %>
+<section class="page-heading">
+  <div><p class="eyebrow">Local workspace</p><h1>Library</h1><p>Browse and maintain public-safe reusable learning content before publishing.</p></div>
+  <a class="button" href="[[ url_for('add_item') ]]">Add Item</a>
+</section>
+<section class="toolbar"><label for="library-search">Search library</label><input id="library-search" type="search" placeholder="Title, type, tool, tag…" autocomplete="off"></section>
+<p class="result-count" id="result-count">[[ items|length ]] item(s)</p>
+<section class="manager-grid" id="library-grid">
+<% for item in items %>
+<article class="manager-card" data-library-card data-search="[[ (item.title ~ ' ' ~ item.summary ~ ' ' ~ item.content_type ~ ' ' ~ item.format ~ ' ' ~ item.tools|join(' ') ~ ' ' ~ item.tags|join(' '))|lower ]]">
+  <div class="card-topline"><span class="eyebrow">[[ item.content_type ]]</span><span class="status-pill" data-status="[[ item.library_status ]]">[[ item.library_status ]]</span></div>
+  <h2>[[ item.title ]]</h2><p>[[ item.summary ]]</p>
+  <div class="meta-line"><strong>[[ item.format ]]</strong><span>[[ item.tools|join(' · ') ]]</span></div>
+  <div class="tag-line">[[ item.tags|join(' · ') ]]</div>
+  <div class="card-actions">
+    <a class="button secondary" target="_blank" rel="noopener" href="[[ item._preview_url ]]">Preview</a>
+    <a class="button secondary" href="[[ url_for('edit_item', slug=item.slug) ]]">Edit</a>
+    <form method="post" action="[[ url_for('open_files', slug=item.slug) ]]"><input type="hidden" name="csrf_token" value="[[ csrf_token() ]]"><button class="button secondary" type="submit">Open Files</button></form>
+    <% if item.library_status != 'archived' %><form method="post" action="[[ url_for('archive_item', slug=item.slug) ]]"><input type="hidden" name="csrf_token" value="[[ csrf_token() ]]"><button class="text-button" type="submit">Archive</button></form><% endif %>
+    <a class="danger-link" href="[[ url_for('delete_item', slug=item.slug) ]]">Delete…</a>
+  </div>
+</article>
+<% else %><div class="empty-state"><h2>No library items yet.</h2><p>Add the first reusable asset when you are ready.</p></div><% endfor %>
+</section>
+<% endblock %>

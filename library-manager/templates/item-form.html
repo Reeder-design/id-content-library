@@ -1,0 +1,57 @@
+<% extends "base.html" %>
+<% block title %><% if mode == 'edit' %>Edit Item<% else %>Add Item<% endif %> | Library Manager<% endblock %>
+<% block content %>
+<section class="page-heading compact">
+  <div><p class="eyebrow">Local workspace</p><h1><% if mode == 'edit' %>Edit Item<% else %>Add Item<% endif %></h1><p>Files first, then human context, then a final review before writing to the library.</p></div>
+</section>
+<form class="manager-form" method="post" enctype="multipart/form-data" data-manager-form>
+  <input type="hidden" name="csrf_token" value="[[ csrf_token() ]]">
+  <ol class="stepper" aria-label="Item workflow"><li class="active" data-step-label="1">1. Files</li><li data-step-label="2">2. Details</li><li data-step-label="3">3. Review</li></ol>
+
+  <section class="form-step active" data-step="1">
+    <div class="section-heading"><p class="eyebrow">Step 1</p><h2>Files</h2><p>Add individual files, complete folders, or both. Folder structure is preserved for Storyline and web content.</p></div>
+    <div class="upload-grid">
+      <% for area, label in [('preview','Preview'),('source','Source'),('assets','Supporting assets')] %>
+      <div class="upload-card">
+        <h3>[[ label ]]</h3><p>Files are stored under <code>[[ area ]]/</code>.</p>
+        <label>Choose files<input type="file" name="[[ area ]]_files" data-upload-group="[[ area ]]_files" multiple></label>
+        <label>Choose folder<input type="file" name="[[ area ]]_files" data-upload-group="[[ area ]]_files" data-folder-input multiple webkitdirectory directory></label>
+        <div class="file-selection" data-file-selection="[[ area ]]_files">No new files selected.</div>
+        <% if mode == 'edit' %><label class="check-row"><input type="checkbox" name="replace_[[ area ]]" value="1"> Replace everything currently in <code>[[ area ]]/</code> before saving</label><% endif %>
+      </div>
+      <% endfor %>
+    </div>
+    <div class="step-actions"><button type="button" class="button" data-next-step>Continue to Details</button></div>
+  </section>
+
+  <section class="form-step" data-step="2">
+    <div class="section-heading"><p class="eyebrow">Step 2</p><h2>Details</h2><p>Describe what the item is. Smart detection and prefill arrive in Phase 6.</p></div>
+    <div class="form-grid">
+      <label class="span-2">Title<input required name="title" value="[[ item.get('title','') ]]"></label>
+      <label>Slug<input required name="slug" value="[[ item.get('slug','') ]]" pattern="[a-z0-9]+(?:-[a-z0-9]+)*" <% if mode == 'edit' %>readonly<% endif %>><small><% if mode == 'edit' %>Stable URL identifier; locked during normal editing.<% else %>Lowercase letters, numbers, and hyphens.<% endif %></small></label>
+      <label>Created<input required type="date" name="created" value="[[ item.get('created','') ]]"></label>
+      <label class="span-2">Summary<textarea required name="summary" rows="3">[[ item.get('summary','') ]]</textarea></label>
+      <label>Content type<select required name="content_type"><option value="">Choose…</option><% for value in options.content_types %><option value="[[ value ]]" <% if item.get('content_type') == value %>selected<% endif %>>[[ value ]]</option><% endfor %></select></label>
+      <label>Format<input required name="format" list="format-suggestions" value="[[ item.get('format','') ]]"></label>
+      <label class="span-2">Tools<input required name="tools" value="<% if item.get('tools') is string %>[[ item.get('tools') ]]<% else %>[[ item.get('tools',[])|join(', ') ]]<% endif %>" placeholder="Articulate Storyline, JavaScript"><small>Comma-separated for Phase 5.</small></label>
+      <label class="span-2">Tags<input required name="tags" value="<% if item.get('tags') is string %>[[ item.get('tags') ]]<% else %>[[ item.get('tags',[])|join(', ') ]]<% endif %>" placeholder="branching, sales enablement, scenario"><small>Comma-separated for Phase 5.</small></label>
+      <label>Library status<select required name="library_status"><option value="">Choose…</option><% for value in options.library_statuses %><option value="[[ value ]]" <% if item.get('library_status') == value %>selected<% endif %>>[[ value ]]</option><% endfor %></select></label>
+      <label>Preview type<select required name="preview_type"><option value="">Choose…</option><% for value in options.preview_types %><option value="[[ value ]]" <% if item.get('preview_type') == value %>selected<% endif %>>[[ value ]]</option><% endfor %></select></label>
+      <label>Portfolio status<select name="portfolio_status"><option value="">Not set</option><% for value in options.portfolio_statuses %><option value="[[ value ]]" <% if item.get('portfolio_status') == value %>selected<% endif %>>[[ value ]]</option><% endfor %></select></label>
+      <label>Updated<input type="date" name="updated" value="[[ item.get('updated','') ]]"></label>
+      <label class="span-2">Other label<input name="other_label" value="[[ item.get('other_label','') ]]"><small>Required only when a controlled field uses Other.</small></label>
+      <label class="span-2">Thumbnail path<input name="thumbnail" value="[[ item.get('thumbnail','') ]]" placeholder="assets/thumbnail.png"></label>
+      <label class="span-2">Usage notes<textarea name="usage_notes" rows="4">[[ item.get('usage_notes','') ]]</textarea></label>
+    </div>
+    <datalist id="format-suggestions"><% for value in options.format_suggestions %><option value="[[ value ]]"></option><% endfor %></datalist>
+    <div class="step-actions"><button type="button" class="button secondary" data-prev-step>Back</button><button type="button" class="button" data-next-step>Review Item</button></div>
+  </section>
+
+  <section class="form-step" data-step="3">
+    <div class="section-heading"><p class="eyebrow">Step 3</p><h2>Review</h2><p>This confirms the save inputs. Generated pre-publish preview is part of Phase 7.</p></div>
+    <div class="review-card"><dl><div><dt>Title</dt><dd data-review="title">—</dd></div><div><dt>Slug</dt><dd data-review="slug">—</dd></div><div><dt>Content type</dt><dd data-review="content_type">—</dd></div><div><dt>Format</dt><dd data-review="format">—</dd></div><div><dt>Tools</dt><dd data-review="tools">—</dd></div><div><dt>Tags</dt><dd data-review="tags">—</dd></div><div><dt>Status</dt><dd data-review="library_status">—</dd></div><div><dt>Preview type</dt><dd data-review="preview_type">—</dd></div></dl></div>
+    <p class="public-safe-note"><strong>Public-safe boundary:</strong> everything written here belongs in the public repository. Do not add confidential or unsanitized material.</p>
+    <div class="step-actions"><button type="button" class="button secondary" data-prev-step>Back</button><button type="submit" class="button"><% if mode == 'edit' %>Save Changes<% else %>Add to Library<% endif %></button></div>
+  </section>
+</form>
+<% endblock %>
