@@ -43,7 +43,9 @@ jobs:
         run: python scripts/validate-phase4-ui.py
 
       - name: Check public JavaScript syntax
-        run: node --check js/library.js
+        run: |
+          node --check js/library.js
+          node --check js/public-guide.js
 
       - name: Check Library Manager Python syntax
         run: python -m py_compile library-manager/app.py library-manager/smart_prefill.py library-manager/workspace.py library-manager/thumbnailer.py
