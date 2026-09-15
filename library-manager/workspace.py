@@ -75,13 +75,19 @@ def summarize_changes(root: Path) -> dict:
             continue
         other.append(path)
 
+    added = sorted(buckets["added"])
+    updated = sorted(buckets["updated"] - buckets["added"] - buckets["removed"])
+    removed = sorted(buckets["removed"])
+    item_count = len(set(added) | set(updated) | set(removed))
+
     return {
         "branch": current_branch(root),
         "count": len(changes),
+        "item_count": item_count,
         "has_changes": bool(changes),
-        "added": sorted(buckets["added"]),
-        "updated": sorted(buckets["updated"] - buckets["added"] - buckets["removed"]),
-        "removed": sorted(buckets["removed"]),
+        "added": added,
+        "updated": updated,
+        "removed": removed,
         "generated": generated,
         "other": sorted(other),
         "raw": changes,
