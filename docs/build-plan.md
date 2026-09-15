@@ -54,14 +54,14 @@ This file is the implementation tracker for v1.
 
 ## Phase 6 — Smart upload + prefill
 
-- [ ] Detect common file types
-- [ ] Detect Storyline source/output
-- [ ] Infer format/tool/preview type
-- [ ] Generate title/slug suggestions from filenames
-- [ ] Prefill dates/default statuses
-- [ ] Add dropdowns and tag/tool chips
-- [ ] Remember commonly used tags/tools
-- [ ] Move uncommon fields under Advanced Details
+- [x] Detect common file types
+- [x] Detect Storyline source/output
+- [x] Infer format/tool/preview type
+- [x] Generate title/slug suggestions from filenames
+- [x] Prefill dates/default statuses
+- [x] Add dropdowns and tag/tool chips
+- [x] Remember commonly used tags/tools
+- [x] Move uncommon fields under Advanced Details
 
 ## Phase 7 — Preview + validation + publishing
 
