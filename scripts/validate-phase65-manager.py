@@ -19,6 +19,8 @@ for marker in ("data-guide-open", "data-guide-drawer", "Library Manager, in plai
     expect(marker in templates, f"Missing guide marker: {marker}")
 for marker in ("Add your project", 'name="project_files"', "We’ll do the boring organizing", "What kind of resource is this?", "What did you use to make it?", "How would you search for it later?", "Advanced file options", "Advanced Details", "data-other-label-wrap"):
     expect(marker in templates, f"Missing Phase 6.5 form marker: {marker}")
+for marker in ("not related to the “Other” resource category", "Download/source only.", "Replace the current project files.", "Only for unusual file-handling cases"):
+    expect(marker in templates, f"Missing Advanced file options explanation: {marker}")
 for marker in ("selectedProjectFiles", "source_files", "preview_files", "data-source-only", "syncOtherLabel"):
     expect(marker in item_js, f"Missing Phase 6.5 item JavaScript marker: {marker}")
 expect("openGuide" in manager_js, "Missing guide interaction")
@@ -30,4 +32,5 @@ for marker in ("--violet:", "--lavender:", "--mint:", "--lime:", ".guide-drawer"
 
 print("PASS: Phase 6.5 uses one human-centered project upload flow")
 print("PASS: Phase 6.5 help guide, contextual help, and simplified labels are present")
+print("PASS: Phase 6.5 Advanced file options are clearly separated from the Other resource category")
 print("PASS: Phase 6.5 light green/purple visual refresh is present")
