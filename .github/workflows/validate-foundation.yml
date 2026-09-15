@@ -33,5 +33,14 @@ jobs:
       - name: Validate public library UI
         run: python scripts/validate-public-ui.py
 
+      - name: Check generated library output
+        run: python scripts/build-library.py --check
+
+      - name: Validate item page preview matrix
+        run: python scripts/validate-item-pages.py
+
+      - name: Validate Phase 4 UI contracts
+        run: python scripts/validate-phase4-ui.py
+
       - name: Check public JavaScript syntax
         run: node --check js/library.js

@@ -32,15 +32,11 @@ function normalize(value) {
 }
 
 function humanize(value) {
-  return text(value)
-    .replaceAll("-", " ")
-    .replace(/\b\w/g, (letter) => letter.toUpperCase());
+  return text(value).replaceAll("-", " ").replace(/\b\w/g, (letter) => letter.toUpperCase());
 }
 
 function displayContentType(item) {
-  if (normalize(item.content_type) === "other" && text(item.other_label)) {
-    return text(item.other_label);
-  }
+  if (normalize(item.content_type) === "other" && text(item.other_label)) return text(item.other_label);
   return text(item.content_type);
 }
 
@@ -73,29 +69,21 @@ function setControlsDisabled(disabled) {
 function populateSelect(select, values, allLabel) {
   const current = select.value || "all";
   select.replaceChildren();
-
-  const allOption = new Option(allLabel, "all");
-  select.add(allOption);
-
+  select.add(new Option(allLabel, "all"));
   values.forEach((value) => select.add(new Option(value, value)));
   select.value = values.includes(current) ? current : "all";
 }
 
 function buildContentTypeFilters() {
   els.contentTypes.replaceChildren();
-
   const buttonValues = ["all"];
   const configured = Array.isArray(state.options.content_types) ? state.options.content_types : [];
+
   configured.forEach((contentType) => {
-    if (state.items.some((item) => item.content_type === contentType)) {
-      buttonValues.push(contentType);
-    }
+    if (state.items.some((item) => item.content_type === contentType)) buttonValues.push(contentType);
   });
 
-  const unconfigured = uniqueSorted(
-    state.items.map((item) => item.content_type).filter((value) => !configured.includes(value))
-  );
-  buttonValues.push(...unconfigured);
+  buttonValues.push(...uniqueSorted(state.items.map((item) => item.content_type).filter((value) => !configured.includes(value))));
 
   buttonValues.forEach((value) => {
     const button = makeElement("button", "filter-pill", value === "all" ? "All" : value);
@@ -114,10 +102,8 @@ function buildContentTypeFilters() {
 }
 
 function buildSecondaryFilters() {
-  const tools = uniqueSorted(state.items.flatMap((item) => Array.isArray(item.tools) ? item.tools : []));
-  const tags = uniqueSorted(state.items.flatMap((item) => Array.isArray(item.tags) ? item.tags : []));
-  populateSelect(els.tool, tools, "All tools");
-  populateSelect(els.tag, tags, "All tags");
+  populateSelect(els.tool, uniqueSorted(state.items.flatMap((item) => Array.isArray(item.tools) ? item.tools : [])), "All tools");
+  populateSelect(els.tag, uniqueSorted(state.items.flatMap((item) => Array.isArray(item.tags) ? item.tags : [])), "All tags");
 }
 
 function searchableText(item) {
@@ -135,11 +121,12 @@ function searchableText(item) {
 }
 
 function matchesFilters(item) {
-  const queryMatch = !state.query || searchableText(item).includes(normalize(state.query));
-  const typeMatch = state.contentType === "all" || item.content_type === state.contentType;
-  const toolMatch = state.tool === "all" || (item.tools || []).includes(state.tool);
-  const tagMatch = state.tag === "all" || (item.tags || []).includes(state.tag);
-  return queryMatch && typeMatch && toolMatch && tagMatch;
+  return (
+    (!state.query || searchableText(item).includes(normalize(state.query))) &&
+    (state.contentType === "all" || item.content_type === state.contentType) &&
+    (state.tool === "all" || (item.tools || []).includes(state.tool)) &&
+    (state.tag === "all" || (item.tags || []).includes(state.tag))
+  );
 }
 
 function metaLine(label, value) {
@@ -155,7 +142,6 @@ function createCard(item) {
 
   const top = makeElement("div", "card-topline");
   top.append(makeElement("span", "card-type", displayContentType(item)));
-
   const status = makeElement("span", "status-badge", humanize(item.library_status));
   status.dataset.status = normalize(item.library_status);
   top.append(status);
@@ -166,13 +152,9 @@ function createCard(item) {
 
   const meta = makeElement("div", "card-meta");
   meta.append(metaLine("Format", text(item.format)));
-
   const tools = Array.isArray(item.tools) ? item.tools.filter(Boolean).join(" · ") : "";
   if (tools) meta.append(metaLine("Tools", tools));
-
-  if (item.portfolio_status && item.portfolio_status !== "library-only") {
-    meta.append(metaLine("Portfolio", humanize(item.portfolio_status)));
-  }
+  if (item.portfolio_status && item.portfolio_status !== "library-only") meta.append(metaLine("Portfolio", humanize(item.portfolio_status)));
   card.append(meta);
 
   if (Array.isArray(item.tags) && item.tags.length) {
@@ -181,13 +163,19 @@ function createCard(item) {
     card.append(tags);
   }
 
+  const actions = makeElement("div", "card-actions");
+  const details = makeElement("a", "card-action-link", "View item");
+  details.href = `items/${item.slug}/`;
+  details.setAttribute("aria-label", `View ${text(item.title)}`);
+  actions.append(details);
+  card.append(actions);
+
   return card;
 }
 
 function renderEmpty(filteredItems) {
   const hasItems = state.items.length > 0;
   const hasMatches = filteredItems.length > 0;
-
   els.empty.hidden = hasMatches;
   if (hasMatches) return;
 
@@ -203,9 +191,7 @@ function renderEmpty(filteredItems) {
 function render() {
   const filtered = sortedItems(state.items.filter(matchesFilters));
   els.grid.replaceChildren(...filtered.map(createCard));
-
-  const noun = filtered.length === 1 ? "item" : "items";
-  els.count.textContent = `${filtered.length} ${noun}`;
+  els.count.textContent = `${filtered.length} ${filtered.length === 1 ? "item" : "items"}`;
   renderEmpty(filtered);
 }
 
@@ -223,21 +209,9 @@ function clearFilters() {
 }
 
 function bindEvents() {
-  els.search.addEventListener("input", (event) => {
-    state.query = event.target.value;
-    render();
-  });
-
-  els.tool.addEventListener("change", (event) => {
-    state.tool = event.target.value;
-    render();
-  });
-
-  els.tag.addEventListener("change", (event) => {
-    state.tag = event.target.value;
-    render();
-  });
-
+  els.search.addEventListener("input", (event) => { state.query = event.target.value; render(); });
+  els.tool.addEventListener("change", (event) => { state.tool = event.target.value; render(); });
+  els.tag.addEventListener("change", (event) => { state.tag = event.target.value; render(); });
   els.clear.addEventListener("click", clearFilters);
 }
 
@@ -256,10 +230,8 @@ async function init() {
       loadJson("library-data/items.json"),
       loadJson("library-data/options.json")
     ]);
-
     state.items = Array.isArray(items) ? items : [];
     state.options = options && typeof options === "object" ? options : {};
-
     buildContentTypeFilters();
     buildSecondaryFilters();
     setControlsDisabled(state.items.length === 0);
