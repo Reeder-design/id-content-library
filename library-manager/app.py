@@ -8,10 +8,13 @@ import shutil
 import subprocess
 import sys
 import tempfile
+from collections import Counter
 from datetime import date
 from pathlib import Path, PurePosixPath
 
-from flask import Flask, abort, flash, redirect, render_template, request, send_from_directory, session, url_for
+from flask import Flask, abort, flash, jsonify, redirect, render_template, request, send_from_directory, session, url_for
+
+from smart_prefill import infer_from_files
 
 ROOT = Path(__file__).resolve().parents[1]
 ITEMS_DIR = ROOT / "items"
@@ -83,19 +86,56 @@ def load_item(slug: str) -> dict:
     return load_json(path)
 
 
-def load_items() -> list[dict]:
+def raw_items() -> list[dict]:
     items: list[dict] = []
     if not ITEMS_DIR.is_dir():
         return items
     for directory in sorted((path for path in ITEMS_DIR.iterdir() if path.is_dir()), key=lambda path: path.name):
         metadata = directory / "item.json"
-        if not metadata.is_file():
-            continue
-        item = load_json(metadata)
-        item["_folder"] = str(directory)
-        item["_preview_url"] = url_for("repo_file", filepath=f"items/{directory.name}/index.html")
+        if metadata.is_file():
+            items.append(load_json(metadata))
+    return items
+
+
+def load_items() -> list[dict]:
+    items: list[dict] = []
+    for item in raw_items():
+        item = dict(item)
+        slug = clean(item.get("slug"))
+        item["_folder"] = str(ITEMS_DIR / slug)
+        item["_preview_url"] = url_for("repo_file", filepath=f"items/{slug}/index.html")
         items.append(item)
     return sorted(items, key=lambda item: clean(item.get("title")).lower())
+
+
+def suggestion_catalog(options: dict | None = None) -> dict[str, list[str]]:
+    options = options or load_options()
+    tool_counts: Counter[str] = Counter()
+    tag_counts: Counter[str] = Counter()
+    for item in raw_items():
+        tool_counts.update(clean(value) for value in item.get("tools", []) if clean(value))
+        tag_counts.update(clean(value) for value in item.get("tags", []) if clean(value))
+
+    def ranked(counter: Counter[str], seeds=(), limit: int = 14) -> list[str]:
+        ordered = [value for value, _ in sorted(counter.items(), key=lambda pair: (-pair[1], pair[0].lower()))]
+        for seed in seeds:
+            if seed not in ordered:
+                ordered.append(seed)
+        return ordered[:limit]
+
+    return {
+        "tools": ranked(tool_counts, options.get("tool_suggestions", [])),
+        "tags": ranked(tag_counts, limit=16),
+    }
+
+
+def new_item_defaults(options: dict) -> dict:
+    defaults = options.get("defaults", {})
+    return {
+        "created": date.today().isoformat(),
+        "library_status": defaults.get("library_status", "stable"),
+        "portfolio_status": defaults.get("portfolio_status", "library-only"),
+    }
 
 
 def safe_upload_path(filename: str) -> Path:
@@ -244,6 +284,19 @@ def open_folder(path: Path) -> None:
         subprocess.Popen(["xdg-open", str(path)])
 
 
+def render_item_form(mode: str, item, options: dict, *, status: int = 200):
+    return (
+        render_template(
+            "item-form.html",
+            mode=mode,
+            item=item,
+            options=options,
+            suggestions=suggestion_catalog(options),
+        ),
+        status,
+    )
+
+
 @app.get("/")
 def home():
     return redirect(url_for("library"))
@@ -254,11 +307,22 @@ def library():
     return render_template("library.html", items=load_items())
 
 
+@app.post("/api/prefill")
+def prefill():
+    payload = request.get_json(silent=True) or {}
+    files = payload.get("files", [])
+    if not isinstance(files, list) or len(files) > 10000:
+        abort(400, "files must be a JSON list with at most 10,000 entries")
+    if any(not isinstance(entry, dict) for entry in files):
+        abort(400, "each file entry must be an object")
+    return jsonify(infer_from_files(files))
+
+
 @app.route("/add", methods=["GET", "POST"])
 def add_item():
     options = load_options()
     if request.method == "GET":
-        return render_template("item-form.html", mode="add", item={}, options=options)
+        return render_item_form("add", new_item_defaults(options), options)
 
     require_csrf()
     try:
@@ -277,7 +341,7 @@ def add_item():
             raise
     except (ValueError, RuntimeError) as exc:
         flash(str(exc), "error")
-        return render_template("item-form.html", mode="add", item=request.form, options=options), 400
+        return render_item_form("add", request.form, options, status=400)
 
     flash(f"Added {item['title']} to the local library.", "success")
     return redirect(url_for("library"))
@@ -288,7 +352,7 @@ def edit_item(slug: str):
     existing = load_item(slug)
     options = load_options()
     if request.method == "GET":
-        return render_template("item-form.html", mode="edit", item=existing, options=options)
+        return render_item_form("edit", existing, options)
 
     require_csrf()
     try:
@@ -301,7 +365,7 @@ def edit_item(slug: str):
         mutate_existing(slug, mutation)
     except (ValueError, RuntimeError) as exc:
         flash(str(exc), "error")
-        return render_template("item-form.html", mode="edit", item=request.form, options=options), 400
+        return render_item_form("edit", request.form, options, status=400)
 
     flash(f"Saved changes to {updated['title']}.", "success")
     return redirect(url_for("library"))
