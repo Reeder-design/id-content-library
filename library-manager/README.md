@@ -1,11 +1,11 @@
 # Library Manager
 
-Library Manager is the **local-only** maintenance utility for the public Learning Content Lab. It is intentionally not deployed as part of the public site.
+Library Manager is the **local-only** maintenance utility for the public Content Library. It is intentionally not deployed as part of the public site.
 
 The two surfaces share a visual identity, but their roles stay separate:
 
 - **Library Manager** = private/local maintenance workspace.
-- **Learning Content Lab** = public visitor-facing library.
+- **Content Library** = public visitor-facing library.
 
 ## Current capabilities
 
@@ -30,7 +30,7 @@ The two surfaces share a visual identity, but their roles stay separate:
 - crop/normalize image projects and use a branded fallback when screenshots are unavailable
 - choose a project frame, upload an image, or select an image from Haley's curated icon library for the public card thumbnail
 - add connected URLs for supporting assets or related repositories
-- preview the full generated Learning Content Lab locally
+- preview the full generated Content Library locally
 - batch multiple local item changes before publishing
 - show a plain-English Review & Publish change summary
 - validate metadata, slugs, paths, files, thumbnails, generated pages, and preview support
@@ -61,4 +61,4 @@ On first launch, the Manager asks you to set a password of at least 12 character
 
 Only a password hash and signing key are stored in `~/.config/learning-content-lab/manager-auth.json` on your computer, outside this repository and the public site. If you forget the password, stop the Manager, remove that local file, and start it again to set a new one. The app still binds only to `127.0.0.1`.
 
-Anything added through Library Manager belongs in the public Learning Content Lab, so only add material that is ready for public storage.
+Anything added through Library Manager belongs in the public Content Library, so only add material that is ready for public storage.
