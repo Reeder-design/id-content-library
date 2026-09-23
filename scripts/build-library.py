@@ -4,7 +4,7 @@ import argparse
 import html
 import json
 from pathlib import Path
-from urllib.parse import quote
+from urllib.parse import quote, urlsplit
 
 ROOT = Path(__file__).resolve().parents[1]
 ITEMS_DIR = ROOT / "items"
@@ -15,6 +15,14 @@ CODE_SUFFIXES = {".html", ".htm", ".css", ".js", ".json", ".xml", ".py", ".sh", 
 IMAGE_SUFFIXES = {".png", ".jpg", ".jpeg", ".gif", ".webp", ".svg"}
 VIDEO_SUFFIXES = {".mp4", ".webm", ".mov", ".m4v"}
 DOCUMENT_SUFFIXES = {".pdf", ".doc", ".docx", ".ppt", ".pptx", ".xls", ".xlsx"}
+TYPE_ICONS = {
+    "Interactive Learning": "ideas", "Templates & Frameworks": "design",
+    "Assessment & Practice": "strategy", "Sales Enablement": "content",
+    "Job Aids & Resources": "content", "Multimedia": "multimedia",
+    "Prompt Library": "ideas", "Code & Automation": "code",
+    "Design Patterns": "visuals", "Other": "repository",
+}
+ICON_IDS = {"content", "ideas", "visuals", "multimedia", "design", "strategy", "code", "repository"}
 
 
 def fail(message: str) -> None:
@@ -32,6 +40,14 @@ def load_json(path: Path):
 
 def clean(value) -> str:
     return str(value or "").strip()
+
+
+def safe_external_url(value: str) -> bool:
+    try:
+        parsed = urlsplit(clean(value))
+        return parsed.scheme in {"http", "https"} and bool(parsed.hostname) and not any(char.isspace() for char in clean(value))
+    except ValueError:
+        return False
 
 
 def humanize(value: str) -> str:
@@ -197,6 +213,18 @@ def render_item_page(item: dict, item_dir: Path) -> str:
     tools = " · ".join(clean(value) for value in item.get("tools", []) if clean(value))
     tags = "".join(f'<span class="tag-chip">{html.escape(clean(tag))}</span>' for tag in item.get("tags", []) if clean(tag))
     portfolio = clean(item.get("portfolio_status"))
+    icon_id = clean(item.get("thumbnail_icon"))
+    if icon_id not in ICON_IDS:
+        icon_id = TYPE_ICONS.get(content_type, "content")
+    icon_markup = f'<img class="item-support-icon" src="../../assets/site/icon-library/{icon_id}.webp" alt="">'
+    connected_links = [link for link in item.get("connected_urls", []) if isinstance(link, dict) and safe_external_url(link.get("url", ""))]
+    connected_markup = ""
+    if connected_links:
+        links = "".join(
+            f'<li><a href="{html.escape(clean(link["url"]), quote=True)}" target="_blank" rel="noopener noreferrer">{html.escape(clean(link["label"]))}<span aria-hidden="true"> ↗</span></a></li>'
+            for link in connected_links
+        )
+        connected_markup = f'<div class="sidebar-card connected-card"><div class="section-kicker">Connected URLs</div><ul class="connected-list">{links}</ul></div>'
 
     actions = []
     if preview_href:
@@ -266,6 +294,7 @@ def render_item_page(item: dict, item_dir: Path) -> str:
       <div class="page-shell item-hero-grid">
         <div>
           <div class="item-topline"><span class="card-type">{html.escape(content_type)}</span><span class="status-badge" data-status="{html.escape(clean(item.get('library_status')), quote=True)}">{html.escape(status)}</span></div>
+          {icon_markup}
           <h1 class="item-title">{html.escape(clean(item.get('title')))}</h1>
           <p class="item-summary">{html.escape(clean(item.get('summary')))}</p>
           {action_markup}
@@ -293,6 +322,7 @@ def render_item_page(item: dict, item_dir: Path) -> str:
           {source_markup}
         </div>
         <aside class="item-sidebar">
+          {connected_markup}
           <div class="sidebar-card">
             <div class="section-kicker">Tags</div>
             <div class="tag-list">{tags or '<span class="muted-copy">No tags listed.</span>'}</div>

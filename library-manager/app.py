@@ -11,11 +11,12 @@ import tempfile
 from collections import Counter
 from datetime import date
 from pathlib import Path, PurePosixPath
+from urllib.parse import urlsplit
 
 from flask import Flask, abort, flash, jsonify, redirect, render_template, request, send_from_directory, session, url_for
 
 from smart_prefill import infer_from_files
-from thumbnailer import AUTO_NAMES, generate_thumbnail
+from thumbnailer import AUTO_NAMES, ICON_CHOICES, ICON_NAME, generate_icon_thumbnail, generate_thumbnail
 from workspace import publish as publish_workspace
 from workspace import run_validation, summarize_changes, validation_ok
 
@@ -26,6 +27,14 @@ BUILD_SCRIPT = ROOT / "scripts" / "build-library.py"
 SLUG_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 UPLOAD_AREAS = ("preview", "source", "assets")
 THUMBNAIL_SUFFIXES = {".png", ".jpg", ".jpeg", ".webp", ".gif", ".svg"}
+ICON_ROOT = ROOT / "assets" / "site" / "icon-library"
+TYPE_ICONS = {
+    "Interactive Learning": "ideas", "Templates & Frameworks": "design",
+    "Assessment & Practice": "strategy", "Sales Enablement": "content",
+    "Job Aids & Resources": "content", "Multimedia": "multimedia",
+    "Prompt Library": "ideas", "Code & Automation": "code",
+    "Design Patterns": "visuals", "Other": "repository",
+}
 
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(32)
@@ -110,6 +119,7 @@ def load_items() -> list[dict]:
         item["_preview_url"] = url_for("repo_file", filepath=f"items/{slug}/index.html")
         thumb = clean(item.get("thumbnail"))
         item["_thumbnail_url"] = url_for("repo_file", filepath=f"items/{slug}/{thumb}") if thumb else ""
+        item["_support_icon"] = item.get("thumbnail_icon") or TYPE_ICONS.get(item.get("content_type"), "content")
         items.append(item)
     return sorted(items, key=lambda item: clean(item.get("title")).lower())
 
@@ -173,11 +183,28 @@ def form_metadata(existing: dict | None = None) -> dict:
         "created": clean(request.form.get("created")),
     }
 
-    optional_strings = ("updated", "portfolio_status", "thumbnail", "other_label", "usage_notes")
+    optional_strings = ("updated", "portfolio_status", "other_label", "usage_notes")
     for field in optional_strings:
         value = clean(request.form.get(field))
         if value:
             item[field] = value
+
+    if existing and existing.get("thumbnail"):
+        item["thumbnail"] = existing["thumbnail"]
+    mode = clean(request.form.get("thumbnail_mode")) or "frame"
+    item["thumbnail_mode"] = mode
+    if mode == "icon":
+        item["thumbnail_icon"] = clean(request.form.get("thumbnail_icon"))
+
+    labels = request.form.getlist("connected_url_label")
+    urls = request.form.getlist("connected_url_url")
+    connected_urls = []
+    for label, url in zip(labels, urls):
+        label, url = clean(label), clean(url)
+        if label or url:
+            connected_urls.append({"label": label, "url": url})
+    if connected_urls:
+        item["connected_urls"] = connected_urls
 
     errors: list[str] = []
     for field in ("title", "slug", "summary", "content_type", "format", "library_status", "preview_type", "created"):
@@ -189,6 +216,21 @@ def form_metadata(existing: dict | None = None) -> dict:
         errors.append("Add at least one tool.")
     if not item["tags"]:
         errors.append("Add at least one tag.")
+    if mode not in {"frame", "upload", "icon"}:
+        errors.append("Choose a thumbnail source.")
+    if mode == "icon" and item.get("thumbnail_icon") not in ICON_CHOICES:
+        errors.append("Choose an icon from the library.")
+    if len(labels) != len(urls) or len(connected_urls) > 12:
+        errors.append("Add no more than 12 complete connected links.")
+    for link in connected_urls:
+        try:
+            parsed = urlsplit(link["url"])
+            valid_url = parsed.scheme in {"http", "https"} and bool(parsed.hostname) and not any(char.isspace() for char in link["url"])
+        except ValueError:
+            valid_url = False
+        if not link["label"] or len(link["label"]) > 80 or len(link["url"]) > 2000 or not valid_url:
+            errors.append("Each connected link needs a short label and a full http or https URL.")
+            break
 
     controlled = {
         "content_type": options["content_types"],
@@ -259,6 +301,7 @@ def apply_custom_thumbnail(directory: Path, item: dict) -> bool:
         path = assets / name
         if path.exists():
             path.unlink()
+    (assets / ICON_NAME).unlink(missing_ok=True)
     target = assets / f"custom-thumbnail{suffix}"
     upload.save(target)
     item["thumbnail"] = f"assets/{target.name}"
@@ -286,11 +329,28 @@ def rebuild_library() -> None:
 
 
 def finish_item_files(directory: Path, item: dict) -> dict:
-    custom = apply_custom_thumbnail(directory, item)
+    mode = item.get("thumbnail_mode", "frame")
+    if mode == "frame":
+        item.pop("thumbnail", None)
+        (directory / "assets" / ICON_NAME).unlink(missing_ok=True)
+    elif mode == "icon":
+        item.pop("thumbnail", None)
+    custom = apply_custom_thumbnail(directory, item) if mode == "upload" else False
+    if mode == "upload" and not custom:
+        existing = clean(item.get("thumbnail"))
+        if not existing.startswith("assets/custom-thumbnail.") or not (directory / existing).is_file():
+            raise ValueError("Choose an image to upload for the card thumbnail.")
     write_metadata(directory, item)
     rebuild_library()
     if custom:
         return {"kind": "custom", "message": "Using your custom preview image."}
+    if mode == "upload":
+        return {"kind": "custom", "message": "Kept your uploaded card image."}
+    if mode == "icon":
+        result = generate_icon_thumbnail(directory, item, item["thumbnail_icon"], ICON_ROOT)
+        item["thumbnail"] = result["path"]
+        write_metadata(directory, item)
+        return result
     result = generate_thumbnail(directory, item, request.host_url.rstrip("/"))
     item["thumbnail"] = result["path"]
     write_metadata(directory, item)
@@ -324,6 +384,10 @@ def open_folder(path: Path) -> None:
 
 
 def render_item_form(mode: str, item, options: dict, *, status: int = 200):
+    labels = item.getlist("connected_url_label") if hasattr(item, "getlist") else []
+    urls = item.getlist("connected_url_url") if hasattr(item, "getlist") else []
+    links = [{"label": label, "url": url} for label, url in zip(labels, urls)] if labels or urls else item.get("connected_urls", [])
+    thumbnail_mode = item.get("thumbnail_mode") or ("upload" if clean(item.get("thumbnail")).startswith("assets/custom-thumbnail.") else "icon" if clean(item.get("thumbnail")).endswith(ICON_NAME) else "frame")
     return (
         render_template(
             "item-form.html",
@@ -331,6 +395,9 @@ def render_item_form(mode: str, item, options: dict, *, status: int = 200):
             item=item,
             options=options,
             suggestions=suggestion_catalog(options),
+            connected_links=links or [{"label": "", "url": ""}],
+            thumbnail_mode=thumbnail_mode,
+            icon_choices=ICON_CHOICES,
         ),
         status,
     )

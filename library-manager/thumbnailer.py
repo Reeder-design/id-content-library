@@ -3,6 +3,18 @@ from __future__ import annotations
 import html
 from pathlib import Path
 
+ICON_CHOICES = {
+    "content": "Content",
+    "ideas": "Ideas",
+    "visuals": "Visuals",
+    "multimedia": "Multimedia",
+    "design": "Design",
+    "strategy": "Strategy",
+    "code": "Code",
+    "repository": "Repository",
+}
+ICON_NAME = "icon-thumbnail.png"
+
 IMAGE_SUFFIXES = {".png", ".jpg", ".jpeg", ".webp", ".gif"}
 AUTO_NAMES = {"auto-thumbnail.png", "auto-thumbnail.jpg", "auto-thumbnail.svg"}
 
@@ -52,6 +64,56 @@ def _normalize_image(source: Path, target: Path) -> bool:
         return True
     except Exception:
         return False
+
+
+def generate_icon_thumbnail(item_dir: Path, item: dict, icon_id: str, icon_root: Path) -> dict:
+    if icon_id not in ICON_CHOICES:
+        raise ValueError("Choose an icon from the library.")
+    from PIL import Image, ImageDraw, ImageFont
+
+    source = icon_root / f"{icon_id}.webp"
+    if not source.is_file():
+        raise ValueError("That library icon is unavailable.")
+    assets = item_dir / "assets"
+    assets.mkdir(parents=True, exist_ok=True)
+    target = assets / ICON_NAME
+    canvas = Image.new("RGB", (1200, 675), "#153842")
+    draw = ImageDraw.Draw(canvas)
+    for x in range(0, 1200, 42):
+        draw.line((x, 0, x, 675), fill="#1c444d", width=1)
+    for y in range(0, 675, 42):
+        draw.line((0, y, 1200, y), fill="#1c444d", width=1)
+    draw.rounded_rectangle((50, 54, 1150, 621), radius=40, fill="#edf9f1")
+    draw.rounded_rectangle((88, 102, 500, 573), radius=34, fill="#d9f2df")
+    with Image.open(source) as original:
+        icon = original.convert("RGBA")
+        icon.thumbnail((345, 345), Image.Resampling.LANCZOS)
+        canvas.paste(icon, (294 - icon.width // 2, 337 - icon.height // 2), icon)
+    font_candidates = [
+        "/System/Library/Fonts/Supplemental/Arial Bold.ttf",
+        "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
+    ]
+    font_path = next((path for path in font_candidates if Path(path).is_file()), None)
+    title_font = ImageFont.truetype(font_path, 58) if font_path else ImageFont.load_default()
+    label_font = ImageFont.truetype(font_path, 23) if font_path else ImageFont.load_default()
+    draw.text((550, 160), "LEARNING CONTENT LAB", font=label_font, fill="#24766d")
+    title = str(item.get("title", "Untitled item"))
+    words, lines, line = title.split(), [], ""
+    for word in words:
+        candidate = f"{line} {word}".strip()
+        if line and draw.textlength(candidate, font=title_font) > 550:
+            lines.append(line)
+            line = word
+        else:
+            line = candidate
+    if line:
+        lines.append(line)
+    for index, text_line in enumerate(lines[:4]):
+        draw.text((550, 230 + index * 72), text_line, font=title_font, fill="#173a43")
+    draw.rounded_rectangle((550, 525, 777, 558), radius=16, fill="#c8ed7c")
+    draw.text((565, 530), ICON_CHOICES[icon_id].upper(), font=label_font, fill="#173a43")
+    canvas.save(target, format="PNG", optimize=True)
+    return {"path": f"assets/{ICON_NAME}", "kind": "icon", "message": f"Using the {ICON_CHOICES[icon_id]} icon from your library."}
 
 
 def _browser_screenshot(url: str, target: Path) -> tuple[bool, str]:

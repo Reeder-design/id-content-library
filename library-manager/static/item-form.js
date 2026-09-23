@@ -9,6 +9,9 @@
   const sourceOnly = q('[data-source-only]');
   const replaceProject = q('[data-replace-project]');
   const smartStatus = q('[data-smart-prefill-status]');
+  const connectedRows = q('[data-connected-rows]');
+  const thumbnailImage = q('[data-draft-thumbnail]');
+  let uploadedPreviewUrl = '';
   let step = 1;
   let maxReached = 1;
   let autoWriting = false;
@@ -51,7 +54,59 @@
       };
       el.textContent = value || fallbacks[name] || '—';
     });
+    const links = qa('[data-connected-row]').map((row) => ({
+      label: row.querySelector('[name="connected_url_label"]').value.trim(),
+      url: row.querySelector('[name="connected_url_url"]').value.trim(),
+    })).filter((link) => link.label && /^https?:\/\//i.test(link.url));
+    const connected = q('[data-draft-connected]');
+    if (connected) connected.replaceChildren(...links.map((link) => {
+      const a = document.createElement('a');
+      a.href = link.url;
+      a.textContent = link.label;
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+      return a;
+    }));
+    const reviewConnected = q('[data-review-connected]');
+    if (reviewConnected) reviewConnected.textContent = links.length ? links.map((link) => link.label).join(' · ') : 'None added';
+    const mode = q('[name="thumbnail_mode"]:checked')?.value || 'frame';
+    const reviewThumb = q('[data-review-thumbnail]');
+    if (reviewThumb) reviewThumb.textContent = mode === 'icon' ? `Icon library · ${q('[name="thumbnail_icon"]:checked')?.value || 'Choose an icon'}` : mode === 'upload' ? 'Uploaded image' : 'Frame from project';
   };
+
+  const syncThumbnail = () => {
+    const mode = q('[name="thumbnail_mode"]:checked')?.value || 'frame';
+    qa('[data-thumbnail-panel]').forEach((panel) => { panel.hidden = panel.dataset.thumbnailPanel !== mode; });
+    const iconField = q('[name="thumbnail_icon"]:checked');
+    const upload = q('[name="thumbnail_file"]');
+    if (thumbnailImage) {
+      if (mode === 'icon' && iconField) thumbnailImage.src = iconField.closest('label').querySelector('img').src;
+      else if (mode === 'upload' && upload?.files?.length) {
+        if (uploadedPreviewUrl) URL.revokeObjectURL(uploadedPreviewUrl);
+        uploadedPreviewUrl = URL.createObjectURL(upload.files[0]);
+        thumbnailImage.src = uploadedPreviewUrl;
+      } else thumbnailImage.src = mode === 'upload' ? (thumbnailImage.dataset.uploadSrc || thumbnailImage.dataset.defaultSrc) : thumbnailImage.dataset.defaultSrc;
+    }
+    const note = q('[data-thumbnail-note]');
+    if (note) note.textContent = mode === 'frame' ? 'The project frame is created after you save the item locally.' : mode === 'icon' ? 'The selected icon becomes a themed 16:9 card image after saving.' : 'Your uploaded image will appear on the card and project page.';
+  };
+  qa('[name="thumbnail_mode"], [name="thumbnail_icon"], [name="thumbnail_file"]').forEach((input) => input.addEventListener('change', syncThumbnail));
+  syncThumbnail();
+
+  const addConnectedRow = (label = '', url = '') => {
+    if (!connectedRows) return;
+    const row = connectedRows.querySelector('[data-connected-row]').cloneNode(true);
+    row.querySelector('[name="connected_url_label"]').value = label;
+    row.querySelector('[name="connected_url_url"]').value = url;
+    connectedRows.append(row);
+  };
+  q('[data-add-connected]')?.addEventListener('click', () => addConnectedRow());
+  connectedRows?.addEventListener('click', (event) => {
+    if (!event.target.closest('[data-remove-connected]')) return;
+    const row = event.target.closest('[data-connected-row]');
+    if (connectedRows.children.length > 1) row.remove();
+    else row.querySelectorAll('input').forEach((input) => { input.value = ''; });
+  });
 
   const showStep = (next) => {
     step = Math.max(1, Math.min(3, next));
@@ -83,6 +138,25 @@
       if (!field.checkValidity()) {
         if (advanced && advanced.contains(field)) advanced.open = true;
         field.reportValidity();
+        return false;
+      }
+    }
+    const mode = q('[name="thumbnail_mode"]:checked')?.value;
+    if (mode === 'icon' && !q('[name="thumbnail_icon"]:checked')) {
+      q('[data-thumbnail-panel="icon"]').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      window.alert('Choose an icon for the card thumbnail.');
+      return false;
+    }
+    if (mode === 'upload' && !q('[name="thumbnail_file"]').files.length && !thumbnailImage?.dataset.uploadSrc) {
+      q('[name="thumbnail_file"]').click();
+      return false;
+    }
+    for (const row of qa('[data-connected-row]')) {
+      const label = row.querySelector('[name="connected_url_label"]');
+      const url = row.querySelector('[name="connected_url_url"]');
+      if ((label.value.trim() && !url.value.trim()) || (url.value.trim() && !label.value.trim()) || !url.checkValidity()) {
+        (label.value.trim() ? url : label).focus();
+        window.alert('Give each connected URL both a label and a full web address.');
         return false;
       }
     }

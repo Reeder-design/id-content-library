@@ -32,7 +32,7 @@ for marker in ("summarize_changes", "item_count", "run_validation", "git(root, \
 for marker in ("1200, 675", "ImageOps.fit", "sync_playwright", "auto-thumbnail.svg", "custom"):
     expect(marker in thumbnail_source, f"Missing thumbnail marker: {marker}")
 
-for marker in ("Review &amp; Publish", "Preview Full Library", "Publish to GitHub", "I confirm this material is public-safe", "data-draft-preview", "Custom card image", "assets/site/manager-favicon.svg", "summary.item_count"):
+for marker in ("Review &amp; Publish", "Preview Full Library", "Publish to GitHub", "I confirm this material is public-safe", "data-draft-preview", "Card thumbnail", "Use frame from project", "Pull from icon library", "Connected URLs", "assets/site/manager-favicon.svg", "summary.item_count"):
     expect(marker in templates, f"Missing Phase 7 UI marker: {marker}")
 
 for marker in ("updateDraftPreview", "data-draft", "Add Locally", "Save Locally"):
@@ -53,4 +53,4 @@ expect("</form>" not in (ROOT / "library-manager" / "templates" / "partials" / "
 
 print("PASS: Phase 7 local preview and automatic thumbnail contracts")
 print("PASS: Phase 7 item-first batching and deliberate publishing controls")
-print("PASS: Phase 7 public card thumbnails, favicon, and custom image replacement contracts")
+print("PASS: Phase 7 public card thumbnails, favicon, and thumbnail source choices")

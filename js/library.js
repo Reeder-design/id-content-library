@@ -139,6 +139,8 @@ function metaLine(label, value) {
 function createCard(item) {
   const card = makeElement("article", "library-card");
   if (normalize(item.library_status) === "archived") card.classList.add("is-archived");
+  const typeIcons = { "Interactive Learning": "ideas", "Templates & Frameworks": "design", "Assessment & Practice": "strategy", "Sales Enablement": "content", "Job Aids & Resources": "content", Multimedia: "multimedia", "Prompt Library": "ideas", "Code & Automation": "code", "Design Patterns": "visuals", Other: "repository" };
+  const iconId = ["content", "ideas", "visuals", "multimedia", "design", "strategy", "code", "repository"].includes(item.thumbnail_icon) ? item.thumbnail_icon : typeIcons[item.content_type] || "content";
 
   if (text(item.thumbnail)) {
     const imageLink = makeElement("a", "card-thumbnail-link");
@@ -149,6 +151,12 @@ function createCard(item) {
     image.alt = `Preview image for ${text(item.title)}`;
     image.loading = "lazy";
     imageLink.append(image);
+    const icon = makeElement("span", "card-support-icon");
+    const iconImage = makeElement("img");
+    iconImage.src = `assets/site/icon-library/${iconId}.webp`;
+    iconImage.alt = "";
+    icon.append(iconImage);
+    imageLink.append(icon);
     card.append(imageLink);
   }
 
@@ -173,6 +181,19 @@ function createCard(item) {
     const tags = makeElement("div", "tag-list");
     item.tags.forEach((tag) => tags.append(makeElement("span", "tag-chip", tag)));
     card.append(tags);
+  }
+
+  if (Array.isArray(item.connected_urls) && item.connected_urls.length) {
+    const links = makeElement("div", "card-connected-links");
+    item.connected_urls.forEach((link) => {
+      if (!link || !link.label || !/^https?:\/\//i.test(link.url || "")) return;
+      const anchor = makeElement("a", "card-connected-link", `${link.label} ↗`);
+      anchor.href = link.url;
+      anchor.target = "_blank";
+      anchor.rel = "noopener noreferrer";
+      links.append(anchor);
+    });
+    card.append(links);
   }
 
   const actions = makeElement("div", "card-actions");

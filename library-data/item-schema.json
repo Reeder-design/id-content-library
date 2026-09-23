@@ -63,6 +63,9 @@
       "enum": ["library-only", "portfolio-candidate", "featured-in-portfolio", "other"]
     },
     "thumbnail": {"type": "string", "minLength": 1},
+    "thumbnail_mode": {"type": "string", "enum": ["frame", "upload", "icon"]},
+    "thumbnail_icon": {"type": "string", "enum": ["content", "ideas", "visuals", "multimedia", "design", "strategy", "code", "repository"]},
+    "connected_urls": {"type": "array", "maxItems": 12, "items": {"type": "object", "additionalProperties": false, "required": ["label", "url"], "properties": {"label": {"type": "string", "minLength": 1, "maxLength": 80}, "url": {"type": "string", "format": "uri", "maxLength": 2000}}},
     "other_label": {"type": "string", "minLength": 1},
     "usage_notes": {"type": "string", "minLength": 1}
   },

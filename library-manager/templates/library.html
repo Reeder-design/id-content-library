@@ -12,11 +12,12 @@
 <section class="manager-grid" id="library-grid">
 <% for item in items %>
 <article class="manager-card" data-library-card data-search="[[ (item.title ~ ' ' ~ item.summary ~ ' ' ~ item.content_type ~ ' ' ~ item.format ~ ' ' ~ item.tools|join(' ') ~ ' ' ~ item.tags|join(' '))|lower ]]">
-  <% if item._thumbnail_url %><a class="manager-card-image" target="_blank" rel="noopener" href="[[ item._preview_url ]]" aria-label="Preview [[ item.title ]]"><img src="[[ item._thumbnail_url ]]" alt="Preview image for [[ item.title ]]" loading="lazy"></a><% endif %>
+  <% if item._thumbnail_url %><a class="manager-card-image" target="_blank" rel="noopener" href="[[ item._preview_url ]]" aria-label="Preview [[ item.title ]]"><img src="[[ item._thumbnail_url ]]" alt="Preview image for [[ item.title ]]" loading="lazy"><span class="manager-card-icon"><img src="[[ url_for('repo_file', filepath='assets/site/icon-library/' ~ item._support_icon ~ '.webp') ]]" alt=""></span></a><% endif %>
   <div class="card-topline"><span class="eyebrow">[[ item.content_type ]]</span><span class="status-pill" data-status="[[ item.library_status ]]">[[ item.library_status ]]</span></div>
   <h2>[[ item.title ]]</h2><p>[[ item.summary ]]</p>
   <div class="meta-line"><strong>[[ item.format ]]</strong><span>[[ item.tools|join(' · ') ]]</span></div>
   <div class="tag-line">[[ item.tags|join(' · ') ]]</div>
+  <% if item.connected_urls %><div class="manager-connected"><strong>Connected URLs</strong><% for link in item.connected_urls %><a href="[[ link.url ]]" target="_blank" rel="noopener noreferrer">[[ link.label ]] ↗</a><% endfor %></div><% endif %>
   <div class="card-actions">
     <a class="button secondary" target="_blank" rel="noopener" href="[[ item._preview_url ]]">Preview</a>
     <a class="button secondary" href="[[ url_for('edit_item', slug=item.slug) ]]">Edit</a>

@@ -68,6 +68,10 @@
   margin-bottom: 1.25rem;
   font-size: clamp(2.8rem, 6vw, 5.8rem);
 }
+.item-support-icon { display: block; width: 78px; height: 78px; object-fit: contain; margin-bottom: 1rem; padding: .5rem; border: 1px solid rgba(36,118,109,.2); border-radius: 17px; background: #e2f5e8; }
+.connected-list { display: grid; gap: .55rem; margin: .6rem 0 0; padding: 0; list-style: none; }
+.connected-list a { display: block; padding: .65rem .8rem; border: 1px solid var(--line); border-radius: 10px; color: var(--pine-blue); background: #f3faf6; font-weight: 750; text-decoration: none; overflow-wrap: anywhere; }
+.connected-list a:hover { background: #e1f5e8; }
 
 .item-summary {
   max-width: 760px;
