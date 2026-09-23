@@ -7,6 +7,7 @@
     <h1><% if mode == 'edit' %>Edit Item<% else %>Add Item<% endif %></h1>
     <p><% if mode == 'edit' %>Update the project or the few details that changed. Leave everything else alone.<% else %>Add the project, check the smart suggestions, and fill in only the parts that need your judgment.<% endif %></p>
   </div>
+  <img class="heading-art" src="[[ url_for('repo_file', filepath='assets/site/illustrations/ideas.webp') ]]" alt="">
 </section>
 
 <form class="manager-form" method="post" enctype="multipart/form-data" data-manager-form data-mode="[[ mode ]]">
@@ -15,10 +16,15 @@
   <input type="hidden" name="updated" value="[[ item.get('updated','') ]]">
   <input type="hidden" name="thumbnail" value="[[ item.get('thumbnail','') ]]">
 
+  <div class="workflow-bar">
+    <a class="workflow-exit" href="[[ url_for('library') ]]">← All items</a>
+    <span class="workflow-progress" data-step-progress aria-live="polite">Step 1 of 3 · Choose project</span>
+    <button class="workflow-back" type="button" data-step-back hidden>← Previous step</button>
+  </div>
   <ol class="stepper" aria-label="Item workflow">
-    <li class="active" data-step-label="1"><span>1</span> Project</li>
-    <li data-step-label="2"><span>2</span> Details</li>
-    <li data-step-label="3"><span>3</span> Review</li>
+    <li class="active" data-step-label="1" aria-current="step"><button type="button" data-step-jump="1"><span class="step-number">1</span><span class="step-copy"><strong>Choose project</strong><small>File or folder</small></span></button></li>
+    <li data-step-label="2"><button type="button" data-step-jump="2" disabled><span class="step-number">2</span><span class="step-copy"><strong>Add details</strong><small>What people should know</small></span></button></li>
+    <li data-step-label="3"><button type="button" data-step-jump="3" disabled><span class="step-number">3</span><span class="step-copy"><strong>Review &amp; save</strong><small>Check before saving</small></span></button></li>
   </ol>
 
   <% include "partials/project-step.html" %>

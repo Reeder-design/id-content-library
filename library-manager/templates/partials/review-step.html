@@ -7,7 +7,7 @@
     <div class="draft-preview-shell">
       <p class="eyebrow">Pre-save preview</p>
       <article class="draft-library-card" data-draft-preview>
-        <div class="draft-preview-art" aria-hidden="true"><span>✦</span></div>
+        <div class="draft-preview-art" aria-hidden="true"><img src="[[ url_for('repo_file', filepath='assets/site/illustrations/learning.webp') ]]" alt=""></div>
         <div class="card-topline"><span class="eyebrow" data-draft="content_type">Resource</span><span class="status-pill" data-draft="library_status">stable</span></div>
         <h3 data-draft="title">Untitled item</h3>
         <p data-draft="summary">Your description will appear here.</p>
@@ -28,5 +28,5 @@
       </dl>
     </div>
     <p class="public-safe-note"><strong>One last thing:</strong> this repository is public. Save only material that is already safe to share outside your company or client work.</p>
-    <div class="step-actions"><button type="button" class="button secondary" data-prev-step>Back</button><button type="submit" class="button"><% if mode == 'edit' %>Save Locally<% else %>Add Locally<% endif %></button></div>
+    <div class="step-actions"><button type="button" class="button secondary" data-prev-step>← Back to details</button><button type="submit" class="button"><% if mode == 'edit' %>Save Locally<% else %>Add Locally<% endif %></button></div>
   </section>

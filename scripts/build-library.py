@@ -252,10 +252,10 @@ def render_item_page(item: dict, item_dir: Path) -> str:
   <header class="site-header">
     <div class="page-shell header-inner">
       <a class="brand" href="../../" aria-label="Learning Content Lab home"><span class="brand-mark" aria-hidden="true"><img src="../../assets/site/favicon.svg" alt=""></span><span>Learning Content Lab</span></a>
-      <div class="public-header-actions">
-        <button class="public-guide-button" type="button" data-public-guide-open><span aria-hidden="true">?</span><span class="guide-label">Guide</span></button>
+      <nav class="public-header-actions" aria-label="Item navigation">
+        <button class="public-guide-button" type="button" data-public-guide-open><span class="guide-icon" aria-hidden="true">?</span><span class="guide-label">Guide</span></button>
         <a class="header-back" href="../../">← Back to library</a>
-      </div>
+      </nav>
     </div>
   </header>
 

@@ -21,10 +21,10 @@
         <span class="brand-mark" aria-hidden="true"><img src="assets/site/favicon.svg" alt=""></span>
         <span>Learning Content Lab</span>
       </a>
-      <div class="public-header-actions">
-        <span class="header-note">Browse · Try · Adapt</span>
-        <button class="public-guide-button" type="button" data-public-guide-open><span aria-hidden="true">?</span><span class="guide-label">Guide</span></button>
-      </div>
+      <nav class="public-header-actions" aria-label="Main navigation">
+        <a class="public-nav-link" href="#library-heading">Browse library</a>
+        <button class="public-guide-button" type="button" data-public-guide-open><span class="guide-icon" aria-hidden="true">?</span><span class="guide-label">Guide</span></button>
+      </nav>
     </div>
   </header>
 
@@ -79,9 +79,12 @@
     <section class="library-section" aria-labelledby="library-heading">
       <div class="page-shell">
         <div class="section-heading">
-          <div>
+          <div class="section-title-group">
+            <img class="section-accent" src="assets/site/illustrations/ideas.webp" alt="">
+            <div>
             <p class="eyebrow">Browse the library</p>
             <h2 id="library-heading">Explore the collection</h2>
+            </div>
           </div>
           <p id="results-count" class="results-count" aria-live="polite">Loading library…</p>
         </div>

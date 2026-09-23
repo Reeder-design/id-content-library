@@ -15,13 +15,15 @@
   <header class="manager-header">
     <div class="shell header-row">
       <a class="brand" href="[[ url_for('library') ]]"><span class="brand-mark" aria-hidden="true"><img src="[[ url_for('repo_file', filepath='assets/site/manager-favicon.svg') ]]" alt=""></span><span>Library Manager</span></a>
-      <nav>
-        <a href="[[ url_for('library') ]]">Library</a>
-        <a href="[[ url_for('repo_file', filepath='index.html') ]]" target="_blank" rel="noopener">Preview Library</a>
-        <a class="publish-nav" href="[[ url_for('workspace_page') ]]">Review &amp; Publish<% if workspace_change_count %><span>[[ workspace_change_count ]]</span><% endif %></a>
-        <button type="button" class="guide-button" data-guide-open><span aria-hidden="true">?</span> Guide</button>
-        <a class="button" href="[[ url_for('add_item') ]]">Add Item</a>
+      <nav class="manager-nav" aria-label="Manager navigation">
+        <a class="manager-nav-link" href="[[ url_for('library') ]]" <% if request.path == '/library' or request.path.startswith('/items/') %>aria-current="page"<% endif %>>Your library</a>
+        <a class="manager-nav-link" href="[[ url_for('add_item') ]]" <% if request.path == '/add' %>aria-current="page"<% endif %>>Add item</a>
+        <a class="manager-nav-link publish-nav" href="[[ url_for('workspace_page') ]]" <% if request.path == '/workspace' %>aria-current="page"<% endif %>>Review &amp; publish<% if workspace_change_count %><span>[[ workspace_change_count ]]</span><% endif %></a>
       </nav>
+      <div class="manager-header-actions">
+        <a class="preview-nav" href="[[ url_for('repo_file', filepath='index.html') ]]" target="_blank" rel="noopener">Public preview <span aria-hidden="true">↗</span></a>
+        <button type="button" class="guide-button" data-guide-open><span aria-hidden="true">?</span> Guide</button>
+      </div>
     </div>
   </header>
 

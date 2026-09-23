@@ -10,6 +10,7 @@
   const replaceProject = q('[data-replace-project]');
   const smartStatus = q('[data-smart-prefill-status]');
   let step = 1;
+  let maxReached = 1;
   let autoWriting = false;
   let requestId = 0;
 
@@ -54,8 +55,22 @@
 
   const showStep = (next) => {
     step = Math.max(1, Math.min(3, next));
+    maxReached = Math.max(maxReached, step);
     qa('[data-step]').forEach((el) => el.classList.toggle('active', Number(el.dataset.step) === step));
-    document.querySelectorAll('[data-step-label]').forEach((el) => el.classList.toggle('active', Number(el.dataset.stepLabel) === step));
+    qa('[data-step-label]').forEach((el) => {
+      const current = Number(el.dataset.stepLabel) === step;
+      el.classList.toggle('active', current);
+      if (current) el.setAttribute('aria-current', 'step');
+      else el.removeAttribute('aria-current');
+      el.querySelector('[data-step-jump]').disabled = Number(el.dataset.stepLabel) > maxReached;
+    });
+    const progress = q('[data-step-progress]');
+    if (progress) progress.textContent = ['Step 1 of 3 · Choose project', 'Step 2 of 3 · Add details', 'Step 3 of 3 · Review & save'][step - 1];
+    const back = q('[data-step-back]');
+    if (back) {
+      back.hidden = step === 1;
+      back.textContent = step === 3 ? '← Back to details' : '← Back to project';
+    }
     if (step === 3) {
       updateReview();
       updateDraftPreview();
@@ -79,6 +94,14 @@
     showStep(step + 1);
   }));
   qa('[data-prev-step]').forEach((button) => button.addEventListener('click', () => showStep(step - 1)));
+  const topBack = q('[data-step-back]');
+  if (topBack) topBack.addEventListener('click', () => showStep(step - 1));
+  qa('[data-step-jump]').forEach((button) => button.addEventListener('click', () => {
+    const target = Number(button.dataset.stepJump);
+    if (target > maxReached) return;
+    if (target === 3 && step < 3 && !validDetails()) return;
+    showStep(target);
+  }));
 
   qa('[data-smart-field]').forEach((field) => {
     const markHuman = () => {

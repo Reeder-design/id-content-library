@@ -86,3 +86,126 @@ input:focus, select:focus, textarea:focus { outline: 3px solid rgba(200,237,124,
   nav { gap: .45rem; }
   nav > a:not(.button), .guide-button { font-size: .86rem; }
 }
+
+/* The Manager uses the same patterned canvas as the public catalog. */
+body {
+  background-color: var(--studio-paper);
+  background-image:
+    radial-gradient(circle at 6% 10%, rgba(129,213,177,.22), transparent 26rem),
+    radial-gradient(circle at 92% 74%, rgba(200,237,124,.17), transparent 30rem),
+    linear-gradient(rgba(32,110,112,.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(32,110,112,.055) 1px, transparent 1px);
+  background-size: auto, auto, 34px 34px, 34px 34px;
+  background-attachment: fixed;
+}
+.manager-header { border-bottom: 0; }
+.manager-header::after { content: ""; position: absolute; inset: auto 0 0; height: 3px; background: linear-gradient(90deg, var(--studio-mint), var(--studio-lime) 48%, var(--studio-teal)); }
+.header-row { display: grid; grid-template-columns: auto minmax(0,1fr) auto; gap: clamp(.8rem, 2vw, 1.8rem); }
+.manager-header .brand { font-size: 1.05rem; font-weight: 760; white-space: nowrap; }
+.manager-nav { display: flex; align-items: center; justify-content: center; gap: .3rem; min-width: 0; }
+.manager-nav > a.manager-nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  min-height: 42px;
+  padding: .6rem .78rem;
+  border: 1px solid transparent;
+  border-radius: 11px;
+  color: #eaf5ef;
+  font-size: .88rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.manager-nav > a.manager-nav-link:hover { border-color: rgba(255,255,255,.25); color: #fff; background: rgba(255,255,255,.1); }
+.manager-nav > a.manager-nav-link[aria-current="page"] { border-color: var(--studio-lime); color: var(--studio-deep); background: var(--studio-lime); }
+.manager-header-actions { display: flex; align-items: center; justify-content: flex-end; gap: .5rem; }
+.preview-nav, .manager-header-actions .guide-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .45rem;
+  min-height: 42px;
+  padding: .58rem .8rem;
+  border: 1px solid rgba(232,247,238,.24);
+  border-radius: 11px;
+  color: #f2faf5;
+  background: rgba(255,255,255,.07);
+  font-size: .88rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.preview-nav:hover, .manager-header-actions .guide-button:hover { border-color: var(--studio-lime); color: var(--studio-deep); background: var(--studio-lime); }
+.manager-header-actions .guide-button span { flex: 0 0 22px; }
+.publish-nav span { min-width: 21px; min-height: 21px; padding: 0 .25rem; }
+
+.page-heading {
+  display: grid;
+  grid-template-columns: minmax(0,1fr) auto auto;
+  gap: clamp(1rem, 3vw, 2.4rem);
+  background-color: var(--studio-deep);
+  background-image:
+    radial-gradient(circle at 1px 1px, rgba(200,237,124,.13) 1px, transparent 0),
+    radial-gradient(circle at 80% 20%, rgba(129,213,177,.22), transparent 21rem),
+    linear-gradient(120deg, var(--studio-deeper), var(--studio-deep) 72%, #265d64);
+  background-size: 23px 23px, auto, auto;
+}
+.page-heading.compact { display: grid; grid-template-columns: minmax(0,1fr) auto; }
+.page-heading > div:first-child { min-width: 0; }
+.page-heading > .heading-art { display: block; width: clamp(78px, 8vw, 106px); height: auto; grid-column: 2; border: 3px solid #e6f7ee; border-radius: 18px; background: #e6f7ee; box-shadow: 0 15px 30px rgba(6,31,37,.2); transform: rotate(-5deg); }
+.page-heading > .heading-actions, .page-heading > .button { grid-column: 3; }
+.page-heading.compact > .heading-art { grid-column: 2; }
+.heading-back { display: inline-flex; margin-bottom: .65rem; color: var(--studio-lime); font-size: .9rem; font-weight: 700; text-decoration: none; }
+.heading-back:hover { text-decoration: underline; }
+.manager-main { min-height: calc(100vh - 70px); }
+.manager-empty { background: linear-gradient(135deg, rgba(255,255,255,.98), rgba(235,248,238,.95)); }
+.form-step, .publish-panel, .manager-card, .review-card { background: rgba(255,255,255,.97); }
+.project-upload-card { background-image: radial-gradient(circle at 12% 18%, rgba(129,213,177,.24), transparent 15rem), linear-gradient(rgba(32,110,112,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(32,110,112,.05) 1px, transparent 1px); background-size: auto, 26px 26px, 26px 26px; background-color: #f3faf6; }
+.project-upload-spark { width: 76px; height: 76px; overflow: hidden; border: 3px solid #e6f7ee; border-radius: 17px; background: #e6f7ee; }
+.project-upload-spark img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.draft-preview-art img { width: 86px; height: 86px; object-fit: contain; border: 2px solid #e6f7ee; border-radius: 16px; background: #e6f7ee; }
+.guide-drawer { background-image: radial-gradient(circle at 90% 7%, rgba(129,213,177,.2), transparent 17rem), linear-gradient(rgba(32,110,112,.04) 1px, transparent 1px), linear-gradient(90deg, rgba(32,110,112,.04) 1px, transparent 1px); background-size: auto, 30px 30px, 30px 30px; }
+
+.workflow-bar { display: flex; align-items: center; gap: 1rem; margin: 0 0 .85rem; padding: .72rem .9rem; border: 1px solid var(--studio-line); border-radius: 13px; background: rgba(255,255,255,.96); box-shadow: 0 7px 20px rgba(16,46,55,.04); }
+.workflow-exit, .workflow-back { color: var(--studio-teal-hover); font-size: .9rem; font-weight: 750; text-decoration: none; white-space: nowrap; }
+.workflow-exit:hover, .workflow-back:hover { text-decoration: underline; }
+.workflow-progress { margin-inline: auto; color: var(--ink-soft); font-size: .87rem; font-weight: 650; }
+.workflow-back { padding: .4rem .55rem; border: 0; background: transparent; cursor: pointer; }
+.workflow-back[hidden] { display: none; }
+.stepper { gap: .75rem; }
+.stepper li { display: block; padding: 0; overflow: hidden; }
+.stepper li button { display: flex; align-items: center; gap: .8rem; width: 100%; min-height: 72px; padding: .75rem .9rem; border: 0; color: inherit; background: transparent; text-align: left; cursor: pointer; }
+.stepper li button:disabled { cursor: default; opacity: .64; }
+.stepper li .step-number { display: grid; place-items: center; flex: 0 0 30px; width: 30px; height: 30px; border-radius: 9px; color: var(--studio-deep); background: #e6f3ed; font-size: .88rem; font-weight: 850; }
+.stepper li.active .step-number { color: var(--studio-deep); background: var(--studio-lime); }
+.stepper li .step-copy { display: grid; place-items: initial; gap: .1rem; width: auto; height: auto; min-width: 0; border-radius: 0; background: transparent; }
+.step-copy strong { color: var(--studio-deep); font-size: .93rem; line-height: 1.2; }
+.step-copy small { margin: 0; color: var(--ink-soft); font-size: .76rem; font-weight: 500; line-height: 1.25; }
+.stepper li.active { border-color: var(--studio-teal); background: #eff9f0; }
+.step-actions { justify-content: space-between; }
+
+@media (max-width: 1100px) {
+  .header-row { grid-template-columns: minmax(0,1fr) auto; padding: .65rem 0; }
+  .manager-nav { grid-column: 1 / -1; grid-row: 2; justify-content: flex-start; }
+  .manager-header-actions { grid-column: 2; grid-row: 1; }
+  .page-heading { grid-template-columns: minmax(0,1fr) auto; }
+  .page-heading > .heading-actions, .page-heading > .button { grid-column: 1 / -1; justify-self: start; }
+}
+@media (max-width: 680px) {
+  .header-row { grid-template-columns: minmax(0,1fr); }
+  .manager-header .brand { white-space: normal; }
+  .manager-header-actions { grid-column: 1; grid-row: 2; justify-content: flex-start; }
+  .manager-nav { grid-column: 1; grid-row: 3; justify-content: flex-start; flex-wrap: nowrap; overflow-x: auto; max-width: 100%; padding-bottom: .15rem; }
+  .manager-nav > a.manager-nav-link { flex: 0 0 auto; }
+  .page-heading, .page-heading.compact { grid-template-columns: minmax(0,1fr) auto; }
+  .page-heading > .heading-art { width: 70px; }
+  .page-heading > .heading-actions, .page-heading > .button { grid-column: 1 / -1; }
+  .workflow-bar { flex-wrap: wrap; }
+  .workflow-progress { order: 3; width: 100%; margin: 0; }
+  .workflow-back { margin-left: auto; }
+  .stepper { grid-template-columns: 1fr; }
+  .stepper li button { min-height: 62px; }
+}

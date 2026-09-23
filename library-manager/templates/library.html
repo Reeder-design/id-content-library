@@ -3,6 +3,7 @@
 <% block content %>
 <section class="page-heading">
   <div><p class="eyebrow">Your local workspace</p><h1>Library Manager</h1><p>Add and refine reusable learning content. Save locally, then review the collection before publishing.</p></div>
+  <img class="heading-art" src="[[ url_for('repo_file', filepath='assets/site/illustrations/tools.webp') ]]" alt="">
   <div class="heading-actions"><a class="button secondary" href="[[ url_for('workspace_page') ]]">Review &amp; Publish<% if workspace_change_count %> ([[ workspace_change_count ]])<% endif %></a><a class="button" href="[[ url_for('add_item') ]]">Add Item</a></div>
 </section>
 <% if workspace_change_count %><div class="local-changes-banner"><span aria-hidden="true">✦</span><div><strong>You have local changes waiting.</strong><p>Preview them as much as you want. Nothing goes to GitHub until Review &amp; Publish.</p></div></div><% endif %>
