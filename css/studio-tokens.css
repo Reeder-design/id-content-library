@@ -1,0 +1,41 @@
+/* One visual foundation for the public Lab and local Manager. */
+:root {
+  --studio-deep: #173a43;
+  --studio-deeper: #102e37;
+  --studio-teal: #206e70;
+  --studio-teal-hover: #15585c;
+  --studio-mint: #81d5b1;
+  --studio-lime: #c8ed7c;
+  --studio-paper: #f4faf7;
+  --studio-line: #cadbd5;
+  --ink: #1b363d;
+  --ink-soft: #456068;
+  --violet: var(--studio-teal);
+  --violet-deep: #175c61;
+  --lavender: #c5e7e0;
+  --lavender-soft: #e9f5f0;
+  --mint: #d7f2e3;
+  --mint-strong: var(--studio-mint);
+  --lime: var(--studio-lime);
+  --aqua: #bde4e0;
+  --paper: var(--studio-paper);
+  --soft: #eaf3ee;
+  --line: var(--studio-line);
+  --muted: #536b70;
+  --radius: 17px;
+  --shadow: 0 15px 40px rgba(16, 46, 55, .09);
+  --taupe: var(--ink);
+  --charcoal: var(--ink);
+  --pine-blue: var(--studio-teal);
+  --mint-leaf: var(--studio-mint);
+  --yellow-green: var(--studio-lime);
+}
+html { color-scheme: light; }
+body { font-family: "Avenir Next", Avenir, Inter, ui-sans-serif, system-ui, sans-serif; }
+button, input, select, textarea { font: inherit; }
+button:focus-visible, input:focus-visible, select:focus-visible,
+textarea:focus-visible, a:focus-visible, summary:focus-visible {
+  outline: 3px solid var(--studio-lime);
+  outline-offset: 3px;
+}
+::selection { color: var(--studio-deeper); background: var(--studio-lime); }

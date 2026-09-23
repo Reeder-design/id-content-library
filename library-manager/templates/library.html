@@ -2,7 +2,8 @@
 <% block title %>Library | Library Manager<% endblock %>
 <% block content %>
 <section class="page-heading">
-  <div><p class="eyebrow">Local workspace</p><h1>Library</h1><p>Browse, preview, and maintain public-safe reusable learning content. Saving here is local; publishing is a separate step.</p></div>
+  <div><p class="eyebrow">Your local workspace</p><h1>Library Manager</h1><p>Add and refine reusable learning content. Save locally, then review the collection before publishing.</p></div>
+  <img class="heading-art manager-mascot" src="[[ url_for('repo_file', filepath='assets/site/mascot-wave.png') ]]" alt="" width="627" height="627">
   <div class="heading-actions"><a class="button secondary" href="[[ url_for('workspace_page') ]]">Review &amp; Publish<% if workspace_change_count %> ([[ workspace_change_count ]])<% endif %></a><a class="button" href="[[ url_for('add_item') ]]">Add Item</a></div>
 </section>
 <% if workspace_change_count %><div class="local-changes-banner"><span aria-hidden="true">✦</span><div><strong>You have local changes waiting.</strong><p>Preview them as much as you want. Nothing goes to GitHub until Review &amp; Publish.</p></div></div><% endif %>
@@ -11,11 +12,12 @@
 <section class="manager-grid" id="library-grid">
 <% for item in items %>
 <article class="manager-card" data-library-card data-search="[[ (item.title ~ ' ' ~ item.summary ~ ' ' ~ item.content_type ~ ' ' ~ item.format ~ ' ' ~ item.tools|join(' ') ~ ' ' ~ item.tags|join(' '))|lower ]]">
-  <% if item._thumbnail_url %><a class="manager-card-image" target="_blank" rel="noopener" href="[[ item._preview_url ]]" aria-label="Preview [[ item.title ]]"><img src="[[ item._thumbnail_url ]]" alt="Preview image for [[ item.title ]]" loading="lazy"></a><% endif %>
+  <% if item._thumbnail_url %><a class="manager-card-image" target="_blank" rel="noopener" href="[[ item._preview_url ]]" aria-label="Preview [[ item.title ]]"><img src="[[ item._thumbnail_url ]]" alt="Preview image for [[ item.title ]]" loading="lazy"><span class="manager-card-icon"><img src="[[ url_for('repo_file', filepath='assets/site/icon-library/' ~ item._support_icon ~ '.webp') ]]" alt=""></span></a><% endif %>
   <div class="card-topline"><span class="eyebrow">[[ item.content_type ]]</span><span class="status-pill" data-status="[[ item.library_status ]]">[[ item.library_status ]]</span></div>
   <h2>[[ item.title ]]</h2><p>[[ item.summary ]]</p>
   <div class="meta-line"><strong>[[ item.format ]]</strong><span>[[ item.tools|join(' · ') ]]</span></div>
   <div class="tag-line">[[ item.tags|join(' · ') ]]</div>
+  <% if item.connected_urls %><div class="manager-connected"><strong>Connected URLs</strong><% for link in item.connected_urls %><a href="[[ link.url ]]" target="_blank" rel="noopener noreferrer">[[ link.label ]] ↗</a><% endfor %></div><% endif %>
   <div class="card-actions">
     <a class="button secondary" target="_blank" rel="noopener" href="[[ item._preview_url ]]">Preview</a>
     <a class="button secondary" href="[[ url_for('edit_item', slug=item.slug) ]]">Edit</a>
@@ -25,6 +27,6 @@
     <a class="danger-link" href="[[ url_for('delete_item', slug=item.slug) ]]">Delete…</a>
   </div>
 </article>
-<% else %><div class="empty-state"><h2>No library items yet.</h2><p>Add the first reusable asset when you are ready.</p></div><% endfor %>
+<% else %><div class="empty-state manager-empty"><img src="[[ url_for('repo_file', filepath='assets/site/mascot-wave.png') ]]" alt="" width="627" height="627"><div><h2>Ready for the first piece.</h2><p>Choose a reusable project to start building the collection.</p><a class="button" href="[[ url_for('add_item') ]]">Add your first item</a></div></div><% endfor %>
 </section>
 <% endblock %>

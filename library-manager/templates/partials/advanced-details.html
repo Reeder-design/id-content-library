@@ -45,18 +45,8 @@
         </div>
 
         <div class="field-block span-2">
-          <div class="field-label-row">
-            <label for="thumbnail-file">Custom card image</label>
-            <details class="field-help"><summary aria-label="Help with custom card image">?</summary><div>The Manager automatically creates a 16:9 preview image. Upload one here only when you want to replace the automatic screenshot or generated image with your own.</div></details>
-          </div>
-          <input id="thumbnail-file" type="file" name="thumbnail_file" accept="image/png,image/jpeg,image/webp,image/gif,image/svg+xml">
-          <small><% if item.get('thumbnail') %>Current image: [[ item.get('thumbnail') ]]. Choosing a new image replaces it.<% else %>Optional — automatic image generation is the default.<% endif %></small>
-        </div>
-
-        <div class="field-block span-2">
           <div class="field-label-row"><label for="usage-notes">Anything someone should know before reusing it?</label><details class="field-help"><summary aria-label="Help with usage notes">?</summary><div>Optional. Add setup notes, dependencies, adaptation tips, or anything that would save future-you confusion.</div></details></div>
           <textarea id="usage-notes" name="usage_notes" rows="4">[[ item.get('usage_notes','') ]]</textarea>
         </div>
       </div>
     </details>
-

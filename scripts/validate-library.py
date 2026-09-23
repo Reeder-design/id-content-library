@@ -4,6 +4,7 @@ import json
 import re
 from datetime import date
 from pathlib import Path
+from urllib.parse import urlsplit
 
 ROOT = Path(__file__).resolve().parents[1]
 OPTIONS_PATH = ROOT / "library-data" / "options.json"
@@ -25,7 +26,7 @@ REQUIRED_FIELDS = {
     "preview_type",
     "created",
 }
-OPTIONAL_FIELDS = {"updated", "portfolio_status", "thumbnail", "other_label", "usage_notes"}
+OPTIONAL_FIELDS = {"updated", "portfolio_status", "thumbnail", "thumbnail_mode", "thumbnail_icon", "connected_urls", "other_label", "usage_notes"}
 SLUG_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 
 
@@ -109,6 +110,24 @@ def validate_item(item: dict, source: str, options: dict) -> None:
     for field in ("thumbnail", "other_label", "usage_notes"):
         if field in item and not nonempty_string(item[field]):
             fail(f"{source}: {field} must be a non-empty string when present")
+    if "thumbnail_mode" in item and item["thumbnail_mode"] not in {"frame", "upload", "icon"}:
+        fail(f"{source}: thumbnail_mode has an unsupported value")
+    if "thumbnail_icon" in item and item["thumbnail_icon"] not in {"content", "ideas", "visuals", "multimedia", "design", "strategy", "code", "repository"}:
+        fail(f"{source}: thumbnail_icon has an unsupported value")
+    if item.get("thumbnail_mode") == "icon" and not item.get("thumbnail_icon"):
+        fail(f"{source}: thumbnail_icon is required for an icon thumbnail")
+    links = item.get("connected_urls", [])
+    if not isinstance(links, list) or len(links) > 12:
+        fail(f"{source}: connected_urls must be a list of at most 12 links")
+    for link in links:
+        if not isinstance(link, dict) or set(link) != {"label", "url"}:
+            fail(f"{source}: each connected URL needs a label and url")
+        try:
+            parsed = urlsplit(link["url"])
+        except (TypeError, ValueError):
+            fail(f"{source}: connected URL is invalid")
+        if not nonempty_string(link["label"]) or len(link["label"]) > 80 or not nonempty_string(link["url"]) or len(link["url"]) > 2000 or parsed.scheme not in {"http", "https"} or not parsed.hostname or any(char.isspace() for char in link["url"]):
+            fail(f"{source}: connected URL needs a short label and full http or https address")
 
 
 def main() -> int:

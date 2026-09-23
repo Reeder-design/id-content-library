@@ -4,25 +4,35 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Browse reusable instructional-design templates, interactions, prompts, code, resources, and experiments.">
-  <meta name="theme-color" content="#fbfaff">
+  <meta name="theme-color" content="#173a43">
   <title>Learning Content Lab</title>
+  <link rel="canonical" href="https://reeder-design.github.io/id-content-library/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Learning Content Lab | Haley Reeder">
+  <meta property="og:description" content="Reusable learning ideas you can open, try, and make your own.">
+  <meta property="og:url" content="https://reeder-design.github.io/id-content-library/">
+  <meta property="og:image" content="https://reeder-design.github.io/id-content-library/assets/site/social-preview.png">
+  <meta property="og:image:alt" content="Learning Content Lab, a reusable learning design library by Haley Reeder">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" type="image/svg+xml" href="assets/site/favicon.svg">
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/item-pages.css">
   <link rel="stylesheet" href="css/card-thumbnails.css">
   <link rel="stylesheet" href="css/public-lab-theme.css">
+  <link rel="stylesheet" href="css/studio-tokens.css">
+  <link rel="stylesheet" href="css/studio-public.css">
 </head>
 <body>
   <header class="site-header">
     <div class="page-shell header-inner">
       <a class="brand" href="./" aria-label="Learning Content Lab home">
-        <span class="brand-mark" aria-hidden="true">✩</span>
+        <span class="brand-mark" aria-hidden="true"><img src="assets/site/favicon.svg" alt=""></span>
         <span>Learning Content Lab</span>
       </a>
-      <div class="public-header-actions">
-        <span class="header-note">Reusable ID workbench</span>
-        <button class="public-guide-button" type="button" data-public-guide-open><span aria-hidden="true">?</span><span class="guide-label">Guide</span></button>
-      </div>
+      <nav class="public-header-actions" aria-label="Main navigation">
+        <a class="public-nav-link" href="#library-heading">Browse library</a>
+        <button class="public-guide-button" type="button" data-public-guide-open><span class="guide-icon" aria-hidden="true">?</span><span class="guide-label">Guide</span></button>
+      </nav>
     </div>
   </header>
 
@@ -62,13 +72,17 @@
     <section class="hero">
       <div class="page-shell hero-grid">
         <div>
-          <p class="eyebrow">Learning design library</p>
-          <h1>Useful things, built to be reused.</h1>
-          <p class="lede">A growing library of instructional-design templates, interactions, prompts, code, resources, and experiments.</p>
+          <p class="eyebrow">Haley Reeder's learning design library</p>
+          <h1>Ideas you can open, try, and make your own.</h1>
+          <p class="lede">Explore reusable learning interactions, templates, job aids, prompts, and experiments.</p>
         </div>
         <aside class="hero-note" aria-label="About this library">
-          <p class="hero-note-label">How this differs from my portfolio</p>
-          <p>This is the workshop, not the museum. The portfolio highlights selected projects; this lab keeps the broader collection of reusable work.</p>
+          <div class="hero-mascot-scene" aria-hidden="true">
+            <img class="hero-mascot" src="assets/site/mascot-wave.png" alt="" width="627" height="627">
+            <div class="hero-art"><img src="assets/site/illustrations/learning.webp" alt=""><img src="assets/site/illustrations/ideas.webp" alt=""><img src="assets/site/illustrations/tools.webp" alt=""></div>
+          </div>
+          <p class="hero-note-label">A place to explore the pieces</p>
+          <p>The portfolio tells the story of selected projects. This library holds the useful parts you can inspect and adapt.</p>
         </aside>
       </div>
     </section>
@@ -76,9 +90,12 @@
     <section class="library-section" aria-labelledby="library-heading">
       <div class="page-shell">
         <div class="section-heading">
-          <div>
+          <div class="section-title-group">
+            <img class="section-accent" src="assets/site/illustrations/ideas.webp" alt="">
+            <div>
             <p class="eyebrow">Browse the library</p>
-            <h2 id="library-heading">Find something useful</h2>
+            <h2 id="library-heading">Explore the collection</h2>
+            </div>
           </div>
           <p id="results-count" class="results-count" aria-live="polite">Loading library…</p>
         </div>
@@ -124,9 +141,9 @@
         <div id="library-grid" class="library-grid" aria-live="polite"></div>
 
         <div id="empty-state" class="empty-state" hidden>
-          <span class="empty-mark" aria-hidden="true">✦</span>
-          <h3 id="empty-title">The shelves are ready.</h3>
-          <p id="empty-copy">Library items will appear here as they are added.</p>
+          <img class="empty-illustration" src="assets/site/illustrations/learning.webp" alt="">
+          <div><h3 id="empty-title">The collection is taking shape.</h3>
+          <p id="empty-copy">The first reusable projects will appear here soon.</p></div>
         </div>
 
         <noscript>

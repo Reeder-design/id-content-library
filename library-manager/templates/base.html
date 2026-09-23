@@ -4,21 +4,27 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title><% block title %>Library Manager<% endblock %></title>
-  <link rel="icon" type="image/svg+xml" href="[[ url_for('repo_file', filepath='assets/site/favicon.svg') ]]">
+  <meta name="theme-color" content="#173a43">
+  <link rel="icon" type="image/svg+xml" href="[[ url_for('repo_file', filepath='assets/site/manager-favicon.svg') ]]">
   <link rel="stylesheet" href="/static/manager.css">
   <link rel="stylesheet" href="/static/phase7.css">
+  <link rel="stylesheet" href="[[ url_for('repo_file', filepath='css/studio-tokens.css') ]]">
+  <link rel="stylesheet" href="/static/manager-studio.css">
 </head>
 <body>
   <header class="manager-header">
     <div class="shell header-row">
-      <a class="brand" href="[[ url_for('library') ]]"><span class="brand-mark" aria-hidden="true">✩</span><span>Library Manager</span></a>
-      <nav>
-        <a href="[[ url_for('library') ]]">Library</a>
-        <a href="[[ url_for('repo_file', filepath='index.html') ]]" target="_blank" rel="noopener">Preview Library</a>
-        <a class="publish-nav" href="[[ url_for('workspace_page') ]]">Review &amp; Publish<% if workspace_change_count %><span>[[ workspace_change_count ]]</span><% endif %></a>
-        <button type="button" class="guide-button" data-guide-open><span aria-hidden="true">?</span> Guide</button>
-        <a class="button" href="[[ url_for('add_item') ]]">Add Item</a>
+      <a class="brand" href="[[ url_for('library') ]]"><span class="brand-mark" aria-hidden="true"><img src="[[ url_for('repo_file', filepath='assets/site/manager-favicon.svg') ]]" alt=""></span><span>Library Manager</span></a>
+      <nav class="manager-nav" aria-label="Manager navigation">
+        <a class="manager-nav-link" href="[[ url_for('library') ]]" <% if request.path == '/library' or request.path.startswith('/items/') %>aria-current="page"<% endif %>>Your library</a>
+        <a class="manager-nav-link" href="[[ url_for('add_item') ]]" <% if request.path == '/add' %>aria-current="page"<% endif %>>Add item</a>
+        <a class="manager-nav-link publish-nav" href="[[ url_for('workspace_page') ]]" <% if request.path == '/workspace' %>aria-current="page"<% endif %>>Review &amp; publish<% if workspace_change_count %><span>[[ workspace_change_count ]]</span><% endif %></a>
       </nav>
+      <div class="manager-header-actions">
+        <a class="preview-nav" href="[[ url_for('repo_file', filepath='index.html') ]]" target="_blank" rel="noopener">Public preview <span aria-hidden="true">↗</span></a>
+        <button type="button" class="guide-button" data-guide-open><span aria-hidden="true">?</span> Guide</button>
+        <form class="manager-lock-form" method="post" action="[[ url_for('logout') ]]"><input type="hidden" name="csrf_token" value="[[ csrf_token() ]]"><button class="manager-lock-button" type="submit">Lock</button></form>
+      </div>
     </div>
   </header>
 
@@ -37,6 +43,7 @@
     </ol>
     <div class="guide-tip"><strong>Rule of thumb:</strong> if a field feels technical, leave the smart suggestion alone unless you know you want something different.</div>
     <div class="guide-tip soft"><strong>Public-safe reminder:</strong> anything you publish belongs in the public Learning Content Lab. Keep confidential or unsanitized work out of this repository.</div>
+    <a class="manager-settings-link" href="[[ url_for('change_password') ]]">Change Manager password →</a>
   </aside>
 
   <main class="shell manager-main">

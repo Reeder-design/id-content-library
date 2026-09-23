@@ -20,6 +20,7 @@ python library-manager/app.py
 ```
 
 Open the local address shown in the terminal, normally `http://127.0.0.1:5000`.
+On first launch, set your Manager password in the browser. Later sessions ask you to unlock the Manager before showing items or project files. Use **Lock** when finished.
 
 ## Add or update content
 

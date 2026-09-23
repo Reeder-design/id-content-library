@@ -6,12 +6,16 @@ A reusable public library for instructional-design templates, interactions, prom
 
 **Public Learning Content Lab:** `https://reeder-design.github.io/id-content-library/`
 
+[![Learning Content Lab preview](assets/site/social-preview.png)](https://reeder-design.github.io/id-content-library/)
+
 The repository has two deliberately separate surfaces:
 
 - **Learning Content Lab** — the public-facing static site that visitors browse. This is the only surface deployed through GitHub Pages.
 - **Library Manager** — the private maintenance utility used locally on the owner's computer for adding, editing, previewing, validating, batching, and publishing library items. It is not a public website and is not deployed.
 
 The public Lab and local Manager share the same visual identity so maintaining the library and browsing it feel like parts of one system, but they serve different audiences and remain technically separate.
+
+The shared color and type tokens live in `css/studio-tokens.css`. The public catalog uses `css/studio-public.css`; the local editing workspace uses `library-manager/static/manager-studio.css`. They use separate book and controls favicons so browser tabs are easy to distinguish. The learning, ideas, and tools illustrations in `assets/site/illustrations/`, along with the wizard mascot in `assets/site/mascot-wave.png`, come from Haley's custom portfolio assets.
 
 This project is also intentionally separate from the official portfolio. The portfolio contains selected spotlight projects; the Lab can contain the broader body of reusable work.
 
@@ -36,6 +40,10 @@ id-content-library/
 ```
 
 Each library item owns a folder under `items/<slug>/` containing its metadata and, when relevant, `preview/`, `source/`, and `assets/` content. Library Manager hides those repository mechanics during normal use.
+
+In General Details, the Manager offers three card thumbnail sources: a frame from the project, an uploaded image, or an image from Haley's curated icon library. You can also add connected URLs for supporting assets and related repositories. The Manager generates the public item page and card from those choices.
+
+The Manager requires a locally configured password before it shows library content. Setup, login, lock, and password change instructions are in [`library-manager/README.md`](library-manager/README.md).
 
 ## Public deployment
 

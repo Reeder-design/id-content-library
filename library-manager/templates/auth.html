@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#173a43">
+  <title><% if mode == 'setup' %>Set password<% elif mode == 'change' %>Change password<% else %>Unlock<% endif %> | Library Manager</title>
+  <link rel="icon" type="image/svg+xml" href="[[ url_for('repo_file', filepath='assets/site/manager-favicon.svg') ]]">
+  <link rel="stylesheet" href="[[ url_for('repo_file', filepath='css/studio-tokens.css') ]]">
+  <link rel="stylesheet" href="/static/auth.css">
+</head>
+<body>
+  <main class="auth-shell">
+    <section class="auth-intro">
+      <div class="auth-brand"><img src="[[ url_for('repo_file', filepath='assets/site/manager-favicon.svg') ]]" alt=""><span>Library Manager</span></div>
+      <div class="auth-intro-copy">
+        <p class="auth-kicker">Your private workspace</p>
+        <h1><% if mode == 'setup' %>Make this space yours.<% elif mode == 'change' %>Change your password.<% else %>Welcome back.<% endif %></h1>
+        <p><% if mode == 'setup' %>Set a password before adding, editing, or publishing library work.<% elif mode == 'change' %>Choose a new password for this local Manager.<% else %>Enter your password to continue where you left off.<% endif %></p>
+      </div>
+      <div class="auth-decoration" aria-hidden="true"><span></span><span></span><span></span></div>
+    </section>
+    <section class="auth-card" aria-labelledby="auth-title">
+      <p class="auth-kicker"><% if mode == 'setup' %>First-time setup<% elif mode == 'change' %>Manager settings<% else %>Locked workspace<% endif %></p>
+      <h2 id="auth-title"><% if mode == 'setup' %>Set a password<% elif mode == 'change' %>Update password<% else %>Unlock Manager<% endif %></h2>
+      <% if error %><p class="auth-error" role="alert">[[ error ]]</p><% endif %>
+      <form method="post">
+        <input type="hidden" name="csrf_token" value="[[ csrf_token() ]]">
+        <% if mode != 'change' %><input type="hidden" name="next" value="[[ next_path ]]"><% endif %>
+        <% if mode == 'change' %><label for="current-password">Current password</label><input id="current-password" name="current_password" type="password" autocomplete="current-password" required autofocus><% endif %>
+        <label for="password"><% if mode == 'login' %>Password<% else %>New password<% endif %></label>
+        <input id="password" name="password" type="password" autocomplete="<% if mode == 'login' %>current-password<% else %>new-password<% endif %>" <% if mode != 'login' %>minlength="12"<% endif %> required <% if mode == 'login' or mode == 'setup' %>autofocus<% endif %>>
+        <% if mode != 'login' %>
+        <label for="confirm-password">Confirm new password</label>
+        <input id="confirm-password" name="confirm_password" type="password" autocomplete="new-password" minlength="12" required>
+        <p class="auth-hint">Use at least 12 characters. Your password is stored as a secure hash on this computer, outside the library repository.</p>
+        <% endif %>
+        <button type="submit"><% if mode == 'setup' %>Set password &amp; open Manager<% elif mode == 'change' %>Save new password<% else %>Unlock Manager<% endif %> <span aria-hidden="true">→</span></button>
+      </form>
+      <% if mode == 'change' %><a class="auth-back" href="[[ url_for('library') ]]">← Back to Manager</a><% endif %>
+      <p class="auth-footnote">The public Learning Content Lab remains open to visitors.</p>
+    </section>
+  </main>
+</body>
+</html>

@@ -3,10 +3,12 @@
 <% block content %>
 <section class="page-heading publish-heading">
   <div>
+    <a class="heading-back" href="[[ url_for('library') ]]">← Back to library</a>
     <p class="eyebrow">Final local checkpoint</p>
     <h1>Review &amp; Publish</h1>
     <p>Everything below is still local until you explicitly publish. Preview, validate, and review the batch first.</p>
   </div>
+  <img class="heading-art" src="[[ url_for('repo_file', filepath='assets/site/illustrations/learning.webp') ]]" alt="">
   <a class="button secondary" href="[[ url_for('repo_file', filepath='index.html') ]]" target="_blank" rel="noopener">Preview Full Library</a>
 </section>
 

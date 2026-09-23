@@ -12,7 +12,7 @@
     </div>
 
     <div class="project-upload-card">
-      <div class="project-upload-spark" aria-hidden="true">✦</div>
+      <div class="project-upload-spark" aria-hidden="true"><img src="[[ url_for('repo_file', filepath='assets/site/illustrations/tools.webp') ]]" alt=""></div>
       <h3><% if mode == 'edit' %>Add or replace the project<% else %>Drop in one project<% endif %></h3>
       <p>One file or one folder is enough. We’ll do the boring organizing.</p>
       <div class="project-upload-actions">
@@ -46,6 +46,5 @@
       </div>
     </details>
 
-    <div class="step-actions"><button type="button" class="button" data-next-step>Looks good — next</button></div>
+    <div class="step-actions"><a class="button secondary" href="[[ url_for('library') ]]">← Back to library</a><button type="button" class="button" data-next-step>Continue to details →</button></div>
   </section>
-

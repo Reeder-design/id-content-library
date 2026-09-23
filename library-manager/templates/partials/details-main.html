@@ -66,5 +66,37 @@
         </div>
         <% endif %>
       </div>
-    </div>
 
+      <div class="field-block span-2 thumbnail-choice-block">
+        <div class="field-label-row"><span class="field-title">Card thumbnail</span><details class="field-help"><summary aria-label="Help with card thumbnail">?</summary><div>This is the image on the Manager card, public library card, and item page. A project frame uses a project image or captures a browser preview after saving.</div></details></div>
+        <div class="thumbnail-modes" role="group" aria-label="Card thumbnail source">
+          <label class="thumbnail-mode"><input type="radio" name="thumbnail_mode" value="frame" <% if thumbnail_mode == 'frame' %>checked<% endif %>><span><strong>Use frame from project</strong><small>Use a project image or capture its page</small></span></label>
+          <label class="thumbnail-mode"><input type="radio" name="thumbnail_mode" value="upload" <% if thumbnail_mode == 'upload' %>checked<% endif %>><span><strong>Upload</strong><small>Choose your own card image</small></span></label>
+          <label class="thumbnail-mode"><input type="radio" name="thumbnail_mode" value="icon" <% if thumbnail_mode == 'icon' %>checked<% endif %>><span><strong>Pull from icon library</strong><small>Build a themed card with your icon</small></span></label>
+        </div>
+        <div class="thumbnail-mode-panel" data-thumbnail-panel="upload" <% if thumbnail_mode != 'upload' %>hidden<% endif %>>
+          <label for="thumbnail-file">Upload card image</label>
+          <input id="thumbnail-file" type="file" name="thumbnail_file" accept="image/png,image/jpeg,image/webp,image/gif,image/svg+xml">
+          <small><% if item.get('thumbnail') and thumbnail_mode == 'upload' %>Current image: [[ item.get('thumbnail') ]]. Choose a new file to replace it.<% else %>PNG, JPG, WEBP, GIF, or SVG. A 16:9 image works best.<% endif %></small>
+        </div>
+        <div class="thumbnail-mode-panel" data-thumbnail-panel="icon" <% if thumbnail_mode != 'icon' %>hidden<% endif %>>
+          <span class="field-title">Choose an icon</span>
+          <div class="thumbnail-icon-grid">
+            <% for icon_id, icon_label in icon_choices.items() %>
+            <label class="thumbnail-icon-option"><input type="radio" name="thumbnail_icon" value="[[ icon_id ]]" <% if item.get('thumbnail_icon') == icon_id %>checked<% endif %>><span><img src="[[ url_for('repo_file', filepath='assets/site/icon-library/' ~ icon_id ~ '.webp') ]]" alt=""><strong>[[ icon_label ]]</strong></span></label>
+            <% endfor %>
+          </div>
+        </div>
+      </div>
+
+      <div class="field-block span-2 connected-links-block">
+        <div class="field-label-row"><span class="field-title">Connected URLs</span><details class="field-help"><summary aria-label="Help with connected URLs">?</summary><div>Add related assets, a source repository, supporting documentation, or any useful companion link. These appear in the public project overview.</div></details></div>
+        <p class="quiet-note">Link related files, a side repository, or supporting material.</p>
+        <div class="connected-link-rows" data-connected-rows>
+          <% for link in connected_links %>
+          <div class="connected-link-row" data-connected-row><input name="connected_url_label" aria-label="Connected link label" value="[[ link.label ]]" placeholder="Source repository"><input name="connected_url_url" aria-label="Connected link URL" type="url" value="[[ link.url ]]" placeholder="https://…"><button type="button" class="text-button" data-remove-connected aria-label="Remove connected link">Remove</button></div>
+          <% endfor %>
+        </div>
+        <button type="button" class="button secondary connected-add" data-add-connected>+ Add another URL</button>
+      </div>
+    </div>
