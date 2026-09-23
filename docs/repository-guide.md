@@ -1,16 +1,16 @@
-# Learning Content Lab
+# Content Library
 
 A reusable public library for instructional-design templates, interactions, prompts, code, resources, experiments, and other learning-content assets.
 
 **V1 released:** 2026-09-15
 
-**Public Learning Content Lab:** `https://reeder-design.github.io/id-content-library/`
+**Public Content Library:** `https://reeder-design.github.io/id-content-library/`
 
-[![Learning Content Lab preview](assets/site/social-preview.png)](https://reeder-design.github.io/id-content-library/)
+[![Content Library cover](assets/readme-cover.svg)](https://reeder-design.github.io/id-content-library/)
 
 The repository has two deliberately separate surfaces:
 
-- **Learning Content Lab** — the public-facing static site that visitors browse. This is the only surface deployed through GitHub Pages.
+- **Content Library** — the public-facing static site that visitors browse. This is the only surface deployed through GitHub Pages.
 - **Library Manager** — the private maintenance utility used locally on the owner's computer for adding, editing, previewing, validating, batching, and publishing library items. It is not a public website and is not deployed.
 
 The public Lab and local Manager share the same visual identity so maintaining the library and browsing it feel like parts of one system, but they serve different audiences and remain technically separate.
