@@ -260,6 +260,10 @@ def render_item_page(item: dict, item_dir: Path) -> str:
         portfolio_line = f'<div><dt>Portfolio</dt><dd>{html.escape(humanize(portfolio))}</dd></div>'
 
     guide_markup = render_public_guide()
+    page_url = f"https://reeder-design.github.io/id-content-library/items/{quote(clean(item.get('slug')))}/"
+    social_image = "https://reeder-design.github.io/id-content-library/assets/site/social-preview.png"
+    social_title = f"{clean(item.get('title'))} | Learning Content Lab"
+    social_description = clean(item.get("summary"))
 
     return f'''<!doctype html>
 <html lang="en">
@@ -269,6 +273,14 @@ def render_item_page(item: dict, item_dir: Path) -> str:
   <meta name="description" content="{html.escape(clean(item.get('summary')), quote=True)}">
   <meta name="theme-color" content="#173a43">
   <title>{html.escape(clean(item.get('title')))} | Learning Content Lab</title>
+  <link rel="canonical" href="{html.escape(page_url, quote=True)}">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="{html.escape(social_title, quote=True)}">
+  <meta property="og:description" content="{html.escape(social_description, quote=True)}">
+  <meta property="og:url" content="{html.escape(page_url, quote=True)}">
+  <meta property="og:image" content="{social_image}">
+  <meta property="og:image:alt" content="Learning Content Lab, a reusable learning design library by Haley Reeder">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" type="image/svg+xml" href="../../assets/site/favicon.svg">
   <link rel="stylesheet" href="../../css/styles.css">
   <link rel="stylesheet" href="../../css/item-pages.css">

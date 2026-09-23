@@ -28,7 +28,8 @@ The two surfaces share a visual identity, but their roles stay separate:
 - generate consistent 16:9 card images automatically
 - use browser screenshots when Playwright/Chromium is available
 - crop/normalize image projects and use a branded fallback when screenshots are unavailable
-- allow a custom card image to replace the automatic one
+- choose a project frame, upload an image, or select an image from Haley's curated icon library for the public card thumbnail
+- add connected URLs for supporting assets or related repositories
 - preview the full generated Learning Content Lab locally
 - batch multiple local item changes before publishing
 - show a plain-English Review & Publish change summary
@@ -59,7 +60,5 @@ From the repository root:
 On first launch, the Manager asks you to set a password of at least 12 characters. Later visits require that password. Use **Lock** in the header to end a session, and **Change Manager password** in the Guide to update it. Sessions expire after eight hours of inactivity.
 
 Only a password hash and signing key are stored in `~/.config/learning-content-lab/manager-auth.json` on your computer, outside this repository and the public site. If you forget the password, stop the Manager, remove that local file, and start it again to set a new one. The app still binds only to `127.0.0.1`.
-
-The app intentionally binds only to `127.0.0.1`.
 
 Anything added through Library Manager belongs in the public Learning Content Lab, so only add material that is ready for public storage.

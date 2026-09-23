@@ -167,6 +167,7 @@ body {
 .heading-back:hover { text-decoration: underline; }
 .manager-main { min-height: calc(100vh - 70px); }
 .manager-empty { background: linear-gradient(135deg, rgba(255,255,255,.98), rgba(235,248,238,.95)); }
+.page-heading > .manager-mascot { border: 0; background: transparent; box-shadow: none; object-fit: contain; filter: drop-shadow(0 8px 8px rgba(16,46,55,.15)); }
 .form-step, .publish-panel, .manager-card, .review-card { background: rgba(255,255,255,.97); }
 .project-upload-card { background-image: radial-gradient(circle at 12% 18%, rgba(129,213,177,.24), transparent 15rem), linear-gradient(rgba(32,110,112,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(32,110,112,.05) 1px, transparent 1px); background-size: auto, 26px 26px, 26px 26px; background-color: #f3faf6; }
 .project-upload-spark { width: 76px; height: 76px; overflow: hidden; border: 3px solid #e6f7ee; border-radius: 17px; background: #e6f7ee; }

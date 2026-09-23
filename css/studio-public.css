@@ -161,6 +161,11 @@ body {
 .hero-art img { width: clamp(64px, 6vw, 86px); height: clamp(64px, 6vw, 86px); border: 3px solid #e8f8ed; box-shadow: 0 12px 24px rgba(6,31,37,.24); }
 .hero-art img:nth-child(2) { transform: rotate(6deg) translateY(-5px); }
 .hero-art img:nth-child(3) { transform: rotate(-6deg) translateY(3px); }
+.hero-mascot-scene { display: flex; align-items: center; justify-content: center; gap: clamp(.4rem, 1vw, 1rem); margin: -.25rem 0 .65rem; }
+.hero-mascot-scene .hero-mascot { display: block; flex: 0 0 auto; width: clamp(110px, 11vw, 158px); height: auto; border: 0; border-radius: 0; background: transparent; box-shadow: none; filter: drop-shadow(0 14px 13px rgba(2, 25, 29, .3)); }
+.hero-mascot-scene .hero-art { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .4rem; margin: 0; padding: 0; }
+.hero-mascot-scene .hero-art img { width: clamp(48px, 5vw, 64px); height: clamp(48px, 5vw, 64px); }
+.hero-mascot-scene .hero-art img:last-child { grid-column: 2; }
 .library-section, .item-content {
   background-color: var(--studio-paper);
   background-image:
