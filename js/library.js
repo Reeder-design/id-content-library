@@ -192,8 +192,8 @@ function renderEmpty(filteredItems) {
   if (hasMatches) return;
 
   if (!hasItems) {
-    els.emptyTitle.textContent = "The shelves are ready.";
-    els.emptyCopy.textContent = "Library items will appear here as they are added.";
+    els.emptyTitle.textContent = "The collection is taking shape.";
+    els.emptyCopy.textContent = "The first reusable projects will appear here soon.";
   } else {
     els.emptyTitle.textContent = "No matches found.";
     els.emptyCopy.textContent = "Try a different search term or clear one of the filters.";

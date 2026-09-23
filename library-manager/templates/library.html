@@ -2,7 +2,7 @@
 <% block title %>Library | Library Manager<% endblock %>
 <% block content %>
 <section class="page-heading">
-  <div><p class="eyebrow">Local workspace</p><h1>Library</h1><p>Browse, preview, and maintain public-safe reusable learning content. Saving here is local; publishing is a separate step.</p></div>
+  <div><p class="eyebrow">Your local workspace</p><h1>Library Manager</h1><p>Add and refine reusable learning content. Save locally, then review the collection before publishing.</p></div>
   <div class="heading-actions"><a class="button secondary" href="[[ url_for('workspace_page') ]]">Review &amp; Publish<% if workspace_change_count %> ([[ workspace_change_count ]])<% endif %></a><a class="button" href="[[ url_for('add_item') ]]">Add Item</a></div>
 </section>
 <% if workspace_change_count %><div class="local-changes-banner"><span aria-hidden="true">✦</span><div><strong>You have local changes waiting.</strong><p>Preview them as much as you want. Nothing goes to GitHub until Review &amp; Publish.</p></div></div><% endif %>
@@ -25,6 +25,6 @@
     <a class="danger-link" href="[[ url_for('delete_item', slug=item.slug) ]]">Delete…</a>
   </div>
 </article>
-<% else %><div class="empty-state"><h2>No library items yet.</h2><p>Add the first reusable asset when you are ready.</p></div><% endfor %>
+<% else %><div class="empty-state manager-empty"><img src="[[ url_for('repo_file', filepath='assets/site/illustrations/tools.webp') ]]" alt=""><div><h2>Ready for the first piece.</h2><p>Choose a reusable project to start building the collection.</p><a class="button" href="[[ url_for('add_item') ]]">Add your first item</a></div></div><% endfor %>
 </section>
 <% endblock %>

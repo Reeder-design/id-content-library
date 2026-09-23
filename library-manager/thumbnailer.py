@@ -24,18 +24,17 @@ def _fallback_svg(item: dict, target: Path) -> None:
     content = f'''<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675">
 <defs>
   <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-    <stop offset="0" stop-color="#eefbf1"/>
-    <stop offset="0.55" stop-color="#eee8ff"/>
-    <stop offset="1" stop-color="#daf7ef"/>
+    <stop offset="0" stop-color="#102e37"/>
+    <stop offset="1" stop-color="#235963"/>
   </linearGradient>
 </defs>
 <rect width="1200" height="675" rx="44" fill="url(#bg)"/>
-<circle cx="1020" cy="120" r="180" fill="#d9ceff" opacity="0.55"/>
-<circle cx="160" cy="560" r="210" fill="#d9f6be" opacity="0.6"/>
-<text x="84" y="118" fill="#7459c7" font-family="Arial, Helvetica, sans-serif" font-size="26" font-weight="700">LEARNING CONTENT LAB</text>
-<text x="84" y="302" fill="#343540" font-family="Arial, Helvetica, sans-serif" font-size="66" font-weight="800">{title}</text>
-<text x="84" y="374" fill="#676878" font-family="Arial, Helvetica, sans-serif" font-size="30">{fmt}</text>
-<text x="84" y="575" fill="#7459c7" font-family="Arial, Helvetica, sans-serif" font-size="42">✦</text>
+<circle cx="1020" cy="120" r="180" fill="#81d5b1" opacity="0.14"/>
+<circle cx="160" cy="560" r="210" fill="#c8ed7c" opacity="0.12"/>
+<text x="84" y="118" fill="#c8ed7c" font-family="Arial, Helvetica, sans-serif" font-size="26" font-weight="700">LEARNING CONTENT LAB</text>
+<text x="84" y="302" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="66" font-weight="800">{title}</text>
+<text x="84" y="374" fill="#d7e9e5" font-family="Arial, Helvetica, sans-serif" font-size="30">{fmt}</text>
+<path d="M84 532h40c9 0 15 3 20 9v50c-5-6-11-9-20-9H84zm120 0h-40c-9 0-15 3-20 9v50c5-6 11-9 20-9h40z" fill="#c8ed7c"/>
 </svg>'''
     target.write_text(content, encoding="utf-8")
 

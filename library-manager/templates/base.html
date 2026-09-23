@@ -4,14 +4,17 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title><% block title %>Library Manager<% endblock %></title>
-  <link rel="icon" type="image/svg+xml" href="[[ url_for('repo_file', filepath='assets/site/favicon.svg') ]]">
+  <meta name="theme-color" content="#173a43">
+  <link rel="icon" type="image/svg+xml" href="[[ url_for('repo_file', filepath='assets/site/manager-favicon.svg') ]]">
   <link rel="stylesheet" href="/static/manager.css">
   <link rel="stylesheet" href="/static/phase7.css">
+  <link rel="stylesheet" href="[[ url_for('repo_file', filepath='css/studio-tokens.css') ]]">
+  <link rel="stylesheet" href="/static/manager-studio.css">
 </head>
 <body>
   <header class="manager-header">
     <div class="shell header-row">
-      <a class="brand" href="[[ url_for('library') ]]"><span class="brand-mark" aria-hidden="true">✩</span><span>Library Manager</span></a>
+      <a class="brand" href="[[ url_for('library') ]]"><span class="brand-mark" aria-hidden="true"><img src="[[ url_for('repo_file', filepath='assets/site/manager-favicon.svg') ]]" alt=""></span><span>Library Manager</span></a>
       <nav>
         <a href="[[ url_for('library') ]]">Library</a>
         <a href="[[ url_for('repo_file', filepath='index.html') ]]" target="_blank" rel="noopener">Preview Library</a>

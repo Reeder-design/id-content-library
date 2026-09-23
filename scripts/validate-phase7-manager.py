@@ -32,7 +32,7 @@ for marker in ("summarize_changes", "item_count", "run_validation", "git(root, \
 for marker in ("1200, 675", "ImageOps.fit", "sync_playwright", "auto-thumbnail.svg", "custom"):
     expect(marker in thumbnail_source, f"Missing thumbnail marker: {marker}")
 
-for marker in ("Review &amp; Publish", "Preview Full Library", "Publish to GitHub", "I confirm this material is public-safe", "data-draft-preview", "Custom card image", "assets/site/favicon.svg", "summary.item_count"):
+for marker in ("Review &amp; Publish", "Preview Full Library", "Publish to GitHub", "I confirm this material is public-safe", "data-draft-preview", "Custom card image", "assets/site/manager-favicon.svg", "summary.item_count"):
     expect(marker in templates, f"Missing Phase 7 UI marker: {marker}")
 
 for marker in ("updateDraftPreview", "data-draft", "Add Locally", "Save Locally"):
@@ -45,7 +45,9 @@ expect("item.thumbnail" in public_js and "card-thumbnail" in public_js, "Public 
 expect("card-thumbnail-link" in public_css, "Public thumbnail sizing styles are missing")
 expect("css/card-thumbnails.css" in index_html, "Public thumbnail stylesheet is not loaded")
 expect("assets/site/favicon.svg" in index_html, "Public Lab favicon is not loaded")
-expect((ROOT / "assets" / "site" / "favicon.svg").is_file(), "Shared favicon asset is missing")
+expect((ROOT / "assets" / "site" / "favicon.svg").is_file(), "Public favicon asset is missing")
+expect((ROOT / "assets" / "site" / "manager-favicon.svg").is_file(), "Manager favicon asset is missing")
+expect("css/studio-tokens.css" in index_html and "css/studio-tokens.css" in templates, "Shared theme tokens must load on both surfaces")
 expect("Pillow" in requirements and "playwright" in requirements, "Thumbnail dependencies are missing")
 expect("</form>" not in (ROOT / "library-manager" / "templates" / "partials" / "review-step.html").read_text(encoding="utf-8"), "Review partial should not close the parent form")
 

@@ -1,11 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Learning Content Lab">
-  <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#c9f5d5"/>
-      <stop offset="1" stop-color="#ded4ff"/>
-    </linearGradient>
-  </defs>
-  <rect width="64" height="64" rx="18" fill="url(#g)"/>
-  <path d="M32 11l5.2 15.8L53 32l-15.8 5.2L32 53l-5.2-15.8L11 32l15.8-5.2L32 11z" fill="#5d49bf"/>
-  <circle cx="47" cy="17" r="4" fill="#8de0aa"/>
+  <rect width="64" height="64" rx="15" fill="#173a43"/>
+  <path d="M10 18h19c4 0 7 1 9 4v28c-2-3-5-4-9-4H10z" fill="#c8ed7c"/>
+  <path d="M54 18H35c-4 0-7 1-9 4v28c2-3 5-4 9-4h19z" fill="#7ed6be"/>
+  <path d="M32 22v27M16 27h10M16 33h10M38 27h10M38 33h10" fill="none" stroke="#173a43" stroke-linecap="round" stroke-width="3"/>
 </svg>

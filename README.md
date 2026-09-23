@@ -13,6 +13,8 @@ The repository has two deliberately separate surfaces:
 
 The public Lab and local Manager share the same visual identity so maintaining the library and browsing it feel like parts of one system, but they serve different audiences and remain technically separate.
 
+The shared color and type tokens live in `css/studio-tokens.css`. The public catalog uses `css/studio-public.css`; the local editing workspace uses `library-manager/static/manager-studio.css`. They use separate book and controls favicons so browser tabs are easy to distinguish. The small learning, ideas, and tools illustrations in `assets/site/illustrations/` are copies of Haley's custom portfolio assets.
+
 This project is also intentionally separate from the official portfolio. The portfolio contains selected spotlight projects; the Lab can contain the broader body of reusable work.
 
 ## Core rule

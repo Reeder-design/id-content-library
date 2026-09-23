@@ -239,17 +239,19 @@ def render_item_page(item: dict, item_dir: Path) -> str:
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="{html.escape(clean(item.get('summary')), quote=True)}">
-  <meta name="theme-color" content="#fbfaff">
+  <meta name="theme-color" content="#173a43">
   <title>{html.escape(clean(item.get('title')))} | Learning Content Lab</title>
   <link rel="icon" type="image/svg+xml" href="../../assets/site/favicon.svg">
   <link rel="stylesheet" href="../../css/styles.css">
   <link rel="stylesheet" href="../../css/item-pages.css">
+  <link rel="stylesheet" href="../../css/studio-tokens.css">
+  <link rel="stylesheet" href="../../css/studio-public.css">
 </head>
 <body class="item-page">
   <!-- {GENERATED_MARKER} -->
   <header class="site-header">
     <div class="page-shell header-inner">
-      <a class="brand" href="../../" aria-label="Learning Content Lab home"><span class="brand-mark" aria-hidden="true">✩</span><span>Learning Content Lab</span></a>
+      <a class="brand" href="../../" aria-label="Learning Content Lab home"><span class="brand-mark" aria-hidden="true"><img src="../../assets/site/favicon.svg" alt=""></span><span>Learning Content Lab</span></a>
       <div class="public-header-actions">
         <button class="public-guide-button" type="button" data-public-guide-open><span aria-hidden="true">?</span><span class="guide-label">Guide</span></button>
         <a class="header-back" href="../../">← Back to library</a>
