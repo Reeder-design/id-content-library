@@ -9,12 +9,13 @@ import subprocess
 import sys
 import tempfile
 from collections import Counter
-from datetime import date
+from datetime import date, timedelta
 from pathlib import Path, PurePosixPath
 from urllib.parse import urlsplit
 
 from flask import Flask, abort, flash, jsonify, redirect, render_template, request, send_from_directory, session, url_for
 
+from auth import ManagerAuth
 from smart_prefill import infer_from_files
 from thumbnailer import AUTO_NAMES, ICON_CHOICES, ICON_NAME, generate_icon_thumbnail, generate_thumbnail
 from workspace import publish as publish_workspace
@@ -36,9 +37,16 @@ TYPE_ICONS = {
     "Design Patterns": "visuals", "Other": "repository",
 }
 
+AUTH = ManagerAuth.from_environment()
 app = Flask(__name__)
-app.secret_key = secrets.token_hex(32)
-app.config.update(MAX_CONTENT_LENGTH=1024 * 1024 * 1024)
+app.secret_key = AUTH.secret_key or secrets.token_hex(32)
+app.config.update(
+    MAX_CONTENT_LENGTH=1024 * 1024 * 1024,
+    SESSION_COOKIE_NAME="learning_content_manager",
+    SESSION_COOKIE_HTTPONLY=True,
+    SESSION_COOKIE_SAMESITE="Lax",
+    PERMANENT_SESSION_LIFETIME=timedelta(hours=8),
+)
 app.jinja_env.variable_start_string = "[["
 app.jinja_env.variable_end_string = "]]"
 app.jinja_env.block_start_string = "<%"
@@ -84,6 +92,126 @@ def require_csrf() -> None:
     supplied = request.form.get("csrf_token")
     if not expected or not supplied or not secrets.compare_digest(expected, supplied):
         abort(400, "Invalid form token. Refresh the page and try again.")
+
+
+def safe_next_path(value: str | None) -> str:
+    target = clean(value)
+    return target if target.startswith("/") and not target.startswith("//") and "\\" not in target and not any(char.isspace() for char in target) else url_for("library")
+
+
+@app.before_request
+def require_manager_login():
+    if request.endpoint == "static":
+        return None
+    if request.endpoint == "repo_file" and request.view_args and request.view_args.get("filepath") in {
+        "assets/site/manager-favicon.svg", "css/studio-tokens.css"
+    }:
+        return None
+    if not AUTH.configured:
+        if request.endpoint == "setup_password":
+            return None
+        return redirect(url_for("setup_password", next=request.full_path.rstrip("?")))
+    if request.endpoint == "setup_password":
+        return redirect(url_for("login"))
+    if request.endpoint == "login":
+        return redirect(url_for("library")) if session.get("auth_revision") == AUTH.revision else None
+    if session.get("auth_revision") != AUTH.revision:
+        return redirect(url_for("login", next=request.full_path.rstrip("?")))
+    return None
+
+
+@app.after_request
+def no_manager_cache(response):
+    if request.endpoint != "static":
+        response.headers["Cache-Control"] = "no-store"
+        response.headers["X-Frame-Options"] = "DENY"
+        response.headers["X-Content-Type-Options"] = "nosniff"
+    return response
+
+
+@app.route("/setup", methods=["GET", "POST"])
+def setup_password():
+    error = None
+    if request.method == "POST":
+        require_csrf()
+        password = request.form.get("password", "")
+        confirmation = request.form.get("confirm_password", "")
+        if not 12 <= len(password) <= 1024:
+            error = "Use between 12 and 1,024 characters for your Manager password."
+        elif password != confirmation:
+            error = "The passwords do not match."
+        else:
+            try:
+                AUTH.create(password)
+            except (FileExistsError, ValueError):
+                return redirect(url_for("login"))
+            except OSError:
+                error = "Could not save the password on this computer."
+            else:
+                app.secret_key = AUTH.secret_key
+                session.clear()
+                session["auth_revision"] = AUTH.revision
+                session["csrf_token"] = secrets.token_urlsafe(32)
+                session.permanent = True
+                return redirect(safe_next_path(request.form.get("next")))
+    return render_template("auth.html", mode="setup", error=error, next_path=safe_next_path(request.values.get("next"))), (400 if error else 200)
+
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    error = None
+    status = 200
+    if request.method == "POST":
+        require_csrf()
+        if AUTH.retry_after():
+            error, status = "Too many attempts. Try again in a minute.", 429
+        elif AUTH.verify(request.form.get("password", "")):
+            AUTH.successful_login()
+            session.clear()
+            session["auth_revision"] = AUTH.revision
+            session["csrf_token"] = secrets.token_urlsafe(32)
+            session.permanent = True
+            return redirect(safe_next_path(request.form.get("next")))
+        else:
+            AUTH.failed_login()
+            error, status = "That password did not work.", 401
+    return render_template("auth.html", mode="login", error=error, next_path=safe_next_path(request.values.get("next"))), status
+
+
+@app.post("/logout")
+def logout():
+    require_csrf()
+    session.clear()
+    return redirect(url_for("login"))
+
+
+@app.route("/password", methods=["GET", "POST"])
+def change_password():
+    error = None
+    if request.method == "POST":
+        require_csrf()
+        current = request.form.get("current_password", "")
+        password = request.form.get("password", "")
+        confirmation = request.form.get("confirm_password", "")
+        if not AUTH.verify(current):
+            error = "The current password did not work."
+        elif not 12 <= len(password) <= 1024:
+            error = "Use between 12 and 1,024 characters for your new password."
+        elif password != confirmation:
+            error = "The new passwords do not match."
+        else:
+            try:
+                AUTH.change(password)
+            except OSError:
+                error = "Could not save the new password on this computer."
+            else:
+                session.clear()
+                session["auth_revision"] = AUTH.revision
+                session["csrf_token"] = secrets.token_urlsafe(32)
+                session.permanent = True
+                flash("Manager password updated.", "success")
+                return redirect(url_for("library"))
+    return render_template("auth.html", mode="change", error=error, next_path=""), (400 if error else 200)
 
 
 def item_dir(slug: str) -> Path:

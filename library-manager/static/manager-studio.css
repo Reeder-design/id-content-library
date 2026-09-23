@@ -121,6 +121,11 @@ body {
 .manager-nav > a.manager-nav-link:hover { border-color: rgba(255,255,255,.25); color: #fff; background: rgba(255,255,255,.1); }
 .manager-nav > a.manager-nav-link[aria-current="page"] { border-color: var(--studio-lime); color: var(--studio-deep); background: var(--studio-lime); }
 .manager-header-actions { display: flex; align-items: center; justify-content: flex-end; gap: .5rem; }
+.manager-lock-form { margin: 0; }
+.manager-lock-button { display: inline-flex; align-items: center; justify-content: center; min-height: 38px; padding: .52rem .7rem; border: 1px solid rgba(255,255,255,.24); border-radius: 10px; color: #e7f3ed; background: rgba(255,255,255,.08); font-size: .82rem; font-weight: 750; white-space: nowrap; cursor: pointer; }
+.manager-lock-button:hover { border-color: var(--studio-lime); color: var(--studio-deep); background: var(--studio-lime); }
+.manager-settings-link { display: inline-block; margin-top: 1rem; color: var(--studio-teal-hover); font-weight: 750; text-decoration: none; }
+.manager-settings-link:hover { text-decoration: underline; }
 .preview-nav, .manager-header-actions .guide-button {
   display: inline-flex;
   align-items: center;

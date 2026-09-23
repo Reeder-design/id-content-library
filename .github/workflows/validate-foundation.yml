@@ -24,6 +24,9 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Install Manager authentication test dependency
+        run: python -m pip install "Flask>=3.0,<4.0"
+
       - name: Validate repository foundation
         run: python scripts/validate-foundation.py
 
@@ -48,7 +51,10 @@ jobs:
           node --check js/public-guide.js
 
       - name: Check Python syntax
-        run: python -m py_compile library-manager/app.py library-manager/smart_prefill.py library-manager/workspace.py library-manager/thumbnailer.py scripts/build-public-site.py scripts/validate-phase8-release.py
+        run: python -m py_compile library-manager/app.py library-manager/auth.py library-manager/smart_prefill.py library-manager/workspace.py library-manager/thumbnailer.py scripts/build-public-site.py scripts/validate-phase8-release.py
+
+      - name: Validate Manager password protection
+        run: python scripts/validate-manager-auth.py
 
       - name: Check Library Manager JavaScript syntax
         run: |

@@ -56,6 +56,10 @@ From the repository root:
 5. Run `python library-manager/app.py`.
 6. Open the local address shown in the terminal.
 
+On first launch, the Manager asks you to set a password of at least 12 characters. Later visits require that password. Use **Lock** in the header to end a session, and **Change Manager password** in the Guide to update it. Sessions expire after eight hours of inactivity.
+
+Only a password hash and signing key are stored in `~/.config/learning-content-lab/manager-auth.json` on your computer, outside this repository and the public site. If you forget the password, stop the Manager, remove that local file, and start it again to set a new one. The app still binds only to `127.0.0.1`.
+
 The app intentionally binds only to `127.0.0.1`.
 
 Anything added through Library Manager belongs in the public Learning Content Lab, so only add material that is ready for public storage.
